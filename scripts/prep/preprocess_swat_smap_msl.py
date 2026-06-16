@@ -74,6 +74,8 @@ def _label_to_int(y):
 
 def _drop_nonfeature_cols(df, extra_drop=None):
     extra_drop = set(extra_drop or [])
+    # 컬럼 이름 공백 제거 (SWaT xlsx에서 일부 컬럼 앞에 공백 있음)
+    df = df.rename(columns=lambda c: str(c).strip())
     keep = []
     for c in df.columns:
         if _is_unnamed(c) or _is_time_col(c) or c in extra_drop:
