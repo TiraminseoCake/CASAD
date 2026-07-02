@@ -8,6 +8,9 @@ _C.SEEDS = [0, 1, 2, 3, 4]
 _C.VISIBLE_DEVICES = 0
 _C.RESULT_DIR = 'results/'
 _C.EXP_TAG = ''  # empty -> auto tag
+# When True, load_config uses RESULT_DIR as-is (no DATA.NAME/tag/timestamp append).
+# Used by scripts/run_parallel.py so each subprocess writes to a preassigned dir.
+_C.RESULT_DIR_LITERAL = False
 
 
 # --- data ---

@@ -69,6 +69,13 @@ def load_config(args, date=None):
     if not cfg.DATA.INPUT_DIR:
         cfg.DATA.INPUT_DIR = os.path.join(cfg.DATA.BASE_DIR, f'{cfg.DATA.NAME}_npz')
 
+    if bool(getattr(cfg, 'RESULT_DIR_LITERAL', False)):
+        # Caller (e.g., run_parallel.py) provided a fully-specified RESULT_DIR.
+        # Skip the DATA.NAME/tag/timestamp munging.
+        if not cfg.TRAIN.CKPT_DIR:
+            cfg.TRAIN.CKPT_DIR = os.path.join(cfg.RESULT_DIR, 'ckpt')
+        return cfg, date
+
     # Build run dir from tag + timestamp
     tag = str(cfg.EXP_TAG).strip() or _build_auto_tag(cfg)
     if date is None:
