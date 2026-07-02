@@ -11,6 +11,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from layers.encoder import PerVarEncoder
+from layers.gat_block import (
+    CrossLagGATBlock,
+    build_cross_lag_causal_mask,
+    build_cross_lag_prior_bias,
+)
 from layers.ops import logit_from_prob, normalize_causal_tensor_torch
 
 
@@ -29,7 +34,13 @@ class PICAAD(nn.Module):
                  te_prior_blend: float = 0.35,
                  # [FIX 4] learnable causal attention mask
                  causal_attn_mask_scale: float = 0.5,
-                 causal_mask_warmup_epochs: int = 5):
+                 causal_mask_warmup_epochs: int = 5,
+                 # Option C: cross-lag GAT block (replaces per-lag MHSA when True)
+                 use_gat: bool = False,
+                 gat_num_layers: int = 2,
+                 gat_heads: int = 4,
+                 gat_dim: int = 64,
+                 gat_dropout: float = 0.1):
         super().__init__()
         self.N = N
         self.L = L
@@ -53,9 +64,26 @@ class PICAAD(nn.Module):
             raise ValueError(f"lag_win must be >= 1, got {self.lag_win}")
 
         self.encoders = nn.ModuleList([PerVarEncoder(d, enc_layers, dropout) for _ in range(N)])
-        self.mhsa = nn.MultiheadAttention(d, heads, batch_first=True, dropout=dropout)
         # Reconstruction removed - ablation showed no contribution to AD performance
         self.mhsa_residual = mhsa_residual
+
+        # Message passing over lag-var nodes: original per-lag MHSA (default)
+        # or cross-lag GAT (Option C). Only one is instantiated.
+        self.use_gat = bool(use_gat)
+        if self.use_gat:
+            self.gat_block = CrossLagGATBlock(
+                d=d, gat_dim=int(gat_dim),
+                num_layers=int(gat_num_layers),
+                num_heads=int(gat_heads),
+                dropout=float(gat_dropout),
+            )
+            self.register_buffer(
+                "_gat_causal_mask",
+                build_cross_lag_causal_mask(N, tau_max),
+                persistent=False,
+            )
+        else:
+            self.mhsa = nn.MultiheadAttention(d, heads, batch_first=True, dropout=dropout)
 
         self.pred_logits = nn.Parameter(torch.zeros(tau_max, N, N))
         with torch.no_grad():
@@ -290,16 +318,19 @@ class PICAAD(nn.Module):
     # mask[tgt, src] = warmup_scale * sigmoid(causal_mask_logits[tau, src, tgt])
     # sigmoid output in (0,1) -> converted to log-domain additive bias.
     # --------------------------------------------------------
+    def _warmup_ramp(self) -> float:
+        """Ramp 0→1 over CAUSAL_MASK_WARMUP epochs.
+        epoch 0 returns 0 so the model learns basic representations first.
+        """
+        if self.causal_mask_warmup_epochs > 0 and self._current_epoch > 0:
+            return min(float(self._current_epoch) / float(self.causal_mask_warmup_epochs), 1.0)
+        return 0.0
+
     def _causal_attn_mask(self, tau: int):
         if self.causal_attn_mask_scale <= 0.0:
             return None
 
-        # warmup: ramp from 0 to full scale over warmup epochs
-        if self.causal_mask_warmup_epochs > 0 and self._current_epoch > 0:
-            ramp = min(float(self._current_epoch) / float(self.causal_mask_warmup_epochs), 1.0)
-        else:
-            ramp = 0.0  # epoch 0 = no mask yet (let model learn basic representations first)
-
+        ramp = self._warmup_ramp()
         if ramp <= 0.0:
             return None
 
@@ -312,6 +343,7 @@ class PICAAD(nn.Module):
     def forward(self, X, mask_tau=None, mask_var=None, mask_fill_value=0.0):
         B, L, N = X.shape
         lag_embeds = []
+        is_intervention = (mask_tau is not None) and (mask_var is not None)
 
         for tau in range(1, self.tau_max + 1):
             end = L - tau
@@ -320,7 +352,7 @@ class PICAAD(nn.Module):
             c_list = []
             for i in range(N):
                 x_i = X[:, start:end, i].unsqueeze(-1)
-                if (mask_tau is not None) and (mask_var is not None):
+                if is_intervention:
                     if (tau == int(mask_tau)) and (i == int(mask_var)):
                         x_i = torch.full_like(x_i, float(mask_fill_value))
                 ci = self.encoders[i](x_i)
@@ -328,15 +360,37 @@ class PICAAD(nn.Module):
 
             C_tau = torch.stack(c_list, dim=1)  # [B, src, d]
 
-            # [FIX 4] apply causal mask to MHSA
-            causal_mask = self._causal_attn_mask(tau)
-            A_tau, _ = self.mhsa(C_tau, C_tau, C_tau,
-                                  attn_mask=causal_mask,
-                                  need_weights=False)
-            C_star_tau = (C_tau + A_tau) if self.mhsa_residual else A_tau
-            lag_embeds.append(C_star_tau)
+            if self.use_gat:
+                # Option C: skip per-lag MHSA; message passing happens once
+                # after all C_tau are stacked (see below).
+                lag_embeds.append(C_tau)
+            else:
+                # [FIX 4] apply causal mask to MHSA
+                causal_mask = self._causal_attn_mask(tau)
+                A_tau, _ = self.mhsa(C_tau, C_tau, C_tau,
+                                      attn_mask=causal_mask,
+                                      need_weights=False)
+                C_star_tau = (C_tau + A_tau) if self.mhsa_residual else A_tau
+                lag_embeds.append(C_star_tau)
 
         C_all = torch.stack(lag_embeds, dim=1)  # [B, tau, src, d]
+
+        if self.use_gat:
+            # Cross-lag GAT over tau_max * N nodes. Rebuild prior bias every
+            # forward (do NOT cache it because causal_mask_logits is a
+            # Parameter — caching would require retain_graph on backward).
+            ramp = self._warmup_ramp()
+            prior_bias = None
+            if self.has_te_prior and self.causal_attn_mask_scale > 0.0 and ramp > 0.0:
+                prior_bias = build_cross_lag_prior_bias(
+                    self.te_prior_gate, self.causal_mask_logits,
+                    N=self.N, tau_max=self.tau_max,
+                    scale=self.causal_attn_mask_scale, ramp=ramp,
+                    detach_for_intervention=is_intervention,
+                )
+            h_flat = C_all.reshape(B, self.tau_max * self.N, self.d)
+            h_out = self.gat_block(h_flat, self._gat_causal_mask, prior_bias)
+            C_all = h_out.reshape(B, self.tau_max, self.N, self.d)
 
         # Reconstruction removed - ablation showed no contribution
         recon = torch.zeros(B, self.L - 1, N, device=X.device)

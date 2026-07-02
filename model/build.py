@@ -41,6 +41,11 @@ def build_model(cfg, N: int) -> PICAAD:
         te_prior_blend=cfg.PICAAD.PRIOR.BLEND,
         causal_attn_mask_scale=cfg.PICAAD.CAUSAL_ATTN_MASK_SCALE,
         causal_mask_warmup_epochs=cfg.PICAAD.CAUSAL_MASK_WARMUP,
+        use_gat=cfg.PICAAD.GAT.ENABLE,
+        gat_num_layers=cfg.PICAAD.GAT.NUM_LAYERS,
+        gat_heads=cfg.PICAAD.GAT.HEADS,
+        gat_dim=cfg.PICAAD.GAT.DIM,
+        gat_dropout=cfg.PICAAD.GAT.DROPOUT,
     )
     return model
 

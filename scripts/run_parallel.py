@@ -32,9 +32,13 @@ SMD_ENTITIES = [
 ]
 
 DATASETS = {
-    'PSM':  ('scripts/configs/psm.yaml',  ['PSM']),
-    'SMD':  ('scripts/configs/smd.yaml',  SMD_ENTITIES),
-    'SWaT': ('scripts/configs/swat.yaml', ['swat']),
+    'PSM':      ('scripts/configs/psm.yaml',      ['PSM']),
+    'SMD':      ('scripts/configs/smd.yaml',      SMD_ENTITIES),
+    'SWaT':     ('scripts/configs/swat.yaml',     ['swat']),
+    # Cross-lag GAT variants (Option C)
+    'PSM_GAT':  ('scripts/configs/psm_gat.yaml',  ['PSM']),
+    'SMD_GAT':  ('scripts/configs/smd_gat.yaml',  SMD_ENTITIES),
+    'SWaT_GAT': ('scripts/configs/swat_gat.yaml', ['swat']),
 }
 
 

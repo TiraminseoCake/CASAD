@@ -80,6 +80,17 @@ _C.PICAAD.GATE_INIT = 0.15
 _C.PICAAD.CAUSAL_ATTN_MASK_SCALE = 0.5
 _C.PICAAD.CAUSAL_MASK_WARMUP = 5
 
+# Cross-lag GAT block (Option C). When ENABLE=True, per-lag MHSA over N
+# variable nodes is replaced by a GAT over tau_max*N (lag, variable) nodes
+# with a lag-aware PCMCI+ prior bias. Encoder pipeline (per-var LSTM +
+# TemporalAttnPool) is untouched so lag_win compression is preserved.
+_C.PICAAD.GAT = CN()
+_C.PICAAD.GAT.ENABLE = False          # False = original per-lag MHSA
+_C.PICAAD.GAT.NUM_LAYERS = 2
+_C.PICAAD.GAT.HEADS = 4
+_C.PICAAD.GAT.DIM = 64                # GAT attention dim (must be divisible by HEADS)
+_C.PICAAD.GAT.DROPOUT = 0.1
+
 # loss weights
 _C.PICAAD.LAM_TASK = 1.0
 _C.PICAAD.LAM_CAUSAL = 1.0
