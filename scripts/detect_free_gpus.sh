@@ -12,17 +12,33 @@
 #   EXCLUDE_GPUS            comma-separated indices to never use (default: empty)
 #   IGNORE_PROCESSES        1 = skip the "no other-user process" check, use
 #                           memory threshold only (default: 0)
+#   STRICT_UNKNOWN_OWNER    1 = if we cannot determine a process's owner
+#                           (e.g. it just ended), assume other-user and mark
+#                           the GPU as busy. Default: 1 (safe).
+#   VERBOSE                 1 = print step-by-step decisions to stderr.
 #
 # Standalone usage:
 #   bash scripts/detect_free_gpus.sh
 #   MAX_GPUS=4 bash scripts/detect_free_gpus.sh
 #   FREE_MEM_THRESHOLD_MB=30000 EXCLUDE_GPUS=0,7 bash scripts/detect_free_gpus.sh
+#   VERBOSE=1 bash scripts/detect_free_gpus.sh    # <-- debug why a GPU was picked
 #   IGNORE_PROCESSES=1 bash scripts/detect_free_gpus.sh
 
 FREE_MEM_THRESHOLD_MB="${FREE_MEM_THRESHOLD_MB:-40000}"
 MAX_GPUS="${MAX_GPUS:-0}"
 EXCLUDE_GPUS="${EXCLUDE_GPUS:-}"
 IGNORE_PROCESSES="${IGNORE_PROCESSES:-0}"
+STRICT_UNKNOWN_OWNER="${STRICT_UNKNOWN_OWNER:-1}"
+VERBOSE="${VERBOSE:-0}"
+
+_log() {
+    if [ "${VERBOSE}" -eq 1 ]; then
+        echo "[detect] $*" >&2
+    fi
+}
+
+MY_UID=$(id -u)
+_log "self: USER=${USER}  UID=${MY_UID}"
 
 # Prefer the actual binary path to avoid any shell alias (e.g. some setups
 # alias `nvidia-smi` to `nvitop`, which does not accept --query-gpu).
@@ -35,6 +51,16 @@ if [ -z "${NVSMI}" ] || [ ! -x "${NVSMI}" ]; then
     echo "[detect_free_gpus] nvidia-smi binary not found" >&2
     exit 1
 fi
+
+# Return the UID of a PID by reading /proc directly (survives race with `ps`).
+# Falls back to `ps` if /proc is not available.
+_pid_uid() {
+    local pid="$1"
+    if [ -e "/proc/${pid}" ]; then
+        stat -c '%u' "/proc/${pid}" 2>/dev/null && return
+    fi
+    ps -o uid= -p "${pid}" 2>/dev/null | tr -d ' '
+}
 
 # Build a set of GPU indices that have compute processes owned by a *different*
 # user than $USER. Those GPUs are considered "busy" regardless of free memory.
@@ -49,11 +75,26 @@ if [ "${IGNORE_PROCESSES}" -eq 0 ]; then
                         --format=csv,noheader,nounits 2>/dev/null)
     while IFS=', ' read -r uuid pid; do
         [ -z "${pid}" ] && continue
-        # Look up the process owner.
-        owner=$(ps -o user= -p "${pid}" 2>/dev/null | tr -d ' ')
-        if [ -n "${owner}" ] && [ "${owner}" != "${USER}" ]; then
-            gid="${uuid_to_idx[${uuid}]}"
-            [ -n "${gid}" ] && other_user_busy["${gid}"]=1
+        gid="${uuid_to_idx[${uuid}]}"
+        [ -z "${gid}" ] && continue
+
+        # Look up the process owner. Compare by numeric UID to avoid docker
+        # username mismatches (same UID, different name).
+        uid=$(_pid_uid "${pid}")
+        if [ -z "${uid}" ]; then
+            # Process ended (race with nvidia-smi). Default: assume other user
+            # (safer than picking a GPU that might immediately get re-taken).
+            if [ "${STRICT_UNKNOWN_OWNER}" -eq 1 ]; then
+                _log "gpu ${gid}: pid=${pid} owner unknown -> mark busy (STRICT)"
+                other_user_busy["${gid}"]=1
+            else
+                _log "gpu ${gid}: pid=${pid} owner unknown -> skip (non-strict)"
+            fi
+        elif [ "${uid}" != "${MY_UID}" ]; then
+            _log "gpu ${gid}: pid=${pid} owned by uid=${uid} (not ${MY_UID}) -> mark busy"
+            other_user_busy["${gid}"]=1
+        else
+            _log "gpu ${gid}: pid=${pid} owned by me (uid=${uid}) -> ok"
         fi
     done < <("${NVSMI}" --query-compute-apps=gpu_uuid,pid \
                         --format=csv,noheader,nounits 2>/dev/null)
@@ -73,12 +114,20 @@ if [ -n "${EXCLUDE_GPUS}" ]; then
     excl_pat=$(echo "${EXCLUDE_GPUS}" | tr ',' '|')
 fi
 
+if [ "${VERBOSE}" -eq 1 ]; then
+    _log "memory per GPU (free MiB):"
+    echo "${raw}" | sed 's/^/[detect]   /' >&2
+    _log "threshold: ${FREE_MEM_THRESHOLD_MB} MiB"
+fi
+
 # First filter by memory + user-provided exclusions.
 mem_ok=$(echo "${raw}" | awk -F', ' \
     -v thresh="${FREE_MEM_THRESHOLD_MB}" \
     -v excl="${excl_pat}" \
     'BEGIN { split(excl, ex, "|"); for (k in ex) skip[ex[k]] = 1 }
      $2 + 0 >= thresh && !skip[$1] { print $1 }')
+_log "GPUs passing memory+exclude filter: $(echo ${mem_ok} | tr '\n' ' ')"
+_log "GPUs marked busy by other-user process: ${!other_user_busy[*]:-<none>}"
 
 # Then drop any GPU busy with another user's process.
 free_list=""
@@ -86,6 +135,8 @@ for g in ${mem_ok}; do
     if [ -z "${other_user_busy[${g}]:-}" ]; then
         free_list="${free_list}${g}
 "
+    else
+        _log "gpu ${g}: dropped (busy by other user)"
     fi
 done
 
