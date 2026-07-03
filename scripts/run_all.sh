@@ -23,6 +23,12 @@ DATE="$(date +%Y%m%d-%H%M%S)"
 cd "$(dirname "$0")/.."
 mkdir -p logs
 
+# Seed the on-disk PCMCI+ prior cache from priors shipped with the repo
+# (skips CPU-heavy recomputation per entity). No-op if already populated.
+if [ -d pretrained_priors ]; then
+    bash scripts/setup_prior_cache.sh 2>&1 | sed 's/^/[run_all] /'
+fi
+
 # Auto-detect free GPUs if the caller did not explicitly set GPUS.
 GPUS="${GPUS:-}"
 if [ -z "${GPUS}" ]; then

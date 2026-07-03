@@ -31,6 +31,13 @@ EPOCHS="${EPOCHS:-80}"
 DATE="$(date +%Y%m%d-%H%M%S)"
 
 cd "$(dirname "$0")/.."
+mkdir -p logs
+
+# Seed the on-disk PCMCI+ prior cache from priors shipped with the repo
+# (skips CPU-heavy recomputation per entity). No-op if already populated.
+if [ -d pretrained_priors ]; then
+    bash scripts/setup_prior_cache.sh 2>&1 | sed 's/^/[run_all_gat] /'
+fi
 
 # Auto-detect free GPUs if the caller did not explicitly set GPUS.
 GPUS="${GPUS:-}"
@@ -46,8 +53,6 @@ if [ -z "${GPUS}" ]; then
     fi
 fi
 echo "[run_all_gat] using GPUs: ${GPUS}  (SEEDS=${SEEDS} EPOCHS=${EPOCHS})"
-
-mkdir -p logs
 
 run_one() {
     local ds="$1"          # PSM_GAT / SMD_GAT / SWaT_GAT
