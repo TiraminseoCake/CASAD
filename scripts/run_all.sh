@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
-# Run PSM -> SMD -> SWaT sequentially with 4-GPU parallelism.
+# Run PSM -> SMD -> SWaT sequentially, parallel per dataset.
+#
+# Auto-detects free GPUs via scripts/detect_free_gpus.sh unless GPUS is set.
+# See detect_free_gpus.sh for the exact "free" definition (no other user's
+# compute processes + free memory >= FREE_MEM_THRESHOLD_MB).
+#
+# Env vars (all optional):
+#   GPUS, SEEDS, EPOCHS, MAX_GPUS, FREE_MEM_THRESHOLD_MB, EXCLUDE_GPUS
 #
 # Usage:
-#   bash scripts/run_all.sh                             # foreground (current terminal)
-#   nohup bash scripts/run_all.sh > run_all.log 2>&1 &  # background, terminal-safe
-#
-# Each dataset writes to results/parallel/{dataset}_{DATE}/ and produces
-# summary_all_epochs.csv + summary_best_epoch.csv on completion.
+#   bash scripts/run_all.sh                             # foreground (tmux)
+#   GPUS=4,5 bash scripts/run_all.sh                    # force these GPUs
+#   MAX_GPUS=8 bash scripts/run_all.sh                  # use up to 8 free GPUs
+#   nohup bash scripts/run_all.sh > logs/run_all.log 2>&1 &
 
 set -u
-GPUS="${GPUS:-0,1,2,3}"
 SEEDS="${SEEDS:-0,1,2,3}"
 EPOCHS="${EPOCHS:-80}"
 DATE="$(date +%Y%m%d-%H%M%S)"
@@ -17,6 +22,18 @@ DATE="$(date +%Y%m%d-%H%M%S)"
 # Change to repo root regardless of where the script is invoked from
 cd "$(dirname "$0")/.."
 mkdir -p logs
+
+# Auto-detect free GPUs if the caller did not explicitly set GPUS.
+GPUS="${GPUS:-}"
+if [ -z "${GPUS}" ]; then
+    export MAX_GPUS="${MAX_GPUS:-4}"
+    GPUS=$(bash scripts/detect_free_gpus.sh)
+    if [ -z "${GPUS}" ]; then
+        echo "[run_all] no free GPU detected. Loosen threshold or set GPUS manually." >&2
+        exit 1
+    fi
+fi
+echo "[run_all] using GPUs: ${GPUS}  (SEEDS=${SEEDS} EPOCHS=${EPOCHS})"
 
 run_one() {
     local ds="$1"
