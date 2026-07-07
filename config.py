@@ -90,6 +90,10 @@ _C.PICAAD.GAT.NUM_LAYERS = 2
 _C.PICAAD.GAT.HEADS = 4
 _C.PICAAD.GAT.DIM = 64                # GAT attention dim (must be divisible by HEADS)
 _C.PICAAD.GAT.DROPOUT = 0.1
+# Option B / SLP: also apply causal_mask_logits[τ] as bias to the diagonal
+# (τ, τ) blocks — restores the per-τ within-lag prior that the original
+# per-lag MHSA carried but plain Option C dropped.
+_C.PICAAD.GAT.SAME_LAG_PRIOR = False
 
 # loss weights
 _C.PICAAD.LAM_TASK = 1.0

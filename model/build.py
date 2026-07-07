@@ -46,6 +46,7 @@ def build_model(cfg, N: int) -> PICAAD:
         gat_heads=cfg.PICAAD.GAT.HEADS,
         gat_dim=cfg.PICAAD.GAT.DIM,
         gat_dropout=cfg.PICAAD.GAT.DROPOUT,
+        gat_same_lag_prior=cfg.PICAAD.GAT.SAME_LAG_PRIOR,
     )
     return model
 

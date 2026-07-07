@@ -40,7 +40,10 @@ class PICAAD(nn.Module):
                  gat_num_layers: int = 2,
                  gat_heads: int = 4,
                  gat_dim: int = 64,
-                 gat_dropout: float = 0.1):
+                 gat_dropout: float = 0.1,
+                 # Option B / SLP: fill diagonal (τ, τ) blocks with the per-τ
+                 # prior. No effect when use_gat=False.
+                 gat_same_lag_prior: bool = False):
         super().__init__()
         self.N = N
         self.L = L
@@ -70,6 +73,7 @@ class PICAAD(nn.Module):
         # Message passing over lag-var nodes: original per-lag MHSA (default)
         # or cross-lag GAT (Option C). Only one is instantiated.
         self.use_gat = bool(use_gat)
+        self.gat_same_lag_prior = bool(gat_same_lag_prior)
         if self.use_gat:
             self.gat_block = CrossLagGATBlock(
                 d=d, gat_dim=int(gat_dim),
@@ -387,6 +391,7 @@ class PICAAD(nn.Module):
                     N=self.N, tau_max=self.tau_max,
                     scale=self.causal_attn_mask_scale, ramp=ramp,
                     detach_for_intervention=is_intervention,
+                    include_same_lag=self.gat_same_lag_prior,
                 )
             h_flat = C_all.reshape(B, self.tau_max * self.N, self.d)
             h_out = self.gat_block(h_flat, self._gat_causal_mask, prior_bias)

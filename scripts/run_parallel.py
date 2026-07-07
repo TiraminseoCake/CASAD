@@ -32,13 +32,17 @@ SMD_ENTITIES = [
 ]
 
 DATASETS = {
-    'PSM':      ('scripts/configs/psm.yaml',      ['PSM']),
-    'SMD':      ('scripts/configs/smd.yaml',      SMD_ENTITIES),
-    'SWaT':     ('scripts/configs/swat.yaml',     ['swat']),
+    'PSM':          ('scripts/configs/psm.yaml',          ['PSM']),
+    'SMD':          ('scripts/configs/smd.yaml',          SMD_ENTITIES),
+    'SWaT':         ('scripts/configs/swat.yaml',         ['swat']),
     # Cross-lag GAT variants (Option C)
-    'PSM_GAT':  ('scripts/configs/psm_gat.yaml',  ['PSM']),
-    'SMD_GAT':  ('scripts/configs/smd_gat.yaml',  SMD_ENTITIES),
-    'SWaT_GAT': ('scripts/configs/swat_gat.yaml', ['swat']),
+    'PSM_GAT':      ('scripts/configs/psm_gat.yaml',      ['PSM']),
+    'SMD_GAT':      ('scripts/configs/smd_gat.yaml',      SMD_ENTITIES),
+    'SWaT_GAT':     ('scripts/configs/swat_gat.yaml',     ['swat']),
+    # Cross-lag GAT + Same-Lag Prior variants (Option B / SLP)
+    'PSM_GAT_SLP':  ('scripts/configs/psm_gat_slp.yaml',  ['PSM']),
+    'SMD_GAT_SLP':  ('scripts/configs/smd_gat_slp.yaml',  SMD_ENTITIES),
+    'SWaT_GAT_SLP': ('scripts/configs/swat_gat_slp.yaml', ['swat']),
 }
 
 

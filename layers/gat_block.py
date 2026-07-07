@@ -41,23 +41,31 @@ def build_cross_lag_prior_bias(
     scale: float,
     ramp: float,
     detach_for_intervention: bool = False,
+    include_same_lag: bool = False,
 ) -> torch.Tensor:
     """Log-domain attention bias [tau_max*N, tau_max*N] from PCMCI+ prior gate.
 
-    For each edge (τ_src, i) → (τ_tgt, j) with lag_gap = τ_src - τ_tgt > 0,
-    use PCMCI+ index `lag_gap - 1` on `causal_mask_logits`, which is the exact
-    lag-alignment of the prior tensor (index k = lag k+1). Same-lag edges
-    (lag_gap == 0) get bias 0 -- PCMCI+ has no contemporaneous entry, and
-    same-lag attention proceeds unconstrained (only the causal mask allows it).
+    Cross-lag edges (τ_src > τ_tgt) with lag_gap = τ_src - τ_tgt use PCMCI+
+    index `lag_gap - 1` on `causal_mask_logits` (index k = lag k+1).
+
+    Same-lag edges (lag_gap == 0):
+      - include_same_lag=False (default, matches original Option C):
+          bias = 0, attention unconstrained apart from the causal mask.
+      - include_same_lag=True (Option B / SLP variant):
+          for each τ, the diagonal block (τ, τ) gets
+          `scale * ramp * log(sigmoid(causal_mask_logits[τ]))`. This
+          restores the per-τ within-lag prior that the original PICAAD
+          per-lag MHSA applied via `causal_mask_logits[τ-1]`.
 
     Args:
-        te_prior_gate:       [tau_max, N, N] (unused directly here; kept for
-                             API symmetry with the combined model helper)
+        te_prior_gate:       [tau_max, N, N] (kept for API symmetry)
         causal_mask_logits:  [tau_max, N, N] learnable nn.Parameter
         scale:               PICAAD.CAUSAL_ATTN_MASK_SCALE
         ramp:                warmup ramp in [0, 1]
         detach_for_intervention: True inside intervention forward passes to
                                  avoid double-backward on the same graph.
+        include_same_lag:    fill diagonal (τ, τ) blocks with
+                             causal_mask_logits[τ]. See docstring above.
 
     Returns:
         bias:                [tau_max*N, tau_max*N] float
@@ -72,8 +80,8 @@ def build_cross_lag_prior_bias(
 
     bias = torch.zeros(NT, NT, device=device, dtype=dtype)
 
-    # For each lag_gap = τ_src - τ_tgt in [1, tau_max], fill the tile of block
-    # (tau_src_range, tau_tgt_range) where tau_src = tau_tgt + gap.
+    # Cross-lag: for lag_gap = τ_src - τ_tgt in [1, tau_max], fill tiles
+    # where tau_src = tau_tgt + gap.
     for gap in range(1, tau_max + 1):
         block = scale * ramp * log_gate[gap - 1]        # [N, N]
         for tau_tgt in range(tau_max - gap):
@@ -81,6 +89,15 @@ def build_cross_lag_prior_bias(
             r_start = tau_src * N
             c_start = tau_tgt * N
             bias[r_start:r_start + N, c_start:c_start + N] = block
+
+    # Same-lag (Option B / SLP): diagonal block (τ, τ) gets its own prior.
+    if include_same_lag:
+        for tau_diag in range(tau_max):
+            block = scale * ramp * log_gate[tau_diag]   # [N, N]
+            r_start = tau_diag * N
+            c_start = tau_diag * N
+            bias[r_start:r_start + N, c_start:c_start + N] = block
+
     return bias
 
 
