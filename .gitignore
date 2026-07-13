@@ -2,7 +2,17 @@ __pycache__/
 *.pyc
 runs/
 logs/
+results/
 *.log
 *.npz
+*.npy
+/data
 data/
+data_npz/
 nohup.out
+
+# Track pretrained PCMCI+ prior cache (overrides *.npz above). Each file is
+# ~60KB and lets new users skip the CPU-heavy PCMCI+ computation. See
+# scripts/setup_prior_cache.sh.
+!pretrained_priors/
+!pretrained_priors/*.npz

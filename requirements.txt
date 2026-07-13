@@ -2,3 +2,5 @@ numpy
 pandas
 torch
 scikit-learn
+yacs
+tigramite
