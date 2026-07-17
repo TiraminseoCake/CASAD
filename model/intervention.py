@@ -77,23 +77,28 @@ def permutation_alignment_and_epoch_cls(model, X, x_true_next, base_abs_err_ref,
     edge_strength_mean = edge_strength.mean(dim=0)
 
     for tau, src in pairs:
-        if perm_mode == "fill":
-            _, pred_perm, _, _, _, _, _, _, _ = model(
-                X, mask_tau=tau, mask_var=src, mask_fill_value=fill_value,
-            )
-        else:
-            Xp = intervene_local_window(
-                X, tau=tau, src=src, lag_win=model.lag_win,
-                mode=perm_mode, fill_value=fill_value,
-            )
-            _, pred_perm, _, _, _, _, _, _, _ = model(Xp)
+        # Intervention forward pass is a stop-gradient target: the model should
+        # be shaped to align cur toward delta, not the other way around.
+        # Wrapping in no_grad both cuts the gradient path through pred_perm and
+        # saves the autograd graph memory of the intervention forward.
+        with torch.no_grad():
+            if perm_mode == "fill":
+                _, pred_perm, _, _, _, _, _, _, _ = model(
+                    X, mask_tau=tau, mask_var=src, mask_fill_value=fill_value,
+                )
+            else:
+                Xp = intervene_local_window(
+                    X, tau=tau, src=src, lag_win=model.lag_win,
+                    mode=perm_mode, fill_value=fill_value,
+                )
+                _, pred_perm, _, _, _, _, _, _, _ = model(Xp)
 
-        delta_pos = torch.clamp((x_true_next - pred_perm).abs() - base_abs_err_ref, min=0.0).mean(dim=0)
+            delta_pos = torch.clamp((x_true_next - pred_perm).abs() - base_abs_err_ref, min=0.0).mean(dim=0)
 
-        cls_sum[tau - 1, src, :] += delta_pos.detach()
+        cls_sum[tau - 1, src, :] += delta_pos
         cls_cnt[tau - 1, src, 0] += 1.0
 
-        delta_sum = float(delta_pos.sum().detach().cpu())
+        delta_sum = float(delta_pos.sum().cpu())
         if not np.isfinite(delta_sum) or delta_sum <= 1e-12:
             continue
 
