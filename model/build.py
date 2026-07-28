@@ -47,6 +47,10 @@ def build_model(cfg, N: int) -> PICAAD:
         gat_dim=cfg.PICAAD.GAT.DIM,
         gat_dropout=cfg.PICAAD.GAT.DROPOUT,
         gat_same_lag_prior=cfg.PICAAD.GAT.SAME_LAG_PRIOR,
+        disable_phi=cfg.PICAAD.ROUTING.DISABLE_PHI,
+        disable_w=cfg.PICAAD.ROUTING.DISABLE_W,
+        disable_m=cfg.PICAAD.ROUTING.DISABLE_M,
+        disable_m_learn=cfg.PICAAD.ROUTING.DISABLE_MLEARN,
     )
     return model
 

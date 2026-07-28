@@ -80,6 +80,15 @@ _C.PICAAD.GATE_INIT = 0.15
 _C.PICAAD.CAUSAL_ATTN_MASK_SCALE = 0.5
 _C.PICAAD.CAUSAL_MASK_WARMUP = 5
 
+# Routing-input ablations (retraining Approach B, minimal). All default False.
+# When True, the corresponding routing input is disabled BOTH at initialization
+# and at forward-time, so the model must learn without it from scratch.
+_C.PICAAD.ROUTING = CN()
+_C.PICAAD.ROUTING.DISABLE_PHI    = False   # freeze pred_logits at 0 (φ removed)
+_C.PICAAD.ROUTING.DISABLE_W      = False   # skip β·log(W̃) blend + skip W̃ init of φ
+_C.PICAAD.ROUTING.DISABLE_M      = False   # skip M in effective_gate + skip M init of M_learn
+_C.PICAAD.ROUTING.DISABLE_MLEARN = False   # freeze edge_log_alpha (M_learn fixed at init)
+
 # Cross-lag GAT block (Option C). When ENABLE=True, per-lag MHSA over N
 # variable nodes is replaced by a GAT over tau_max*N (lag, variable) nodes
 # with a lag-aware PCMCI+ prior bias. Encoder pipeline (per-var LSTM +
@@ -106,6 +115,14 @@ _C.PICAAD.START_CLS_EPOCH = 5
 _C.PICAAD.START_WREF_EPOCH = 3
 _C.PICAAD.TRAIN_LOSS_TYPE = 'l1'     # l1 | l2root
 _C.PICAAD.RECON_LOSS_TYPE = 'l1'
+
+# Per-regularizer weights (formerly hardcoded in trainer.py). Setting a weight
+# to 0.0 disables that regularizer, used by regularizer-ablation experiments.
+_C.PICAAD.LOSS = CN()
+_C.PICAAD.LOSS.W_GATE    = 1.0    # gate sparsity     (was implicit 1.0 in group_graphreg)
+_C.PICAAD.LOSS.W_GRAPH   = 0.5    # routing stability (was _W_GRAPH   in trainer.py)
+_C.PICAAD.LOSS.W_LAGMONO = 0.5    # lag monotonicity  (was _W_LAGMONO in trainer.py)
+_C.PICAAD.LOSS.W_INV     = 0.5    # env invariance    (was _W_INV     in trainer.py)
 
 # causal prior
 _C.PICAAD.PRIOR = CN()

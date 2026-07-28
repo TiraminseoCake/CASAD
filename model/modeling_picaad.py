@@ -43,7 +43,12 @@ class PICAAD(nn.Module):
                  gat_dropout: float = 0.1,
                  # Option B / SLP: fill diagonal (τ, τ) blocks with the per-τ
                  # prior. No effect when use_gat=False.
-                 gat_same_lag_prior: bool = False):
+                 gat_same_lag_prior: bool = False,
+                 # Routing-input ablations (retraining Approach B).
+                 disable_phi: bool = False,
+                 disable_w: bool = False,
+                 disable_m: bool = False,
+                 disable_m_learn: bool = False):
         super().__init__()
         self.N = N
         self.L = L
@@ -60,6 +65,13 @@ class PICAAD(nn.Module):
         self.causal_attn_mask_scale = float(causal_attn_mask_scale)
         self.causal_mask_warmup_epochs = int(causal_mask_warmup_epochs)
         self._current_epoch = 0  # set by training loop
+
+        # Routing-input ablation flags (Approach B). These affect BOTH the
+        # forward-time routing computation and the initialization from prior.
+        self.disable_phi     = bool(disable_phi)
+        self.disable_w       = bool(disable_w)
+        self.disable_m       = bool(disable_m)
+        self.disable_m_learn = bool(disable_m_learn)
 
         if tau_max >= L:
             raise ValueError(f"tau_max={tau_max} must be < L={L}")
@@ -191,16 +203,29 @@ class PICAAD(nn.Module):
             prior_score = torch.log(te_weight.clamp_min(1e-8))
             g = te_gate.clamp(1e-4, 1.0 - 1e-4)
             prior_alpha = torch.log(g / (1.0 - g))
-            self.pred_logits.add_(float(init_scale) * prior_score)
-            self.edge_log_alpha.add_(0.5 * float(init_scale) * prior_alpha)
+            # DISABLE_W skips W̃'s contribution to φ initialization.
+            if not self.disable_w:
+                self.pred_logits.add_(float(init_scale) * prior_score)
+            # DISABLE_M skips M's contribution to M_learn initialization.
+            if not self.disable_m:
+                self.edge_log_alpha.add_(0.5 * float(init_scale) * prior_alpha)
 
         # [FIX 4] Initialize learnable causal mask from TE gate logits
         g = te_gate.clamp(1e-4, 1.0 - 1e-4)
         self.causal_mask_logits.data.copy_(torch.log(g / (1.0 - g)) * 0.5)
 
+        # DISABLE_PHI: freeze φ at zero (already zero-initialized above; no W̃ add).
+        if self.disable_phi:
+            self.pred_logits.zero_()
+            self.pred_logits.requires_grad_(False)
+
+        # DISABLE_MLEARN: freeze M_learn at its initial value.
+        if self.disable_m_learn:
+            self.edge_log_alpha.requires_grad_(False)
+
     def _effective_gate(self):
         gate = self.edge_gate()
-        if not self.has_te_prior:
+        if not self.has_te_prior or self.disable_m:
             return gate
         return gate * (0.05 + 0.95 * self.te_prior_gate)
 
@@ -250,18 +275,22 @@ class PICAAD(nn.Module):
     def get_pred_weights(self, local_delta=None):
         gate = self._effective_gate()
 
-        if self.has_te_prior and self.te_prior_blend > 0.0:
+        # DISABLE_W: skip forward-time β·log(W̃) blend.
+        if self.has_te_prior and self.te_prior_blend > 0.0 and not self.disable_w:
             prior_bias = self.te_prior_blend * torch.log(self.te_prior_weight.clamp_min(1e-8))
         else:
             prior_bias = 0.0
 
+        # DISABLE_PHI: substitute a zero tensor for pred_logits (φ) in the score.
+        phi = torch.zeros_like(self.pred_logits) if self.disable_phi else self.pred_logits
+
         if local_delta is None:
-            score = self.pred_logits + prior_bias
+            score = phi + prior_bias
         else:
             if torch.is_tensor(prior_bias):
-                score = self.pred_logits.unsqueeze(0) + prior_bias.unsqueeze(0) + local_delta
+                score = phi.unsqueeze(0) + prior_bias.unsqueeze(0) + local_delta
             else:
-                score = self.pred_logits.unsqueeze(0) + local_delta
+                score = phi.unsqueeze(0) + local_delta
         return self._normalize_weight_tensor(score, gate)
 
     def pred_weight_entropy(self, weights=None):

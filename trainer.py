@@ -23,13 +23,13 @@ from model.losses import (
 from utils.evaluation import run_epoch_eval
 
 
-# Group sub-weights (kept fixed as in the original picaad.py to preserve
-# the achieved SWaT results; expose to cfg only if a future ablation needs it).
-_W_RECON = 0.0    # reconstruction removed
+# Non-ablatable sub-weights kept as module constants:
+#   _W_RECON is 0 (reconstruction fully removed); _W_TE_GATE is the λ_m
+#   inside L_prior (paper reports as a fixed hyperparameter).
+# Regularizer weights (W_GATE, W_GRAPH, W_LAGMONO, W_INV) are now read from
+# cfg.PICAAD.LOSS so ablation experiments can zero them out per-run.
+_W_RECON = 0.0
 _W_TE_GATE = 0.50
-_W_GRAPH = 0.50
-_W_LAGMONO = 0.50
-_W_INV = 0.50
 
 
 class PicaadTrainer:
@@ -131,14 +131,19 @@ class PicaadTrainer:
 
                 loss_inv = invariance_loss_from_tensor(edge_strength, env)
 
+                w_gate    = cfg.PICAAD.LOSS.W_GATE
+                w_graph   = cfg.PICAAD.LOSS.W_GRAPH
+                w_lagmono = cfg.PICAAD.LOSS.W_LAGMONO
+                w_inv     = cfg.PICAAD.LOSS.W_INV
+
                 group_task = loss_pred + _W_RECON * loss_recon
                 group_causal = loss_te_w + _W_TE_GATE * loss_te_g
                 if use_cstruct_loss:
                     group_causal = group_causal + loss_cstruct
-                group_graphreg = loss_gate + _W_LAGMONO * loss_lagmono
+                group_graphreg = w_gate * loss_gate + w_lagmono * loss_lagmono
                 if use_graph_loss:
-                    group_graphreg = group_graphreg + _W_GRAPH * loss_graph
-                group_robust = loss_perm + _W_INV * loss_inv
+                    group_graphreg = group_graphreg + w_graph * loss_graph
+                group_robust = loss_perm + w_inv * loss_inv
 
                 loss = (
                     cfg.PICAAD.LAM_TASK * group_task
