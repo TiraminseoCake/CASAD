@@ -135,15 +135,18 @@ class PicaadTrainer:
                 w_graph   = cfg.PICAAD.LOSS.W_GRAPH
                 w_lagmono = cfg.PICAAD.LOSS.W_LAGMONO
                 w_inv     = cfg.PICAAD.LOSS.W_INV
+                w_prior   = cfg.PICAAD.LOSS.W_PRIOR
+                w_crs     = cfg.PICAAD.LOSS.W_CRS
+                w_int     = cfg.PICAAD.LOSS.W_INT
 
                 group_task = loss_pred + _W_RECON * loss_recon
-                group_causal = loss_te_w + _W_TE_GATE * loss_te_g
+                group_causal = w_prior * (loss_te_w + _W_TE_GATE * loss_te_g)
                 if use_cstruct_loss:
-                    group_causal = group_causal + loss_cstruct
+                    group_causal = group_causal + w_crs * loss_cstruct
                 group_graphreg = w_gate * loss_gate + w_lagmono * loss_lagmono
                 if use_graph_loss:
                     group_graphreg = group_graphreg + w_graph * loss_graph
-                group_robust = loss_perm + w_inv * loss_inv
+                group_robust = w_int * loss_perm + w_inv * loss_inv
 
                 loss = (
                     cfg.PICAAD.LAM_TASK * group_task

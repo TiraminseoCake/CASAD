@@ -123,6 +123,10 @@ _C.PICAAD.LOSS.W_GATE    = 1.0    # gate sparsity     (was implicit 1.0 in group
 _C.PICAAD.LOSS.W_GRAPH   = 0.5    # routing stability (was _W_GRAPH   in trainer.py)
 _C.PICAAD.LOSS.W_LAGMONO = 0.5    # lag monotonicity  (was _W_LAGMONO in trainer.py)
 _C.PICAAD.LOSS.W_INV     = 0.5    # env invariance    (was _W_INV     in trainer.py)
+# Core-loss scalers for core-loss ablation (default 1.0 preserves baseline).
+_C.PICAAD.LOSS.W_PRIOR   = 1.0    # scales JSD(Pi||W_tilde) + lambda_m*BCE(M_learn,M)
+_C.PICAAD.LOSS.W_CRS     = 1.0    # scales KL(sg(CRS)||Norm(E)) (activated after e0)
+_C.PICAAD.LOSS.W_INT     = 1.0    # scales intervention MSE (loss_perm)
 
 # causal prior
 _C.PICAAD.PRIOR = CN()
