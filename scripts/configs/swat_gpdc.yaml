@@ -20,6 +20,7 @@ PICAAD:
   PRIOR:
     TYPE: pcmci
     PCMCI:
+      CI_TEST: 'GPDC'
       ALPHA: 0.05
       SUBSAMPLE: 10000
   SCORING:

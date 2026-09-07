@@ -10,6 +10,9 @@ import torch
 from datasets.util import get_median_anomaly_length
 from metrics.paper_eval.metrics_api import get_metrics as paper_get_metrics
 from model.scoring import (
+    counterfactual_score_windows,
+    cf_anomaly_score,
+    fit_cf_profile,
     fit_score_calibrator,
     score_components_to_timeline,
     score_windows,
@@ -46,6 +49,19 @@ def paper_eval_one(score_series_1d, y01, start_idx, eval_cfg):
     )
 
 
+# --- original run_epoch_eval (without counterfactual) ---
+# def run_epoch_eval(model, test_TN, y, device, cfg,
+#                    ep, seed, name, epochs_total,
+#                    train_TN=None, writer=None, writer_prefix="",
+#                    ckpt_dir=None, csv_path=None, mu=None, sd=None):
+#     ... identical to below but without cf_profile logic ...
+#     test_scores = score_windows(model, test_TN, device,
+#                                 batch=cfg.TEST.BATCH_SIZE,
+#                                 scoring_cfg=cfg.PICAAD.SCORING,
+#                                 calibrator=calibrator)
+#     ... rest identical ...
+
+
 def run_epoch_eval(model, test_TN, y, device, cfg,
                    ep, seed, name, epochs_total,
                    train_TN=None,
@@ -60,23 +76,44 @@ def run_epoch_eval(model, test_TN, y, device, cfg,
     was_training = model.training
     model.eval()
 
+    scoring_cfg = cfg.PICAAD.SCORING
+    use_cf = getattr(scoring_cfg, 'USE_COUNTERFACTUAL', False)
+
+    # --- counterfactual normal profile (from training data) ---
+    cf_profile = None
+    if use_cf and train_TN is not None:
+        cf_top_k = getattr(scoring_cfg, 'CF_TOP_K', 15)
+        cf_fill = getattr(scoring_cfg, 'CF_FILL_VALUE', 0.0)
+        train_effects, _ = counterfactual_score_windows(
+            model, train_TN, device,
+            batch=cfg.TRAIN.BATCH_SIZE,
+            top_k=cf_top_k, fill_value=cf_fill,
+        )
+        cf_profile = fit_cf_profile(train_effects)
+
     calibrator = None
-    if cfg.PICAAD.SCORING.CALIBRATE and train_TN is not None:
+    if scoring_cfg.CALIBRATE and train_TN is not None:
         train_scores = score_windows(model, train_TN, device,
                                      batch=cfg.TRAIN.BATCH_SIZE,
-                                     scoring_cfg=cfg.PICAAD.SCORING,
-                                     calibrator=None)
+                                     scoring_cfg=scoring_cfg,
+                                     calibrator=None,
+                                     cf_profile=cf_profile)
         calibrator = fit_score_calibrator(train_scores)
 
     test_scores = score_windows(model, test_TN, device,
                                 batch=cfg.TEST.BATCH_SIZE,
-                                scoring_cfg=cfg.PICAAD.SCORING,
-                                calibrator=calibrator)
+                                scoring_cfg=scoring_cfg,
+                                calibrator=calibrator,
+                                cf_profile=cf_profile)
 
     Tt = test_TN.shape[0]
     start = cfg.PICAAD.L - 1
+
+    timeline_keys = ["P", "C", "G", "S", "A", "P_raw", "C_raw", "G_raw"]
+    if "CF" in test_scores:
+        timeline_keys.extend(["CF", "CF_raw"])
     score_t_dict = score_components_to_timeline(
-        {k: test_scores[k] for k in ["P", "C", "G", "S", "A", "P_raw", "C_raw", "G_raw"]},
+        {k: test_scores[k] for k in timeline_keys if k in test_scores},
         Tt=Tt, start=start,
     )
     A_t = score_t_dict["A_t"]

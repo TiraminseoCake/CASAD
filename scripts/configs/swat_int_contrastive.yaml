@@ -17,6 +17,10 @@ SOLVER:
   GRADIENT_CLIP: 1.0
 
 PICAAD:
+  INTERVENTION:
+    LOSS_TYPE: 'contrastive'
+    PERM_PAIRS_PER_BATCH: 8
+    MARGIN_HIGH: 0.1
   PRIOR:
     TYPE: pcmci
     PCMCI:

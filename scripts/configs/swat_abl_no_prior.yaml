@@ -17,8 +17,11 @@ SOLVER:
   GRADIENT_CLIP: 1.0
 
 PICAAD:
+  ENABLE_PRIOR_LOSS: False
   PRIOR:
     TYPE: pcmci
+    INIT_SCALE: 0.0
+    BLEND: 0.0
     PCMCI:
       ALPHA: 0.05
       SUBSAMPLE: 10000

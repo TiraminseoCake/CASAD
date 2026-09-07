@@ -244,7 +244,7 @@ def main():
         print(
             f'lr={cfg.SOLVER.BASE_LR} L={cfg.PICAAD.L} tau_max={cfg.PICAAD.TAU_MAX} '
             f'lag_win={cfg.PICAAD.LAG_WIN} batch={cfg.TRAIN.BATCH_SIZE} '
-            f'enc/dec={cfg.PICAAD.ENC_LAYERS}/{cfg.PICAAD.DEC_LAYERS} '
+            f'enc_layers={cfg.PICAAD.ENC_LAYERS} '
             f'lam_task={cfg.PICAAD.LAM_TASK} lam_causal={cfg.PICAAD.LAM_CAUSAL} '
             f'lam_graphreg={cfg.PICAAD.LAM_GRAPHREG} lam_robust={cfg.PICAAD.LAM_ROBUST} '
             f'prior={prior_label} te_prior_blend={cfg.PICAAD.PRIOR.BLEND} '
