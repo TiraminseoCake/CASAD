@@ -1,8 +1,6 @@
 """PicaadTrainer: encapsulates the train loop, per-epoch eval, and reference
 tensor (w_ref/cls_ref) maintenance for a single (entity, seed) run.
 """
-import os
-
 import numpy as np
 import torch
 import torch.nn as nn
@@ -87,12 +85,10 @@ class PicaadTrainer:
                     X.requires_grad_(True)
                 env = torch.as_tensor(env, device=self.device, dtype=torch.long)
 
-                out = self.model(X)
-                (recon, pred, C_all, pred_weights,
-                 edge_value, edge_effect, edge_strength, gate, local_delta) = out
+                (_, pred, _, pred_weights,
+                 _, _, edge_strength, _, _) = self.model(X)
 
                 xL = X[:, -1, :]
-                xpast = X[:, :self.model.L - 1, :]
 
                 loss_pred = prediction_train_loss(xL, pred, loss_type=cfg.PICAAD.TRAIN_LOSS_TYPE)
 

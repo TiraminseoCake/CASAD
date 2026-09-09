@@ -11,7 +11,6 @@ from datasets.util import get_median_anomaly_length
 from metrics.paper_eval.metrics_api import get_metrics as paper_get_metrics
 from model.scoring import (
     counterfactual_score_windows,
-    cf_anomaly_score,
     fit_cf_profile,
     fit_score_calibrator,
     score_components_to_timeline,
@@ -47,19 +46,6 @@ def paper_eval_one(score_series_1d, y01, start_idx, eval_cfg):
         score=score, labels=labels, slidingWindow=sliding_window,
         pred=None, version=eval_cfg.VUS_VERSION, thre=eval_cfg.VUS_THRE,
     )
-
-
-# --- original run_epoch_eval (without counterfactual) ---
-# def run_epoch_eval(model, test_TN, y, device, cfg,
-#                    ep, seed, name, epochs_total,
-#                    train_TN=None, writer=None, writer_prefix="",
-#                    ckpt_dir=None, csv_path=None, mu=None, sd=None):
-#     ... identical to below but without cf_profile logic ...
-#     test_scores = score_windows(model, test_TN, device,
-#                                 batch=cfg.TEST.BATCH_SIZE,
-#                                 scoring_cfg=cfg.PICAAD.SCORING,
-#                                 calibrator=calibrator)
-#     ... rest identical ...
 
 
 def run_epoch_eval(model, test_TN, y, device, cfg,

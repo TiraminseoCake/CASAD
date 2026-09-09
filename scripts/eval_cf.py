@@ -21,9 +21,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from datasets.build import list_entities, load_entity
 from model.build import apply_prior_to_model, build_causal_prior_cached, build_model
 from model.scoring import (
+    cf_anomaly_score,
     counterfactual_score_windows,
     fit_cf_profile,
-    fit_score_calibrator,
     score_components_to_timeline,
     score_windows,
 )
@@ -78,17 +78,11 @@ def main():
 
         scoring_cfg = cfg.PICAAD.SCORING
 
-        # --- Baseline (P + C) ---
         raw_base = score_windows(model, entity.test_z, device,
                                  batch=cfg.TEST.BATCH_SIZE,
                                  scoring_cfg=scoring_cfg)
         Tt = entity.test_z.shape[0]
         start = cfg.PICAAD.L - 1
-        tl_base = score_components_to_timeline(
-            {k: raw_base[k] for k in ['P', 'C', 'G', 'S', 'A']}, Tt=Tt, start=start)
-        mtr_base = paper_eval_one(tl_base['A_t'], entity.y, start, cfg.EVAL)
-
-        # --- Counterfactual (P + C + gamma * CF) ---
         print(f'[seed {seed}] computing counterfactual profile (train) ...', flush=True)
         train_cf, _ = counterfactual_score_windows(
             model, entity.train_z, device, batch=cfg.TRAIN.BATCH_SIZE,
@@ -96,10 +90,9 @@ def main():
         cf_profile = fit_cf_profile(train_cf)
 
         print(f'[seed {seed}] computing counterfactual scores (test) ...', flush=True)
-        test_cf, src_idx = counterfactual_score_windows(
+        test_cf, _ = counterfactual_score_windows(
             model, entity.test_z, device, batch=cfg.TEST.BATCH_SIZE,
             top_k=args.cf_top_k, fill_value=args.cf_fill)
-        from model.scoring import cf_anomaly_score
         CF_raw = cf_anomaly_score(test_cf, cf_profile)
 
         P = raw_base['P'].astype(np.float32)

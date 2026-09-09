@@ -14,11 +14,10 @@ import torch
 
 from config import get_cfg_defaults
 from datasets.build import load_entity
-from datasets.sliding_window import SlidingWindowDataset
 from model.build import build_model
-from model.scoring import score_windows_raw, fit_score_calibrator
+from model.scoring import score_windows_raw
 from utils.evaluation import paper_eval_one
-from utils.misc import robust_loc_scale, robust_zscore, pct, set_seed
+from utils.misc import robust_loc_scale, robust_zscore, set_seed
 
 
 FUSION_STRATEGIES = {

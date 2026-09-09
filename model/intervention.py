@@ -7,7 +7,7 @@ from layers.ops import normalize_vector_torch
 
 def intervene_local_window(X: torch.Tensor, tau: int, src: int, lag_win: int,
                            mode: str = "permute", fill_value: float = 0.0):
-    B, L, N = X.shape
+    B, L, _ = X.shape
     tau = int(tau)
     src = int(src)
     end = L - tau
@@ -88,7 +88,7 @@ def gradient_sensitivity_and_epoch_cls(model, X, pred, x_true_next, edge_strengt
 
     Returns (loss_perm, cls_sum, cls_cnt) with same interface as permutation variant.
     """
-    B, L, N = X.shape
+    _, L, N = X.shape
     tau_max = model.tau_max
     lag_win = model.lag_win
     device = X.device

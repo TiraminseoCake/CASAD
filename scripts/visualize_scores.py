@@ -30,12 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from datasets.build import load_entity
 from model.build import build_model, build_causal_prior_cached, apply_prior_to_model
 from model.scoring import score_windows, score_components_to_timeline
-from layers.ops import normalize_causal_tensor_torch
 from utils.parser import load_config
-
-
-def pct(x):
-    return float(x) * 100.0 if np.isfinite(x) else float('nan')
 
 
 def main():
