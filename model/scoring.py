@@ -38,9 +38,10 @@ def apply_score_calibrator(raw_scores: dict, calibrator: dict, clip_min: float =
         CFn = robust_zscore(raw_scores["CF_raw"], calibrator["CF_raw"]["center"], calibrator["CF_raw"]["scale"], clip_min)
     else:
         CFn = np.zeros_like(Pn)
+        gamma = 0.0
 
     S = Cn.copy()
-    A = (Pn + Cn).astype(np.float32)
+    A = (Pn + Cn + float(gamma) * CFn).astype(np.float32)
     return {"P": Pn, "C": Cn, "G": Gn, "CF": CFn, "S": S, "A": A}
 
 
@@ -122,15 +123,13 @@ def _select_cf_sources(model, top_k):
 @torch.no_grad()
 def counterfactual_score_windows(model, series_TN, device, batch,
                                   top_k=15, fill_value=0.0):
-    """Graph-intervention version: cuts outgoing edges of src in the
-    learned causal graph (gate_override) instead of modifying input X.
+    """Do-calculus counterfactual: do(X_s = normal).
 
-    For each window:
-      base_err = |x_true - pred(X)|
-      For each source src:
-        gate_cf = gate with gate_cf[:, src, :] = 0  (structural intervention)
-        cf_err = |x_true - pred(X, gate_override=gate_cf)|
-        causal_effect[src] = mean(cf_err - base_err)
+    For each source src, implements Pearl's do-operator:
+      1. Replace X_src with fill_value in input (set src to "normal")
+      2. Cut incoming edges to src in gate (src is now exogenous)
+      3. Keep outgoing edges from src (causal influence path preserved)
+      4. Measure prediction change as causal effect
 
     Returns (effects, src_indices):
       effects: [W, k] — causal effect per window per source
@@ -156,9 +155,13 @@ def counterfactual_score_windows(model, series_TN, device, batch,
 
         bsz = X.shape[0]
         for j, src in enumerate(src_indices):
+            X_cf = X.clone()
+            X_cf[:, :, src] = float(fill_value)
+
             gate_cf = base_gate.clone()
-            gate_cf[:, src, :] = 0.0       # cut all outgoing edges from src
-            _, cf_pred, *_ = model(X, gate_override=gate_cf)
+            gate_cf[:, :, src] = 0.0       # cut incoming edges to src (do-operator)
+
+            _, cf_pred, *_ = model(X_cf, gate_override=gate_cf)
             cf_err = (x_true - cf_pred).abs()
             delta = (cf_err - base_err).mean(dim=1)   # [B]
             effects[offset:offset + bsz, j] = delta.cpu().numpy()
@@ -293,7 +296,10 @@ def score_windows(model, series_TN, device, batch, scoring_cfg,
         else:
             cal["CF"] = np.zeros_like(cal["P"])
         cal["S"] = cal["C"].copy()
-        cal["A"] = (cal["P"] + cal["C"]).astype(np.float32)
+        if use_cf and float(gamma) > 0:
+            cal["A"] = (cal["P"] + cal["C"] + float(gamma) * cal["CF"]).astype(np.float32)
+        else:
+            cal["A"] = (cal["P"] + cal["C"]).astype(np.float32)
 
     out = {}
     out.update(raw)

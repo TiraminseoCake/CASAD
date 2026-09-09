@@ -18,6 +18,8 @@ from model.build import (
     build_model,
 )
 from model.scoring import (
+    counterfactual_score_windows,
+    fit_cf_profile,
     fit_score_calibrator,
     score_components_to_timeline,
     score_windows,
@@ -82,15 +84,31 @@ def _final_eval(cfg, model, entity, seed, writer, device):
                                      calibrator=None)
         calibrator = fit_score_calibrator(train_scores)
 
+    cf_profile = None
+    if getattr(cfg.PICAAD.SCORING, 'USE_COUNTERFACTUAL', False):
+        print(f'[seed {seed}] fitting counterfactual profile on train windows ...', flush=True)
+        train_cf_effects, _ = counterfactual_score_windows(
+            model, entity.train_z, device, batch=cfg.TRAIN.BATCH_SIZE,
+            top_k=cfg.PICAAD.SCORING.CF_TOP_K,
+            fill_value=cfg.PICAAD.SCORING.CF_FILL_VALUE,
+        )
+        cf_profile = fit_cf_profile(train_cf_effects)
+
     test_scores = score_windows(model, entity.test_z, device,
                                 batch=cfg.TEST.BATCH_SIZE,
                                 scoring_cfg=cfg.PICAAD.SCORING,
-                                calibrator=calibrator)
+                                calibrator=calibrator,
+                                cf_profile=cf_profile)
 
     Tt = entity.test_z.shape[0]
     start = cfg.PICAAD.L - 1
+    comp_keys = ['P', 'C', 'G', 'S', 'A', 'P_raw', 'C_raw', 'G_raw']
+    if 'CF' in test_scores:
+        comp_keys.append('CF')
+    if 'CF_raw' in test_scores:
+        comp_keys.append('CF_raw')
     score_t_dict = score_components_to_timeline(
-        {k: test_scores[k] for k in ['P', 'C', 'G', 'S', 'A', 'P_raw', 'C_raw', 'G_raw']},
+        {k: test_scores[k] for k in comp_keys if k in test_scores},
         Tt=Tt, start=start,
     )
     P_t = score_t_dict['P_t']; C_t = score_t_dict['C_t']; G_t = score_t_dict['G_t']
@@ -102,14 +120,23 @@ def _final_eval(cfg, model, entity, seed, writer, device):
     mtr_S = paper_eval_one(S_t, entity.y, start, cfg.EVAL)
     mtr_A = paper_eval_one(A_t, entity.y, start, cfg.EVAL)
 
+    mtr_CF = None
+    if 'CF_t' in score_t_dict:
+        CF_t = score_t_dict['CF_t']
+        mtr_CF = paper_eval_one(CF_t, entity.y, start, cfg.EVAL)
+
     if cfg.EVAL.DIAGNOSE_COMPONENTS:
+        cf_line = ''
+        if mtr_CF is not None:
+            cf_line = f"\n  CF-only: A-PR={pct(mtr_CF['AUC-PR']):.2f}  VUS-PR={pct(mtr_CF['VUS-PR']):.2f}  F1={pct(mtr_CF['Standard-F1']):.2f}"
         print(
             f'[seed {seed}] paper_eval components\n'
             f"  P-only : A-PR={pct(mtr_P['AUC-PR']):.2f}  VUS-PR={pct(mtr_P['VUS-PR']):.2f}  F1={pct(mtr_P['Standard-F1']):.2f}\n"
             f"  C-only : A-PR={pct(mtr_C['AUC-PR']):.2f}  VUS-PR={pct(mtr_C['VUS-PR']):.2f}  F1={pct(mtr_C['Standard-F1']):.2f}\n"
             f"  G-only : A-PR={pct(mtr_G['AUC-PR']):.2f}  VUS-PR={pct(mtr_G['VUS-PR']):.2f}  F1={pct(mtr_G['Standard-F1']):.2f}\n"
             f"  S=C+G  : A-PR={pct(mtr_S['AUC-PR']):.2f}  VUS-PR={pct(mtr_S['VUS-PR']):.2f}  F1={pct(mtr_S['Standard-F1']):.2f}\n"
-            f"  A=P*S  : A-PR={pct(mtr_A['AUC-PR']):.2f}  VUS-PR={pct(mtr_A['VUS-PR']):.2f}  F1={pct(mtr_A['Standard-F1']):.2f}",
+            f"  A=P*S  : A-PR={pct(mtr_A['AUC-PR']):.2f}  VUS-PR={pct(mtr_A['VUS-PR']):.2f}  F1={pct(mtr_A['Standard-F1']):.2f}"
+            + cf_line,
             flush=True,
         )
 
