@@ -26,8 +26,10 @@ from datasets.split import (                              # noqa: E402
 from datasets.util import standardize_train_test          # noqa: E402
 from model.build import _prior_cache_key, build_causal_prior_cached  # noqa: E402
 
-GOLDEN_FIXTURE = ('/mnt/data/PICAAD/snapshots/20260909_pre_cf_integration/'
-                  'golden/fixture/synth_npz/synth.npz')
+# Optional Phase-0 golden fixture (reference machine path); override with PICAAD_GOLDEN_FIXTURE.
+# Tests fall back to a generated synthetic series / skip when it is absent.
+GOLDEN_FIXTURE = os.environ.get('PICAAD_GOLDEN_FIXTURE',
+                                '/mnt/data/PICAAD/snapshots/20260909_pre_cf_integration/golden/fixture/synth_npz/synth.npz')
 GOLDEN_KEY = 'PSM_synth_pcmci_5fc402d470ab3c5c'   # from Phase-0 golden run.log (VAL off)
 
 
@@ -188,6 +190,8 @@ class TestPriorCacheKey(unittest.TestCase):
 
     @unittest.skipUnless(os.path.exists(GOLDEN_FIXTURE), 'Phase-0 golden fixture not available')
     def test_full_key_matches_phase0_golden(self):
+        if not os.path.exists(GOLDEN_FIXTURE):
+            self.skipTest('Phase-0 golden fixture not available on this machine')
         cfg = get_cfg_defaults(); cfg.merge_from_file(os.path.join(REPO, 'scripts/configs/psm_cf.yaml'))
         cfg.DATA.INPUT_DIR = os.path.dirname(GOLDEN_FIXTURE); cfg.DATA.ENTITIES = 'synth'
         e = load_entity(cfg, 'synth')

@@ -31,8 +31,10 @@ import trainer as trainer_mod                                 # noqa: E402
 from trainer import PicaadTrainer                             # noqa: E402
 from utils.misc import set_seed                               # noqa: E402
 
-GOLDEN_FIXTURE = ('/mnt/data/PICAAD/snapshots/20260909_pre_cf_integration/'
-                  'golden/fixture/synth_npz/synth.npz')
+# Optional Phase-0 golden fixture (reference machine path); override with PICAAD_GOLDEN_FIXTURE.
+# Tests fall back to a generated synthetic series / skip when it is absent.
+GOLDEN_FIXTURE = os.environ.get('PICAAD_GOLDEN_FIXTURE',
+                                '/mnt/data/PICAAD/snapshots/20260909_pre_cf_integration/golden/fixture/synth_npz/synth.npz')
 
 
 def _synth_npz(path, seed=20260909, Ttr=600, Tte=400, N=6):
