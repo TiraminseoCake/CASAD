@@ -1,0 +1,31 @@
+# Full scope (NOT approved for execution yet): 4 seeds; SMD all 28 entities.
+# Expressed for planning/dry-run only. Epoch/LR/CF settings come from the configs.
+name: full_cfval
+description: PSM/SWaT51/SMD(28 entities) x seeds 0-3 with *_cf_val.yaml
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 2
+  eval:
+    ckpt_tags: [last, best_val]
+    cf: both
+    calibrate: cfg
+    verify_native_parity: false
+train:
+  - dataset: PSM
+    config: scripts/configs/psm_cf_val.yaml
+    input_dir: PSM
+    entities: [PSM]
+    seeds: [0, 1, 2, 3]
+  - dataset: SWaT
+    config: scripts/configs/swat_cf_val.yaml
+    input_dir: SWaT51
+    entities: [swat]
+    seeds: [0, 1, 2, 3]
+    expected_n: 51
+  - dataset: SMD
+    config: scripts/configs/smd_cf_val.yaml
+    input_dir: SMD
+    entities: all             # -> run_parallel.SMD_ENTITIES (28)
+    seeds: [0, 1, 2, 3]
+eval_only: []

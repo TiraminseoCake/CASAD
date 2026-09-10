@@ -1,0 +1,21 @@
+# Eval-only jobs (e.g. a colleague's native last-epoch checkpoint). Paths are placeholders.
+name: example_eval_only
+description: evaluate existing checkpoints with scripts/eval_ckpt.py, no training
+defaults:
+  threads_per_job: 4
+  eval:
+    cf: both
+    calibrate: cfg
+    verify_native_parity: true
+train: []
+eval_only:
+  - name: colleague_psm_seed0_ep80
+    ckpt: /path/to/colleague/ckpt/PSM_seed0_ep80.pt      # explicit file
+    input_dir: PSM
+  - name: colleague_swat_seed0_ep80
+    ckpt_dir: /path/to/colleague/ckpt                    # or explicit dir + entity + seed + tag
+    entity: swat
+    seed: 0
+    ckpt_tag: ep80
+    input_dir: SWaT51
+    expected_n: 51
