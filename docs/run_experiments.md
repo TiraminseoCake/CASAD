@@ -14,7 +14,7 @@ Verification status (be explicit about what was and was not checked):
 | Unit tests (validation split/prior cache, val trainer, evaluator raw + calibrated, launcher with mocked GPUs and CPU mock jobs) | pass, CPU only |
 | VAL-off native regression against the Phase-0 golden (synthetic, CPU) | exact |
 | Pilot / full manifest `--dry-run` | done (plan JSON only) |
-| Launcher on real GPUs (nvidia-smi probe, per-child `CUDA_VISIBLE_DEVICES`, locks) | **no run record exists in this working tree** (`results/experiments/_launcher/*` holds dry-run plans only). Whoever runs the first GPU job must keep its `queue.json`/`SUCCESS.json` as the record. |
+| Launcher on real GPUs (nvidia-smi probe, per-child `CUDA_VISIBLE_DEVICES`, locks) | **synthetic smoke done at commit 30631d9 (2026-09-10)**: two 6-epoch synthetic training jobs ran concurrently on two RTX A6000 (GPU 0/1, one job per GPU, child `cuda:0`), followed by `eval_ckpt.py` last/best_val with CF OFF/ON; queue `--resume` skipped all completed jobs. Record: `/mnt/data/PICAAD/smoke/20260910_gpu_smoke_30631d9/` (`SMOKE_REPORT.md`, `queue_run1.json`, `monitor/nvidia_smi_samples.csv`). Not exercised on real GPUs: external-process avoidance, cross-launcher lock contention, `--gpus auto`, OOM (mocked tests only). |
 | Benchmark training / test evaluation on PSM, SWaT51, SMD | not run |
 
 ---
