@@ -18,3 +18,6 @@ nohup.out
 # scripts/setup_prior_cache.sh.
 !pretrained_priors/
 !pretrained_priors/*.npz
+
+# per-server local settings (copy from *.env.example)
+configs/servers/*.env

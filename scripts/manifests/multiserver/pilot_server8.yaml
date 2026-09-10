@@ -1,0 +1,11 @@
+# Campaign cfval — pilot, server8 share: SWaT51 seed0.
+name: cfval_pilot_server8
+description: pilot share for the 8-GPU server (SWaT51 seed0)
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 1
+  eval: {ckpt_tags: [last, best_val], cf: both, calibrate: cfg, verify_native_parity: false}
+train:
+  - {dataset: SWaT, config: scripts/configs/swat_cf_val.yaml, input_dir: SWaT51, entities: [swat], seeds: [0], expected_n: 51}
+eval_only: []

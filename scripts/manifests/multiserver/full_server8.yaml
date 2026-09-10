@@ -1,0 +1,20 @@
+# Campaign cfval — FULL, server8 share (planning file; execution needs approval):
+#   SWaT51 seeds 0-3 FIRST (queue order = manifest order, so SWaT takes GPUs first),
+#   then the remaining 20 SMD entities (machine-2-1..2-9, machine-3-1..3-11) x seeds 0-3 on whatever GPUs are free.
+# Disjoint from full_server4.yaml; together they cover all 120 training jobs.
+name: cfval_full_server8
+description: full share for the 8-GPU server (SWaT51 x4 seeds first, then SMD machine-2-*/3-* x4 seeds)
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 2
+  eval: {ckpt_tags: [last, best_val], cf: both, calibrate: cfg, verify_native_parity: false}
+train:
+  - {dataset: SWaT, config: scripts/configs/swat_cf_val.yaml, input_dir: SWaT51, entities: [swat], seeds: [0, 1, 2, 3], expected_n: 51}
+  - dataset: SMD
+    config: scripts/configs/smd_cf_val.yaml
+    input_dir: SMD
+    entities: [machine-2-1, machine-2-2, machine-2-3, machine-2-4, machine-2-5, machine-2-6, machine-2-7, machine-2-8, machine-2-9,
+               machine-3-1, machine-3-2, machine-3-3, machine-3-4, machine-3-5, machine-3-6, machine-3-7, machine-3-8, machine-3-9, machine-3-10, machine-3-11]
+    seeds: [0, 1, 2, 3]
+eval_only: []

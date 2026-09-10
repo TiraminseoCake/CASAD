@@ -1,0 +1,13 @@
+# Campaign cfval — pilot, server4 share: PSM seed0, SMD machine-1-1 seed0.
+# Configs unchanged (*_cf_val.yaml: 80 epochs, PERM_PAIRS_PER_BATCH=0, CALIBRATE=False, USE_COUNTERFACTUAL=True, SCORE_GAMMA=1.0).
+name: cfval_pilot_server4
+description: pilot share for the 4-GPU server (PSM seed0, SMD machine-1-1 seed0)
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 1
+  eval: {ckpt_tags: [last, best_val], cf: both, calibrate: cfg, verify_native_parity: false}
+train:
+  - {dataset: PSM, config: scripts/configs/psm_cf_val.yaml, input_dir: PSM, entities: [PSM], seeds: [0]}
+  - {dataset: SMD, config: scripts/configs/smd_cf_val.yaml, input_dir: SMD, entities: [machine-1-1], seeds: [0]}
+eval_only: []
