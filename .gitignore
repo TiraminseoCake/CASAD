@@ -3,6 +3,8 @@ __pycache__/
 runs/
 logs/
 results/
+!results/parallel/*/summary_*.csv
+!results/cf_eval_*/
 *.log
 *.npz
 *.npy
