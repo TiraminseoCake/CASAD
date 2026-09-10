@@ -4,6 +4,7 @@ Usage:
     python main.py --cfg scripts/configs/swat.yaml \
         SEEDS "[0,1,2,3,4]" SOLVER.MAX_EPOCH 20
 """
+import hashlib
 import os
 import sys
 
@@ -12,7 +13,9 @@ import pandas as pd
 import torch
 
 from datasets.build import list_entities, load_entity
+from datasets.split import split_id_for
 from model.build import (
+    _prior_cache_key,
     apply_prior_to_model,
     build_causal_prior_cached,
     build_model,
@@ -49,8 +52,13 @@ def _make_writer(cfg, entity_name, seed):
     return writer
 
 
-def _run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device):
-    """Train + evaluate one (entity, seed) run. Returns metric tuple."""
+def _run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device, provenance=None):
+    """Train + evaluate one (entity, seed) run. Returns metric tuple.
+
+    Under cfg.VAL.ENABLE the run is training + validation-based checkpoint
+    selection only: no test-set evaluation happens here and None is returned;
+    test scoring is a separate explicit step (Phase 2 evaluator).
+    """
     print(f'\n[seed {seed}] training ...', flush=True)
     set_seed(seed)
 
@@ -59,15 +67,34 @@ def _run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device):
     model = build_model(cfg, N=entity.N).to(device)
     apply_prior_to_model(cfg, model, te_weight_np, te_gate_np)
 
-    ckpt_dir = cfg.TRAIN.CKPT_DIR
+    val_enabled = bool(cfg.VAL.ENABLE)
+    ckpt_dir = cfg.TRAIN.CKPT_DIR or (os.path.join(cfg.RESULT_DIR, 'ckpt') if val_enabled else '')
     csv_path = os.path.join(cfg.RESULT_DIR, f'{entity.name}_seed{seed}_epoch_metrics.csv')
 
     trainer = PicaadTrainer(
         cfg, model, entity, seed,
         device=device, writer=writer,
         ckpt_dir=ckpt_dir, csv_path=csv_path,
+        provenance=provenance,
     )
     trainer.train()
+
+    if val_enabled:
+        best_path = trainer.best_val_ckpt_path
+        if best_path is None or not os.path.exists(best_path):
+            raise RuntimeError(
+                f'[seed {seed}] validation protocol produced no best_val.pt '
+                f'(no finite validation MAE?). Not falling back to a test-selected checkpoint.'
+            )
+        print(
+            f'[seed {seed}] training done under VAL.ENABLE=True: '
+            f'best_val epoch={trainer.best_val_epoch} val_mae={trainer.best_val_mae:.6f} -> {best_path}; '
+            f'last -> {trainer.last_ckpt_path}. Test scoring is a separate explicit step.',
+            flush=True,
+        )
+        if writer is not None:
+            writer.flush(); writer.close()
+        return None
 
     return _final_eval(cfg, model, entity, seed, writer, device)
 
@@ -205,6 +232,17 @@ def _final_eval(cfg, model, entity, seed, writer, device):
     return (A_PR, A_ROC, F1, PA_F1, EV_F1, R_F1, Aff_F1, VUS_ROC, VUS_PR)
 
 
+def _npz_fingerprint(path):
+    """sha256 of the entity NPZ file plus per-array shapes (data identity)."""
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1 << 22), b''):
+            h.update(chunk)
+    d = np.load(path)
+    return {'path': os.path.abspath(path), 'file_sha256': h.hexdigest(),
+            'shapes': {k: list(d[k].shape) for k in d.files}}
+
+
 def _summarize_and_save(cfg, per_entity_rows):
     """Write RESULT_DIR/summary.csv (one row per entity, seed-mean values)."""
     if not per_entity_rows:
@@ -261,12 +299,31 @@ def main():
             print(f'[skip] {name} too short (Ttr={entity.T_train}, Tte={entity.T_test})',
                   flush=True)
             continue
+        if cfg.VAL.ENABLE and entity.T_val < cfg.PICAAD.L + 1:
+            print(f'[skip] {name}: validation block too short (T_val={entity.T_val} < L+1)',
+                  flush=True)
+            continue
 
         prior_label = cfg.PICAAD.PRIOR.TYPE.upper()
+        val_tag = (f' | val_frac={entity.val_frac:g} T_val={entity.T_val} boundary={entity.val_boundary}'
+                   if cfg.VAL.ENABLE else '')
         print(f'\n=== {name} (Ttr={entity.T_train}, Tte={entity.T_test}, N={entity.N}) '
-              f'| prior={prior_label} ===', flush=True)
+              f'| prior={prior_label}{val_tag} ===', flush=True)
 
-        te_weight_np, te_gate_np = build_causal_prior_cached(cfg, entity.train_z, entity.name)
+        # Prior is fit on entity.train_z, which is the full train series when
+        # VAL is off and the chronological train_sub when VAL is on; the split
+        # identity is mixed into the cache key so the two never collide.
+        split_id = split_id_for(cfg, entity)
+        te_weight_np, te_gate_np = build_causal_prior_cached(
+            cfg, entity.train_z, entity.name, split_id=split_id,
+        )
+        provenance = None
+        if cfg.VAL.ENABLE:
+            provenance = {
+                'split_id': split_id,
+                'prior_cache_key': _prior_cache_key(cfg, entity.train_z, entity.name, split_id=split_id),
+                'data_fingerprint': _npz_fingerprint(os.path.join(cfg.DATA.INPUT_DIR, f'{name}.npz')),
+            }
 
         print(
             f'lr={cfg.SOLVER.BASE_LR} L={cfg.PICAAD.L} tau_max={cfg.PICAAD.TAU_MAX} '
@@ -281,7 +338,13 @@ def main():
 
         metrics = []
         for seed in seeds:
-            metrics.append(_run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device))
+            r = _run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device, provenance=provenance)
+            if r is not None:
+                metrics.append(r)
+
+        if not metrics:
+            # VAL on: training + selection only; no test metrics to aggregate.
+            continue
 
         A_PR_m,   A_PR_s   = safe_mean_std([m[0] for m in metrics])
         A_ROC_m,  A_ROC_s  = safe_mean_std([m[1] for m in metrics])

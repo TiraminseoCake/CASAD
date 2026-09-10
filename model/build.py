@@ -1,3 +1,4 @@
+import fcntl
 import hashlib
 import os
 import time
@@ -99,12 +100,22 @@ def apply_prior_to_model(cfg, model: PICAAD, te_weight_np, te_gate_np):
 # ----------------------------------------------------------
 # On-disk prior cache
 # ----------------------------------------------------------
-def _prior_cache_key(cfg, train_TN: np.ndarray, entity_name: str) -> str:
-    """Deterministic cache key from prior hyperparameters + training data.
+def _prior_cache_key(cfg, train_TN: np.ndarray, entity_name: str,
+                     split_id: str = 'full') -> str:
+    """Deterministic cache key from prior hyperparameters + training data
+    (+ split identity).
 
     Any change to hyperparameters, tau_max, or the training tensor content
     invalidates the cache. Excludes irrelevant params (BLEND, INIT_SCALE are
     applied at model-init time and don't affect the prior arrays).
+
+    ``split_id == 'full'`` (default, VAL off) reproduces the legacy key
+    byte-for-byte: nothing is added to the hash input or the file name, so
+    existing full-train caches keep hitting. Any other ``split_id`` (e.g.
+    ``'val0.2_b105985'`` for a chronological train_sub) is mixed into the hash
+    and appended to the file name, so a train_sub prior can never be confused
+    with a full-train prior even though both share DATA.NAME/entity/PCMCI
+    settings.
     """
     h = hashlib.sha256()
     p = cfg.PICAAD.PRIOR
@@ -113,6 +124,8 @@ def _prior_cache_key(cfg, train_TN: np.ndarray, entity_name: str) -> str:
         f'tau{cfg.PICAAD.TAU_MAX}',
         f'self{p.SELF_MASS:g}', f'sd{p.SEED}',
     ]
+    if split_id != 'full':
+        parts.append(f'split_{split_id}')
     if p.TYPE == 'pcmci':
         parts += [p.PCMCI.CI_TEST, f'a{p.PCMCI.ALPHA:g}', f'sub{p.PCMCI.SUBSAMPLE}']
     else:
@@ -121,39 +134,75 @@ def _prior_cache_key(cfg, train_TN: np.ndarray, entity_name: str) -> str:
     h.update('|'.join(parts).encode('utf-8'))
     h.update(np.ascontiguousarray(train_TN).tobytes())
     digest = h.hexdigest()[:16]
-    return f'{cfg.DATA.NAME}_{entity_name}_{p.TYPE}_{digest}'
+    prefix = f'{cfg.DATA.NAME}_{entity_name}_{p.TYPE}'
+    if split_id != 'full':
+        return f'{prefix}_{split_id}_{digest}'
+    return f'{prefix}_{digest}'
 
 
-def build_causal_prior_cached(cfg, train_TN: np.ndarray, entity_name: str):
+def build_causal_prior_cached(cfg, train_TN: np.ndarray, entity_name: str,
+                              split_id: str = 'full'):
     """Wraps build_causal_prior with an on-disk NPZ cache keyed by
-    hyperparameters and the raw training tensor contents.
+    hyperparameters, the raw training tensor contents and ``split_id``.
+
+    Callers on the legacy full-train path may omit ``split_id``. Callers that
+    pass a chronological train_sub MUST pass the matching split identity
+    (``datasets.split.split_id_for``) so the cache cannot silently reuse a
+    full-train prior.
     """
     p = cfg.PICAAD.PRIOR
     if not p.CACHE_ENABLE:
         return build_causal_prior(cfg, train_TN)
 
-    key = _prior_cache_key(cfg, train_TN, entity_name)
+    key = _prior_cache_key(cfg, train_TN, entity_name, split_id=split_id)
     cache_path = os.path.join(p.CACHE_DIR, f'{key}.npz')
 
-    if not p.CACHE_REBUILD and os.path.exists(cache_path):
-        try:
-            data = np.load(cache_path)
-            te_weight_np = data['te_weight']
-            te_gate_np = data['te_gate']
-            print(f'  [prior] cache hit: {cache_path}', flush=True)
-            return te_weight_np, te_gate_np
-        except Exception as e:
-            print(f'  [prior] cache read failed ({e}); rebuilding', flush=True)
+    def _try_load():
+        if not p.CACHE_REBUILD and os.path.exists(cache_path):
+            try:
+                data = np.load(cache_path)
+                te_weight_np = data['te_weight']
+                te_gate_np = data['te_gate']
+                print(f'  [prior] cache hit: {cache_path}', flush=True)
+                return te_weight_np, te_gate_np
+            except Exception as e:
+                print(f'  [prior] cache read failed ({e}); rebuilding', flush=True)
+        return None
 
-    t0 = time.time()
-    te_weight_np, te_gate_np = build_causal_prior(cfg, train_TN)
-    dt = time.time() - t0
+    hit = _try_load()
+    if hit is not None:
+        return hit
 
+    # Concurrent builders of the *same key* (e.g. seed-parallel launchers)
+    # serialize on a per-key lock; whoever wins builds once, the others load
+    # the finished file. The key itself is unchanged; only the I/O is guarded.
     os.makedirs(p.CACHE_DIR, exist_ok=True)
-    try:
-        np.savez(cache_path, te_weight=te_weight_np, te_gate=te_gate_np)
-        print(f'  [prior] cached ({dt:.1f}s): {cache_path}', flush=True)
-    except Exception as e:
-        print(f'  [prior] cache write failed ({e}); continuing without cache', flush=True)
+    lock_path = cache_path + '.lock'
+    with open(lock_path, 'w') as lock_f:
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        try:
+            hit = _try_load()
+            if hit is not None:
+                return hit
+
+            t0 = time.time()
+            te_weight_np, te_gate_np = build_causal_prior(cfg, train_TN)
+            dt = time.time() - t0
+
+            # atomic publish: write to a private temp file, then rename
+            # np.savez appends '.npz' unless the name already ends with it
+            tmp_path = f'{cache_path[:-4]}.tmp{os.getpid()}.npz'
+            try:
+                np.savez(tmp_path, te_weight=te_weight_np, te_gate=te_gate_np)
+                os.replace(tmp_path, cache_path)
+                print(f'  [prior] cached ({dt:.1f}s): {cache_path}', flush=True)
+            except Exception as e:
+                print(f'  [prior] cache write failed ({e}); continuing without cache', flush=True)
+                try:
+                    os.remove(tmp_path)
+                except OSError:
+                    pass
+        finally:
+            fcntl.flock(lock_f, fcntl.LOCK_UN)
 
     return te_weight_np, te_gate_np

@@ -72,6 +72,11 @@ DATASETS = {
     'SWaT_ABL_NI':  ('scripts/configs/swat_abl_no_int.yaml',   ['swat']),
     'PSM_ABL_NI':   ('scripts/configs/psm_abl_no_int.yaml',    ['PSM']),
     'SMD_ABL_NI':   ('scripts/configs/smd_abl_no_int.yaml',    SMD_ENTITIES),
+    # Counterfactual scoring + validation protocol (VAL.ENABLE=True; Phase 1-B
+    # trainer support required before these can train)
+    'SWaT_CFVAL':           ('scripts/configs/swat_cf_val.yaml',          ['swat']),
+    'PSM_CFVAL':            ('scripts/configs/psm_cf_val.yaml',           ['PSM']),
+    'SMD_CFVAL':            ('scripts/configs/smd_cf_val.yaml',           SMD_ENTITIES),
 }
 
 
@@ -91,12 +96,13 @@ _WARMUP_SCRIPT = (
     'import sys; sys.path.insert(0, ".");'
     'from config import get_cfg_defaults;'
     'from datasets.build import load_entity;'
+    'from datasets.split import split_id_for;'
     'from model.build import build_causal_prior_cached;'
     'cfg = get_cfg_defaults();'
     'cfg.merge_from_file(sys.argv[1]);'
     'cfg.merge_from_list(["DATA.ENTITIES", sys.argv[2]]);'
     'entity = load_entity(cfg, sys.argv[2]);'
-    'build_causal_prior_cached(cfg, entity.train_z, entity.name)'
+    'build_causal_prior_cached(cfg, entity.train_z, entity.name, split_id=split_id_for(cfg, entity))'
 )
 
 
@@ -129,6 +135,15 @@ def warmup_priors(cfg_yaml, entities, threads_per_warmup):
         print(f'  [{i + 1}/{len(entities)}] {ent}: {status} ({dt}s)', flush=True)
     total = int(time.time() - t0)
     print(f'[warmup] done in {total}s\n', flush=True)
+
+
+def _cfg_val_enabled(cfg_yaml):
+    """True when the yaml turns on the validation protocol."""
+    sys.path.insert(0, str(ROOT))
+    from config import get_cfg_defaults
+    cfg = get_cfg_defaults()
+    cfg.merge_from_file(str(ROOT / cfg_yaml))
+    return bool(cfg.VAL.ENABLE)
 
 
 def _fmt_eta(remaining, per_job):
@@ -265,6 +280,12 @@ def main():
         print('  FAILED jobs:', flush=True)
         for ent, seed, rc in failed:
             print(f'    {ent} seed{seed} exit={rc}', flush=True)
+
+    if not a.no_aggregate and _cfg_val_enabled(cfg_yaml):
+        print(f'\n[parallel] VAL.ENABLE=True in {cfg_yaml}: skipping test-metric '
+              f'best-epoch aggregation (checkpoints are selected by validation MAE; '
+              f'test scoring is a separate explicit step).', flush=True)
+        a.no_aggregate = True
 
     if not a.no_aggregate:
         print(f'\n[parallel] running best-epoch aggregation ...', flush=True)

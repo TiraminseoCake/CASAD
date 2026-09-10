@@ -21,6 +21,9 @@ _C.DATA.INPUT_DIR = ''              # NPZ dir; empty -> {BASE_DIR}/{NAME}_npz
 _C.DATA.ENTITIES = ''               # comma-separated entities; empty -> glob
 _C.DATA.SCALE = 'standard'          # standard | none
 _C.DATA.NUM_ENVS = 4                # pseudo-env count for invariance loss
+# Expected number of variables (0 = no check). Set per dataset config to fail
+# loudly on a wrong preprocessing variant (e.g. SWaT must be 51 channels).
+_C.DATA.EXPECTED_N = 0
 
 
 # --- data loader ---
@@ -159,6 +162,23 @@ _C.PICAAD.SCORING.USE_COUNTERFACTUAL = False
 _C.PICAAD.SCORING.CF_TOP_K = 15        # intervene on top-k causal sources (0 = all)
 _C.PICAAD.SCORING.CF_FILL_VALUE = 0.0  # value to substitute (0 = population mean after z-score)
 _C.PICAAD.SCORING.SCORE_GAMMA = 1.0    # weight for CF channel in final score
+
+
+# --- validation-based checkpoint selection (Phase 1-A: data/prior only) ---
+# Default False keeps the native pipeline byte-for-byte. When True:
+#   * the raw train series is split chronologically into train_sub / val
+#     (val = trailing FRAC), each windowed independently;
+#   * standardization statistics and the PCMCI+ prior are fit on train_sub only;
+#   * the prior cache key carries the split identity (see model/build.py).
+# Trainer/evaluator support (val epoch, best_val/last checkpoints) is Phase 1-B.
+_C.VAL = CN()
+_C.VAL.ENABLE = False
+_C.VAL.FRAC = 0.2                      # trailing fraction of raw train used as validation
+_C.VAL.SELECTION_METRIC = 'pred_mae'   # used by Phase 1-B trainer
+_C.VAL.EVAL_BATCH_SIZE = 0             # 0 -> cfg.TEST.BATCH_SIZE
+_C.VAL.SAVE_EVERY_EPOCH = False        # per-epoch checkpoints off (last.pt + best_val.pt only)
+_C.VAL.SAVE_EVERY_N = 0                # optional periodic checkpoint (0 = off)
+_C.VAL.MIN_DELTA = 0.0                 # improvement > MIN_DELTA updates best_val
 
 
 # --- paper eval ---
