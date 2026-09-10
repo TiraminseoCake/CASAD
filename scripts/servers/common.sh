@@ -92,9 +92,12 @@ picaad_check_paths() {
   [ -n "$DATA_ROOT" ] || picaad_die "PICAAD_DATA_ROOT is not set"
   [ -n "$OUT_ROOT" ] || picaad_die "PICAAD_OUT_ROOT is not set"
   case "$OUT_ROOT" in /*) ;; *) picaad_die "PICAAD_OUT_ROOT must be absolute: $OUT_ROOT" ;; esac
-  # forbid output inside the Git checkout (results/ is now a tracked directory)
-  local out_abs; out_abs="$(cd -- "$(dirname -- "$OUT_ROOT")" 2>/dev/null && pwd -P)/$(basename -- "$OUT_ROOT")" || out_abs="$OUT_ROOT"
-  case "$out_abs/" in "$REPO"/*) picaad_die "PICAAD_OUT_ROOT ($out_abs) is inside the Git checkout ($REPO); use an external campaign/server path" ;; esac
+  # forbid output inside the Git checkout (results/ is now a tracked directory). Compare canonical paths on both
+  # sides (readlink -m also canonicalises not-yet-existing leaves) and the literal path, so symlinked parents cannot hide it.
+  local out_abs repo_abs
+  out_abs="$(readlink -m -- "$OUT_ROOT" 2>/dev/null || printf '%s' "$OUT_ROOT")"; repo_abs="$(readlink -m -- "$REPO" 2>/dev/null || printf '%s' "$REPO")"
+  case "$out_abs/" in "$repo_abs"/*|"$REPO"/*) picaad_die "PICAAD_OUT_ROOT ($out_abs) is inside the Git checkout ($repo_abs); use an external campaign/server path" ;; esac
+  case "$OUT_ROOT/" in "$repo_abs"/*|"$REPO"/*) picaad_die "PICAAD_OUT_ROOT ($OUT_ROOT) is inside the Git checkout ($repo_abs); use an external campaign/server path" ;; esac
   case "$out_abs" in */"$CAMPAIGN"/*"$SERVER"*|*"$SERVER"*) ;; *) picaad_log "WARNING: out_root '$out_abs' does not mention server '$SERVER'; make sure servers do not share an out_root" ;; esac
   [ "$MODE" = "status" ] || [ -d "$DATA_ROOT" ] || picaad_die "PICAAD_DATA_ROOT does not exist: $DATA_ROOT"
 }
