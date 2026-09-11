@@ -1,0 +1,276 @@
+scripts/configs/psm_cf_val.yaml:
+  ANALYSIS:
+    MASK_BATCH: 0
+    MASK_CONTRIB: false
+    MASK_SAVE_CSV: false
+    MASK_TOPK: 10
+  DATA:
+    BASE_DIR: data/
+    ENTITIES: PSM
+    EXPECTED_N: 0
+    INPUT_DIR: <DATA_ROOT>/PSM
+    NAME: PSM
+    NUM_ENVS: 4
+    SCALE: standard
+  DATA_LOADER:
+    NUM_WORKERS: 0
+    PIN_MEMORY: false
+  EVAL:
+    DIAGNOSE_COMPONENTS: true
+    SLIDING_WINDOW: 100
+    USE_MEDIAN_VUS_WINDOW: true
+    VUS_THRE: 250
+    VUS_VERSION: opt
+  EXP_TAG: ''
+  MODEL:
+    NAME: PICAAD
+  PICAAD:
+    CAUSAL_ATTN_MASK_SCALE: 0.5
+    CAUSAL_MASK_WARMUP: 5
+    CLS_EMA: 0.9
+    D: 64
+    DROPOUT: 0.0
+    DYNAMIC_GRAPH: true
+    ENABLE_GATE_LOSS: false
+    ENABLE_GRAPH_LOSS: false
+    ENABLE_INV_LOSS: false
+    ENABLE_LAGMONO_LOSS: false
+    ENABLE_PRIOR_LOSS: true
+    ENC_LAYERS: 2
+    GAT:
+      DIM: 64
+      DROPOUT: 0.1
+      ENABLE: false
+      HEADS: 4
+      NUM_LAYERS: 2
+      SAME_LAG_PRIOR: false
+    GATE_INIT: 0.15
+    GRAPH_HIDDEN: 16
+    HEADS: 4
+    INTERVENTION:
+      FILL_VALUE: 0.0
+      LOSS_TYPE: mse
+      MARGIN_HIGH: 0.3
+      MARGIN_LOW: 0.1
+      MODE: permute
+      PERM_MODE: permute
+      PERM_PAIRS_PER_BATCH: 0
+    L: 10
+    LAG_WIN: 5
+    LAM_CAUSAL: 1.0
+    LAM_GRAPHREG: 0.05
+    LAM_ROBUST: 0.1
+    LAM_TASK: 1.0
+    MHSA_RESIDUAL: false
+    PRED_TEMP: 1.0
+    PRIOR:
+      BLEND: 0.35
+      CACHE_DIR: <PRIOR_CACHE>
+      CACHE_ENABLE: true
+      CACHE_REBUILD: false
+      INIT_SCALE: 0.25
+      PCMCI:
+        ALPHA: 0.05
+        CI_TEST: ParCorr
+        SUBSAMPLE: 10000
+      SEED: 0
+      SELF_MASS: 0.25
+      TE:
+        BINS: 8
+        CHUNK_LEN: 256
+        NUM_CHUNKS: 32
+        THRESHOLD: 0.0
+      TYPE: pcmci
+    SCORING:
+      CALIBRATE: false
+      CALIB_CLIP_MIN: 0.0
+      CAUSAL_LAG_AGG: mean
+      CF_FILL_VALUE: 0.0
+      CF_TOP_K: 15
+      C_AGG: fro
+      C_TOPK: 3
+      GRAPH_LAG_AGG: mean
+      G_AGG: fro
+      G_TOPK: 3
+      P_AGG: mean
+      P_TOPK: 3
+      SCORE_ALPHA: 1.0
+      SCORE_BETA: 1.0
+      SCORE_GAMMA: 1.0
+      USE_COUNTERFACTUAL: true
+    SELF_LOOP_BIAS: 1.0
+    START_CLS_EPOCH: 5
+    START_WREF_EPOCH: 3
+    TAU_MAX: 5
+    TRAIN_LOSS_TYPE: l1
+    WREF_EMA: 0.9
+  RESULT_DIR: <OUT_ROOT>/PSM/PSM/seed0/psm_cf_val/attempt1
+  RESULT_DIR_LITERAL: true
+  SAVE:
+    PER_SEED: false
+  SEED: 0
+  SEEDS:
+  - 0
+  SOLVER:
+    BASE_LR: 5.0e-05
+    GRADIENT_CLIP: 1.0
+    MAX_EPOCH: 80
+    WEIGHT_DECAY: 0.01
+  TENSORBOARD:
+    ENABLE: false
+    ROOT: runs/tensorboard/picaad
+  TEST:
+    BATCH_SIZE: 512
+  TRAIN:
+    BATCH_SIZE: 512
+    CKPT_DIR: <OUT_ROOT>/PSM/PSM/seed0/psm_cf_val/attempt1/ckpt
+    DROP_LAST: false
+    EVAL_EVERY: 0
+    SHUFFLE: true
+  VAL:
+    ENABLE: true
+    EVAL_BATCH_SIZE: 0
+    FRAC: 0.2
+    MIN_DELTA: 0.0
+    SAVE_EVERY_EPOCH: false
+    SAVE_EVERY_N: 0
+    SELECTION_METRIC: pred_mae
+  VISIBLE_DEVICES: 0
+scripts/configs/smd_cf_val.yaml:
+  ANALYSIS:
+    MASK_BATCH: 0
+    MASK_CONTRIB: false
+    MASK_SAVE_CSV: false
+    MASK_TOPK: 10
+  DATA:
+    BASE_DIR: data/
+    ENTITIES: machine-1-1
+    EXPECTED_N: 0
+    INPUT_DIR: <DATA_ROOT>/SMD
+    NAME: SMD
+    NUM_ENVS: 4
+    SCALE: standard
+  DATA_LOADER:
+    NUM_WORKERS: 0
+    PIN_MEMORY: false
+  EVAL:
+    DIAGNOSE_COMPONENTS: true
+    SLIDING_WINDOW: 100
+    USE_MEDIAN_VUS_WINDOW: true
+    VUS_THRE: 250
+    VUS_VERSION: opt
+  EXP_TAG: ''
+  MODEL:
+    NAME: PICAAD
+  PICAAD:
+    CAUSAL_ATTN_MASK_SCALE: 0.5
+    CAUSAL_MASK_WARMUP: 5
+    CLS_EMA: 0.9
+    D: 64
+    DROPOUT: 0.0
+    DYNAMIC_GRAPH: true
+    ENABLE_GATE_LOSS: false
+    ENABLE_GRAPH_LOSS: false
+    ENABLE_INV_LOSS: false
+    ENABLE_LAGMONO_LOSS: false
+    ENABLE_PRIOR_LOSS: true
+    ENC_LAYERS: 2
+    GAT:
+      DIM: 64
+      DROPOUT: 0.1
+      ENABLE: false
+      HEADS: 4
+      NUM_LAYERS: 2
+      SAME_LAG_PRIOR: false
+    GATE_INIT: 0.15
+    GRAPH_HIDDEN: 16
+    HEADS: 4
+    INTERVENTION:
+      FILL_VALUE: 0.0
+      LOSS_TYPE: mse
+      MARGIN_HIGH: 0.3
+      MARGIN_LOW: 0.1
+      MODE: permute
+      PERM_MODE: permute
+      PERM_PAIRS_PER_BATCH: 0
+    L: 10
+    LAG_WIN: 5
+    LAM_CAUSAL: 1.0
+    LAM_GRAPHREG: 0.05
+    LAM_ROBUST: 0.1
+    LAM_TASK: 1.0
+    MHSA_RESIDUAL: false
+    PRED_TEMP: 1.0
+    PRIOR:
+      BLEND: 0.35
+      CACHE_DIR: <PRIOR_CACHE>
+      CACHE_ENABLE: true
+      CACHE_REBUILD: false
+      INIT_SCALE: 0.25
+      PCMCI:
+        ALPHA: 0.05
+        CI_TEST: ParCorr
+        SUBSAMPLE: 10000
+      SEED: 0
+      SELF_MASS: 0.25
+      TE:
+        BINS: 8
+        CHUNK_LEN: 256
+        NUM_CHUNKS: 32
+        THRESHOLD: 0.0
+      TYPE: pcmci
+    SCORING:
+      CALIBRATE: false
+      CALIB_CLIP_MIN: 0.0
+      CAUSAL_LAG_AGG: mean
+      CF_FILL_VALUE: 0.0
+      CF_TOP_K: 15
+      C_AGG: fro
+      C_TOPK: 3
+      GRAPH_LAG_AGG: mean
+      G_AGG: fro
+      G_TOPK: 3
+      P_AGG: mean
+      P_TOPK: 3
+      SCORE_ALPHA: 1.0
+      SCORE_BETA: 1.0
+      SCORE_GAMMA: 1.0
+      USE_COUNTERFACTUAL: true
+    SELF_LOOP_BIAS: 1.0
+    START_CLS_EPOCH: 5
+    START_WREF_EPOCH: 3
+    TAU_MAX: 5
+    TRAIN_LOSS_TYPE: l1
+    WREF_EMA: 0.9
+  RESULT_DIR: <OUT_ROOT>/SMD/machine-1-1/seed0/smd_cf_val/attempt1
+  RESULT_DIR_LITERAL: true
+  SAVE:
+    PER_SEED: false
+  SEED: 0
+  SEEDS:
+  - 0
+  SOLVER:
+    BASE_LR: 0.0005
+    GRADIENT_CLIP: 1.0
+    MAX_EPOCH: 80
+    WEIGHT_DECAY: 0.01
+  TENSORBOARD:
+    ENABLE: false
+    ROOT: runs/tensorboard/picaad
+  TEST:
+    BATCH_SIZE: 512
+  TRAIN:
+    BATCH_SIZE: 512
+    CKPT_DIR: <OUT_ROOT>/SMD/machine-1-1/seed0/smd_cf_val/attempt1/ckpt
+    DROP_LAST: false
+    EVAL_EVERY: 0
+    SHUFFLE: true
+  VAL:
+    ENABLE: true
+    EVAL_BATCH_SIZE: 0
+    FRAC: 0.2
+    MIN_DELTA: 0.0
+    SAVE_EVERY_EPOCH: false
+    SAVE_EVERY_N: 0
+    SELECTION_METRIC: pred_mae
+  VISIBLE_DEVICES: 0

@@ -1,0 +1,150 @@
+{
+ "export_version": "export_results/1",
+ "content_sha256": "85c84281f8d597b7b7d350d82f9c03df564a26d4c6ee329320261bcb5e3b078a",
+ "exported_at": "2026-09-11T16:02:44+0900",
+ "exported_by_host": "ailab-ks",
+ "export_code": {
+  "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+  "branch": "feat/do-counterfactual",
+  "dirty_tracked": true
+ },
+ "campaign": "cfval",
+ "server": "ks",
+ "legacy_server_id": "server4",
+ "server_note": "server = logical server name used for publishing paths; legacy_server_id = execution id recorded in the original out_root/tmux/queue (never rewritten); launcher_queue keeps the job-share name",
+ "run_id": "pilot_49f630a",
+ "launcher_queue": "cfval_pilot_server4",
+ "launcher_manifest": "<PATH1>/scripts/manifests/multiserver/pilot_server4.yaml",
+ "launcher_updated_at": "2026-09-10T18:25:19+0900",
+ "launcher_stopped": "done",
+ "training_code_sha": [
+  "49f630ac8d324ba01390c1a1dcaa4386cd94ae84"
+ ],
+ "launcher_code": {
+  "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+  "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+ },
+ "note_publishing_commit": "the Git commit that publishes this package is NOT the training commit; see training_code_sha",
+ "result_kind": "val_ckpt_eval",
+ "complete": true,
+ "job_counts": {
+  "success": 8
+ },
+ "n_jobs": 8,
+ "n_exported_eval_jobs": 4,
+ "n_exported_train_jobs": 2,
+ "duplicates": [],
+ "jobs": [
+  {
+   "job_id": "prior/PSM/PSM/psm_cf_val",
+   "kind": "prior",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": null,
+   "gpu_index": null,
+   "gpu_uuid": null,
+   "started_at": 1789026837.9895163,
+   "finished_at": 1789026842.9908233,
+   "blocked_reason": null,
+   "exported": null
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val",
+   "kind": "train",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "PSM/PSM/seed0/psm_cf_val/attempt1",
+   "gpu_index": 0,
+   "gpu_uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+   "started_at": 1789026843.1729393,
+   "finished_at": 1789031576.5816977,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val/eval/last",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "PSM/PSM/seed0/psm_cf_val/eval/last/attempt1",
+   "gpu_index": 0,
+   "gpu_uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+   "started_at": 1789031576.7578425,
+   "finished_at": 1789031949.208758,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val/eval/best_val",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "PSM/PSM/seed0/psm_cf_val/eval/best_val/attempt1",
+   "gpu_index": 0,
+   "gpu_uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+   "started_at": 1789031949.3700776,
+   "finished_at": 1789032319.5908606,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "prior/SMD/machine-1-1/smd_cf_val",
+   "kind": "prior",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": null,
+   "gpu_index": null,
+   "gpu_uuid": null,
+   "started_at": 1789026843.1747828,
+   "finished_at": 1789026848.1772573,
+   "blocked_reason": null,
+   "exported": null
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_cf_val",
+   "kind": "train",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_cf_val/attempt1",
+   "gpu_index": 1,
+   "gpu_uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+   "started_at": 1789026848.3748302,
+   "finished_at": 1789028249.271197,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_cf_val/eval/last",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_cf_val/eval/last/attempt1",
+   "gpu_index": 1,
+   "gpu_uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+   "started_at": 1789028249.4569316,
+   "finished_at": 1789028394.6831582,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_cf_val/eval/best_val",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_cf_val/eval/best_val/attempt1",
+   "gpu_index": 2,
+   "gpu_uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+   "started_at": 1789028249.603103,
+   "finished_at": 1789028394.68413,
+   "blocked_reason": null,
+   "exported": true
+  }
+ ],
+ "excluded_from_package": [
+  "checkpoints (*.pt)",
+  "scores.npz",
+  "data NPZ",
+  "logs",
+  "symlinks"
+ ]
+}
