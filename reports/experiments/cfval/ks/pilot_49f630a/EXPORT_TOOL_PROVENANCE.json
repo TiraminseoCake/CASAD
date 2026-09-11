@@ -1,0 +1,24 @@
+{
+ "sidecar": "export tool provenance (added after export; original run_manifest/provenance untouched)",
+ "added_at": "2026-09-11T16:37:05+0900",
+ "export_tool_commit": "7d7fbe4ee750885e411a09e1215fae204652d788",
+ "export_tool_files_sha256": {
+  "scripts/export_results.py": "1b141ff0f217d4a61fab0345c8b1473bbe854dcedede27c651a40e2967c9cd41",
+  "scripts/publish_results.sh": "f464e88bb6e398854251b78959bc85baeeb3d06137f342ec572dd895aa0561af"
+ },
+ "note": "run_manifest.export_code shows 49f630a dirty because the tool files were committed after the export; the committed blobs are byte-identical to the files used",
+ "training_code_sha": [
+  "49f630ac8d324ba01390c1a1dcaa4386cd94ae84"
+ ],
+ "server": "ks",
+ "legacy_server_id": "server4",
+ "launcher_queue": "cfval_pilot_server4",
+ "coverage": {
+  "fusion_rows": 8,
+  "diagnostic_rows": 16,
+  "eval_jobs": 4,
+  "train_jobs": 2
+ },
+ "smd_coverage": "partial: ks share machine-1-1..1-8 only (8/28 entities); machine-2-*/3-* belong to js/server8",
+ "verification": "all 432 package rows matched the original per-job metrics.csv/provenance (metrics, checkpoint sha256, epoch, entity/seed/tag) on 2026-09-11"
+}
