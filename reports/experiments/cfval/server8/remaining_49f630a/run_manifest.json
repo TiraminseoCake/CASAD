@@ -1,0 +1,174 @@
+{
+ "export_version": "export_results/1",
+ "content_sha256": "be301574c459cbac7a0b4e356dfca36dd7251fcfb7f594b118065f2819936776",
+ "exported_at": "2026-09-13T01:00:37+0900",
+ "exported_by_host": "ailab-js",
+ "export_code": {
+  "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+  "branch": "HEAD",
+  "dirty_tracked": false
+ },
+ "campaign": "cfval",
+ "server": "server8",
+ "run_id": "remaining_49f630a",
+ "launcher_queue": "cfval_remaining_server8",
+ "launcher_manifest": "<HOME>/workspace/CASAD/bootstrap/server8/remaining/remaining_server8.yaml",
+ "launcher_updated_at": "2026-09-12T03:18:34+0900",
+ "launcher_stopped": "done",
+ "training_code_sha": [
+  "49f630ac8d324ba01390c1a1dcaa4386cd94ae84"
+ ],
+ "launcher_code": {
+  "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+  "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+ },
+ "note_publishing_commit": "the Git commit that publishes this package is NOT the training commit; see training_code_sha",
+ "result_kind": "val_ckpt_eval",
+ "complete": true,
+ "job_counts": {
+  "success": 10
+ },
+ "n_jobs": 10,
+ "n_exported_eval_jobs": 6,
+ "n_exported_train_jobs": 3,
+ "duplicates": [],
+ "jobs": [
+  {
+   "job_id": "prior/SWaT/swat/swat_cf_val",
+   "kind": "prior",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": null,
+   "gpu_index": null,
+   "gpu_uuid": null,
+   "started_at": 1789032934.8494534,
+   "finished_at": 1789033580.1639435,
+   "blocked_reason": null,
+   "exported": null
+  },
+  {
+   "job_id": "train/SWaT/swat/seed1/swat_cf_val",
+   "kind": "train",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed1/swat_cf_val/attempt1",
+   "gpu_index": 0,
+   "gpu_uuid": "GPU-7cec80be-818c-53e1-f37f-1ae75b2dd452",
+   "started_at": 1789033580.4349158,
+   "finished_at": 1789144995.5370326,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed1/swat_cf_val/eval/last",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed1/swat_cf_val/eval/last/attempt1",
+   "gpu_index": 0,
+   "gpu_uuid": "GPU-7cec80be-818c-53e1-f37f-1ae75b2dd452",
+   "started_at": 1789144995.8492758,
+   "finished_at": 1789150679.1093369,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed1/swat_cf_val/eval/best_val",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed1/swat_cf_val/eval/best_val/attempt1",
+   "gpu_index": 3,
+   "gpu_uuid": "GPU-987eba19-1ae8-e465-7b20-50167738b7a1",
+   "started_at": 1789144996.112985,
+   "finished_at": 1789150714.1289084,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val",
+   "kind": "train",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val/attempt1",
+   "gpu_index": 1,
+   "gpu_uuid": "GPU-4b4ba28b-dcaf-1b41-bdec-8807af7b4425",
+   "started_at": 1789033580.710821,
+   "finished_at": 1789099989.920795,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val/eval/last",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val/eval/last/attempt1",
+   "gpu_index": 1,
+   "gpu_uuid": "GPU-4b4ba28b-dcaf-1b41-bdec-8807af7b4425",
+   "started_at": 1789099990.2169163,
+   "finished_at": 1789105348.2115555,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val/eval/best_val",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val/eval/best_val/attempt1",
+   "gpu_index": 4,
+   "gpu_uuid": "GPU-e83d035c-4028-1e54-2979-f74f379efd79",
+   "started_at": 1789099990.4936948,
+   "finished_at": 1789105413.2450888,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val",
+   "kind": "train",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val/attempt1",
+   "gpu_index": 2,
+   "gpu_uuid": "GPU-3327f5db-6276-9492-dbf6-a4037569f3e8",
+   "started_at": 1789033581.008249,
+   "finished_at": 1789140842.7902567,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val/eval/last",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val/eval/last/attempt1",
+   "gpu_index": 1,
+   "gpu_uuid": "GPU-4b4ba28b-dcaf-1b41-bdec-8807af7b4425",
+   "started_at": 1789140843.052611,
+   "finished_at": 1789146356.831889,
+   "blocked_reason": null,
+   "exported": true
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val/eval/best_val",
+   "kind": "eval",
+   "status": "success",
+   "exit_code": 0,
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val/eval/best_val/attempt1",
+   "gpu_index": 2,
+   "gpu_uuid": "GPU-3327f5db-6276-9492-dbf6-a4037569f3e8",
+   "started_at": 1789140843.348282,
+   "finished_at": 1789146521.9181516,
+   "blocked_reason": null,
+   "exported": true
+  }
+ ],
+ "excluded_from_package": [
+  "checkpoints (*.pt)",
+  "scores.npz",
+  "data NPZ",
+  "logs",
+  "symlinks"
+ ]
+}
