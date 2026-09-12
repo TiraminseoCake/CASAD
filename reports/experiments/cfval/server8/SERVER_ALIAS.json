@@ -1,0 +1,5 @@
+{"campaign":"cfval","execution_server_id":"server8","display_name":"js","host":"ailab-js",
+ "training_code_sha":"49f630ac8d324ba01390c1a1dcaa4386cd94ae84","python_env":"picaad_cfval_ksmatch (Python 3.11.10, torch 2.6.0+cu124)",
+ "packages":{"pilot_49f630a":"queue cfval_pilot_server8: SWaT51 seed0","remaining_49f630a":"queue cfval_remaining_server8: SWaT51 seeds 1-3","smd_remaining_49f630a":"queue cfval_smd_remaining_server8: SMD machine-2-1..2-9, machine-3-1..3-11 x seeds 0-3"},
+ "note":"The directory name server8 is the execution id used by the launcher/wrappers; js is the display name. Counterpart: ks (execution id server4).",
+ "written":"2026-09-13T01:00:48+09:00"}
