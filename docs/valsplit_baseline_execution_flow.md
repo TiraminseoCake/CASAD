@@ -1,4 +1,4 @@
-# Val-Split Baseline 실험 실행 흐름 보고서
+#  Baseline 실험 실행 흐름
 
 > **대상 결과**: `results/valsplit_baseline_20260911.csv`
 > **실험 일자**: 2026-09-11
