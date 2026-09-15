@@ -99,6 +99,9 @@ _C.PICAAD.WREF_EMA = 0.9
 _C.PICAAD.START_CLS_EPOCH = 5
 _C.PICAAD.START_WREF_EPOCH = 3
 _C.PICAAD.TRAIN_LOSS_TYPE = 'l1'     # l1 | l2root
+_C.PICAAD.VAL_RATIO = 0.2
+_C.PICAAD.EARLY_STOP = True
+_C.PICAAD.PATIENCE = 10
 
 # per-loss enable flags (ablation toggle)
 _C.PICAAD.ENABLE_PRIOR_LOSS = True
@@ -153,7 +156,7 @@ _C.PICAAD.SCORING.GRAPH_LAG_AGG = 'mean'
 _C.PICAAD.SCORING.SCORE_ALPHA = 1.0
 _C.PICAAD.SCORING.SCORE_BETA = 1.0
 _C.PICAAD.SCORING.CALIB_CLIP_MIN = 0.0
-_C.PICAAD.SCORING.CALIBRATE = False
+_C.PICAAD.SCORING.CALIBRATE = True
 # counterfactual scoring (test-time interventional channel)
 _C.PICAAD.SCORING.USE_COUNTERFACTUAL = False
 _C.PICAAD.SCORING.CF_TOP_K = 15        # intervene on top-k causal sources (0 = all)
