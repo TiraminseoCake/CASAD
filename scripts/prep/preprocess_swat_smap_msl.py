@@ -1,4 +1,4 @@
-import os, glob
+import os
 import numpy as np
 import pandas as pd
 
@@ -40,9 +40,6 @@ def load_npy_dataset(ds_name):
     if label.ndim == 2 and label.shape[1] == 1:
         label = label[:, 0]
     return train, test, label
-
-def _pick_first(paths):
-    return paths[0] if paths else None
 
 def _is_time_col(col):
     c = str(col).lower()

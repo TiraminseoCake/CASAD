@@ -1,6 +1,6 @@
 DATA:
   NAME: SWaT
-  INPUT_DIR: data_npz/SWaT51
+  INPUT_DIR: data/SWaT
 
 SEEDS: [0, 1, 2, 3]
 
