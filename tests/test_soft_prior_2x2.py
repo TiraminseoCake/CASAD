@@ -566,6 +566,11 @@ class TestGeneratedConfigs(unittest.TestCase):
                 self.assertFalse(c.PICAAD.ENABLE_INV_LOSS)
                 self.assertTrue(c.VAL.ENABLE)
                 self.assertEqual(c.SEEDS, [0])
+                # per-epoch checkpoints for the epoch 1/5/20/80 diagnostics;
+                # output artifact only, so best_val saving must stay intact
+                self.assertEqual(c.VAL.SAVE_EVERY_N, 1)
+                self.assertFalse(c.VAL.SAVE_EVERY_EPOCH)
+                self.assertEqual(c.VAL.SELECTION_METRIC, "pred_mae")
                 # the deep merge must preserve every other base key
                 self.assertEqual(c.DATA.NAME, base.DATA.NAME)
                 self.assertEqual(c.DATA.EXPECTED_N, base.DATA.EXPECTED_N)

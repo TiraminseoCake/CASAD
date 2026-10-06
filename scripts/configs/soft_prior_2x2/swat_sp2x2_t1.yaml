@@ -62,5 +62,5 @@ VAL:
   ENABLE: true
   FRAC: 0.2
   SAVE_EVERY_EPOCH: false
-  SAVE_EVERY_N: 0
+  SAVE_EVERY_N: 1
   SELECTION_METRIC: pred_mae

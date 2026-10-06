@@ -102,7 +102,17 @@ def overrides(rho: float, gmin: float) -> dict:
             },
         },
         "SOLVER": {"MAX_EPOCH": 80},
-        "VAL": {"ENABLE": True, "FRAC": 0.2, "SELECTION_METRIC": "pred_mae"},
+        "VAL": {
+            "ENABLE": True, "FRAC": 0.2, "SELECTION_METRIC": "pred_mae",
+            # Per-epoch checkpoints so the protocol's epoch 1/5/20/80 routing
+            # diagnostics can be run post hoc. This is an OUTPUT artifact only:
+            # trainer._save_ckpts writes ep{N}.pt after best-selection has already
+            # been decided, so training dynamics, best_val choice and the loss are
+            # byte-for-byte what SAVE_EVERY_N=0 would produce. ~15 GB for the
+            # 8-job ks share.
+            "SAVE_EVERY_EPOCH": False,
+            "SAVE_EVERY_N": 1,
+        },
     }
 
 

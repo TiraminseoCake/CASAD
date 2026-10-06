@@ -131,6 +131,11 @@ CLI로 `SOLVER.BASE_LR`를 주지 않으면 **YAML 값을 조용히 덮어쓴다
 - seed는 0 하나다. **seed 간 분산은 이 pilot으로 측정되지 않는다.**
 - entity는 ks 2개 + js 1개다. 데이터셋 전체 일반화를 주장하지 않는다.
 - 80 epoch, `last.pt`와 `best_val.pt`를 저장한다.
+- `VAL.SAVE_EVERY_N = 1`로 epoch별 `ep{N}.pt`도 남긴다. §6.2의 epoch 1/5/20/80
+  routing 진단을 사후에 돌리기 위한 **출력 artifact 전용** 설정이다.
+  `trainer._save_ckpts`는 best 선택이 끝난 뒤에 `ep{N}.pt`를 쓰므로 학습 동역학,
+  `best_val` 선택, loss는 `SAVE_EVERY_N = 0`과 바이트 단위로 동일하다.
+  ks 8-job 기준 약 15 GB.
 
 ### 초기 state 동일성
 
