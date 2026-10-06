@@ -45,6 +45,9 @@ def build_model(cfg, N: int) -> PICAAD:
         gat_dim=cfg.PICAAD.GAT.DIM,
         gat_dropout=cfg.PICAAD.GAT.DROPOUT,
         gat_same_lag_prior=cfg.PICAAD.GAT.SAME_LAG_PRIOR,
+        # soft-prior 2x2 pilot (both 0.0 by default -> original code paths)
+        prior_smooth_rho=cfg.PICAAD.PRIOR.SMOOTH_RHO,
+        eff_gate_floor=cfg.PICAAD.EFF_GATE_FLOOR,
     )
     return model
 
@@ -107,7 +110,9 @@ def _prior_cache_key(cfg, train_TN: np.ndarray, entity_name: str,
 
     Any change to hyperparameters, tau_max, or the training tensor content
     invalidates the cache. Excludes irrelevant params (BLEND, INIT_SCALE are
-    applied at model-init time and don't affect the prior arrays).
+    applied at model-init time and don't affect the prior arrays; likewise
+    PRIOR.SMOOTH_RHO and EFF_GATE_FLOOR are forward-only and must NOT enter
+    the key, so the soft-prior 2x2 conditions share one cached prior).
 
     ``split_id == 'full'`` (default, VAL off) reproduces the legacy key
     byte-for-byte: nothing is added to the hash input or the file name, so

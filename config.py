@@ -92,6 +92,14 @@ _C.PICAAD.GAT.DROPOUT = 0.1
 # per-lag MHSA carried but plain Option C dropped.
 _C.PICAAD.GAT.SAME_LAG_PRIOR = False
 
+# Effective-gate floor (g_min), soft-prior 2x2 pilot.
+#   G_native = sigmoid(edge_log_alpha) * (0.05 + 0.95*M)
+#   G_floor  = g_min + (1 - g_min) * G_native
+# This floors the WHOLE effective gate; the structural 0.05/0.95 coefficients
+# are left unchanged. 0.0 keeps the original code path untouched.
+# See docs/soft_prior_2x2_protocol.md.
+_C.PICAAD.EFF_GATE_FLOOR = 0.0
+
 # loss weights
 _C.PICAAD.LAM_TASK = 1.0
 _C.PICAAD.LAM_CAUSAL = 1.0
@@ -117,6 +125,13 @@ _C.PICAAD.PRIOR.BLEND = 0.35         # te_prior_blend
 _C.PICAAD.PRIOR.INIT_SCALE = 0.25    # te_init_scale
 _C.PICAAD.PRIOR.SELF_MASS = 0.25
 _C.PICAAD.PRIOR.SEED = 0
+# Forward-only prior smoothing (rho), soft-prior 2x2 pilot.
+#   D = tau_max*N, u = 1/D, p_rho = (1-rho)*te_prior_weight + rho*u
+# Applied to the routing prior-bias input ONLY. The te_prior_weight buffer,
+# set_te_prior() initialization and the prior losses keep the raw prior.
+# 0.0 keeps the original code path untouched.
+# See docs/soft_prior_2x2_protocol.md.
+_C.PICAAD.PRIOR.SMOOTH_RHO = 0.0
 # On-disk prior cache: skip rebuild when hyperparams+data hash unchanged
 _C.PICAAD.PRIOR.CACHE_DIR = 'data/prior_cache'
 _C.PICAAD.PRIOR.CACHE_ENABLE = True

@@ -1,0 +1,45 @@
+# soft-prior 2x2 pilot — js share.
+# Protocol: docs/soft_prior_2x2_protocol.md  (written before any result was seen)
+#
+# Scope: SWaT51 seed0, four conditions = 4 training jobs.
+# ks runs the PSM + SMD share from soft_prior_2x2_ks.yaml on the same commit.
+# js receives this commit; it does not re-implement anything.
+#
+#   T0  rho=0.00  g_min=0.00   <- must reproduce native noalign (regression baseline)
+#   T1  rho=0.05  g_min=0.00
+#   T2  rho=0.00  g_min=0.05
+#   T3  rho=0.05  g_min=0.05
+#
+# Every condition: prediction loss only (ENABLE_PRIOR_LOSS=False,
+# START_CLS_EPOCH=81 > MAX_EPOCH=80, PERM_PAIRS_PER_BATCH=0, auxiliary losses off),
+# CALIBRATE=False, USE_COUNTERFACTUAL=False. 80 epochs, last.pt + best_val.pt saved.
+#
+# Evaluation: best_val ONLY, cf=off, calibrate=off.
+#   primary   = P_raw
+#   secondary = A_off = P_raw + C_raw
+#
+# expected_n: 51 is inherited from swat_cf_val.yaml (DATA.EXPECTED_N) and also
+# declared here, so a non-51-channel SWaT export fails loudly.
+# Effective LR is 5e-04 from utils/parser.py:_DATASET_DEFAULT_LR['SWaT'].
+name: soft_prior_2x2_js
+description: >
+  soft-prior 2x2 pilot, js share: SWaT51 seed0 x {T0,T1,T2,T3}.
+  Forward-only prior smoothing (rho) and effective-gate floor (g_min).
+  best_val-only evaluation with CF fully disabled.
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 1
+  eval:
+    # NOTE: "off" MUST stay quoted. YAML 1.1 parses a bare off as boolean False,
+    # and eval_ckpt.py --cf/--calibrate only accept the strings off|on|both / cfg|off|on.
+    ckpt_tags: [best_val]     # pilot evaluates best_val only; last.pt is saved but not scored
+    cf: "off"                 # CF profile fitting and CF forward are never invoked
+    calibrate: "off"          # CALIBRATE=False
+    verify_native_parity: false
+train:
+  - {dataset: SWaT, config: scripts/configs/soft_prior_2x2/swat_sp2x2_t0.yaml, input_dir: SWaT51, entities: [swat], seeds: [0], expected_n: 51}
+  - {dataset: SWaT, config: scripts/configs/soft_prior_2x2/swat_sp2x2_t1.yaml, input_dir: SWaT51, entities: [swat], seeds: [0], expected_n: 51}
+  - {dataset: SWaT, config: scripts/configs/soft_prior_2x2/swat_sp2x2_t2.yaml, input_dir: SWaT51, entities: [swat], seeds: [0], expected_n: 51}
+  - {dataset: SWaT, config: scripts/configs/soft_prior_2x2/swat_sp2x2_t3.yaml, input_dir: SWaT51, entities: [swat], seeds: [0], expected_n: 51}
+eval_only: []

@@ -41,7 +41,11 @@ class PICAAD(nn.Module):
                  gat_dropout: float = 0.1,
                  # Option B / SLP: fill diagonal (τ, τ) blocks with the per-τ
                  # prior. No effect when use_gat=False.
-                 gat_same_lag_prior: bool = False):
+                 gat_same_lag_prior: bool = False,
+                 # soft-prior 2x2 pilot: forward-only routing relaxations.
+                 # Both default to 0.0, which keeps the original code paths.
+                 prior_smooth_rho: float = 0.0,
+                 eff_gate_floor: float = 0.0):
         super().__init__()
         self.N = N
         self.L = L
@@ -57,10 +61,20 @@ class PICAAD(nn.Module):
         self.causal_mask_warmup_epochs = int(causal_mask_warmup_epochs)
         self._current_epoch = 0  # set by training loop
 
+        # soft-prior 2x2 pilot. Plain floats, deliberately NOT buffers: they must
+        # not enter state_dict, so the four pilot conditions share one initial
+        # state hash. Neither touches initialization (set_te_prior is unchanged).
+        self.prior_smooth_rho = float(prior_smooth_rho)
+        self.eff_gate_floor = float(eff_gate_floor)
+
         if tau_max >= L:
             raise ValueError(f"tau_max={tau_max} must be < L={L}")
         if self.lag_win <= 0:
             raise ValueError(f"lag_win must be >= 1, got {self.lag_win}")
+        if not (0.0 <= self.prior_smooth_rho <= 1.0):
+            raise ValueError(f"prior_smooth_rho must be in [0, 1], got {self.prior_smooth_rho}")
+        if not (0.0 <= self.eff_gate_floor < 1.0):
+            raise ValueError(f"eff_gate_floor must be in [0, 1), got {self.eff_gate_floor}")
 
         self.encoders = nn.ModuleList([PerVarEncoder(d, enc_layers, dropout) for _ in range(N)])
         # Reconstruction removed - ablation showed no contribution to AD performance
@@ -197,8 +211,36 @@ class PICAAD(nn.Module):
     def _effective_gate(self):
         gate = self.edge_gate()
         if not self.has_te_prior:
-            return gate
-        return gate * (0.05 + 0.95 * self.te_prior_gate)
+            native = gate
+        else:
+            native = gate * (0.05 + 0.95 * self.te_prior_gate)
+        if self.eff_gate_floor <= 0.0:
+            return native                      # original path, bit-identical
+        # soft-prior 2x2 pilot: floor the WHOLE effective gate. The structural
+        # 0.05 / 0.95 coefficients above are left untouched.
+        #   G_floor = g_min + (1 - g_min) * G_native   ->  range [g_min, 1]
+        g_min = self.eff_gate_floor
+        return g_min + (1.0 - g_min) * native
+
+    def _routing_prior_weight(self):
+        """Prior weight tensor fed to the routing prior-bias term.
+
+        soft-prior 2x2 pilot:
+            D = tau_max * N,  u = 1 / D
+            p_rho = (1 - rho) * te_prior_weight + rho * u
+
+        Read-only: the te_prior_weight buffer is never written, so
+        set_te_prior()'s initialization, cls_ref and causal_prior_losses()
+        keep using the raw prior. te_prior_weight columns sum to 1 over the D
+        (tau, src) entries, so p_rho columns also sum to exactly 1 and need no
+        renormalization. rho == 0 returns the buffer itself.
+        """
+        w = self.te_prior_weight
+        if self.prior_smooth_rho <= 0.0:
+            return w                           # original path, bit-identical
+        rho = self.prior_smooth_rho
+        u = 1.0 / float(self.tau_max * self.N)
+        return (1.0 - rho) * w + rho * u
 
     def _compute_dynamic_delta(self, C_all):
         if not self.dynamic_graph:
@@ -237,7 +279,9 @@ class PICAAD(nn.Module):
         gate = gate_override if gate_override is not None else self._effective_gate()
 
         if self.has_te_prior and self.te_prior_blend > 0.0:
-            prior_bias = self.te_prior_blend * torch.log(self.te_prior_weight.clamp_min(1e-8))
+            # clamp/log/epsilon/temperature ordering below is unchanged; only the
+            # prior weight fed in here is smoothed (rho == 0 -> raw buffer).
+            prior_bias = self.te_prior_blend * torch.log(self._routing_prior_weight().clamp_min(1e-8))
         else:
             prior_bias = 0.0
 

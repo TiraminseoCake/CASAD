@@ -1,0 +1,57 @@
+# soft-prior 2x2 pilot — ks share.
+# Protocol: docs/soft_prior_2x2_protocol.md  (written before any result was seen)
+#
+# Scope: PSM seed0 and SMD machine-1-1 seed0, four conditions each = 8 training jobs.
+# js runs the SWaT51 share from soft_prior_2x2_js.yaml on the same commit.
+#
+#   T0  rho=0.00  g_min=0.00   <- must reproduce native noalign (regression baseline)
+#   T1  rho=0.05  g_min=0.00
+#   T2  rho=0.00  g_min=0.05
+#   T3  rho=0.05  g_min=0.05
+#
+# Every condition: prediction loss only (ENABLE_PRIOR_LOSS=False,
+# START_CLS_EPOCH=81 > MAX_EPOCH=80, PERM_PAIRS_PER_BATCH=0, auxiliary losses off),
+# CALIBRATE=False, USE_COUNTERFACTUAL=False. 80 epochs, last.pt + best_val.pt saved.
+#
+# Evaluation: best_val ONLY, cf=off, calibrate=off.
+#   primary   = P_raw
+#   secondary = A_off = P_raw + C_raw   (eval_ckpt.py computes A_off directly)
+# cf=off makes eval_ckpt.py skip the whole CF block, so neither
+# counterfactual_score_windows nor fit_cf_profile is ever called. The configs
+# also set USE_COUNTERFACTUAL=False, which makes eval_ckpt.py reject --cf on|both.
+#
+# Effective LR comes from utils/parser.py:_DATASET_DEFAULT_LR (PSM 5e-05,
+# SMD 5e-04), identical across the four conditions and to the preceding
+# baseline/noalign diagnostic checkpoints.
+#
+# The four conditions share one prior cache entry: PRIOR.SMOOTH_RHO and
+# EFF_GATE_FLOOR are deliberately excluded from _prior_cache_key, so the first
+# warmup computes the PCMCI+ prior and the other three hit the same file.
+name: soft_prior_2x2_ks
+description: >
+  soft-prior 2x2 pilot, ks share: PSM seed0 + SMD machine-1-1 seed0 x {T0,T1,T2,T3}.
+  Forward-only prior smoothing (rho) and effective-gate floor (g_min).
+  best_val-only evaluation with CF fully disabled.
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 1
+  eval:
+    # NOTE: "off" MUST stay quoted. YAML 1.1 parses a bare off as boolean False,
+    # and eval_ckpt.py --cf/--calibrate only accept the strings off|on|both / cfg|off|on.
+    ckpt_tags: [best_val]     # pilot evaluates best_val only; last.pt is saved but not scored
+    cf: "off"                   # CF profile fitting and CF forward are never invoked
+    calibrate: "off"            # CALIBRATE=False
+    verify_native_parity: false
+train:
+  # ---------------- PSM seed0 ----------------
+  - {dataset: PSM, config: scripts/configs/soft_prior_2x2/psm_sp2x2_t0.yaml, input_dir: PSM, entities: [PSM], seeds: [0]}
+  - {dataset: PSM, config: scripts/configs/soft_prior_2x2/psm_sp2x2_t1.yaml, input_dir: PSM, entities: [PSM], seeds: [0]}
+  - {dataset: PSM, config: scripts/configs/soft_prior_2x2/psm_sp2x2_t2.yaml, input_dir: PSM, entities: [PSM], seeds: [0]}
+  - {dataset: PSM, config: scripts/configs/soft_prior_2x2/psm_sp2x2_t3.yaml, input_dir: PSM, entities: [PSM], seeds: [0]}
+  # ---------------- SMD machine-1-1 seed0 ----------------
+  - {dataset: SMD, config: scripts/configs/soft_prior_2x2/smd_sp2x2_t0.yaml, input_dir: SMD, entities: [machine-1-1], seeds: [0]}
+  - {dataset: SMD, config: scripts/configs/soft_prior_2x2/smd_sp2x2_t1.yaml, input_dir: SMD, entities: [machine-1-1], seeds: [0]}
+  - {dataset: SMD, config: scripts/configs/soft_prior_2x2/smd_sp2x2_t2.yaml, input_dir: SMD, entities: [machine-1-1], seeds: [0]}
+  - {dataset: SMD, config: scripts/configs/soft_prior_2x2/smd_sp2x2_t3.yaml, input_dir: SMD, entities: [machine-1-1], seeds: [0]}
+eval_only: []
