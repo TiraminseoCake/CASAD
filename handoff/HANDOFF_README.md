@@ -7,7 +7,8 @@ js(8-GPU, 실행 식별자 server8)에서 완료한 실험 결과와, ks가 이�
 
 1. `PITFALLS.md` — 실행 전 필수. 특히 LR fallback(1번), CRS 끄는 방법(2번), PERM_PAIRS 의미(3번).
 2. `plans/REMAINING_EXPERIMENTS.md` — 남은 실험 P1~P4, 우선순위·비용·검증 절차.
-3. `reports/PSM_2x2_REPORT.md` — 이번 인계의 핵심 발견.
+3. `KS_AGENT_BRIEF.md` — ks Claude 에이전트용 작업 지시서 (역할, 금지사항, P1~P3 절차, 보고 방식).
+4. `reports/PSM_2x2_REPORT.md` — 이번 인계의 핵심 발견.
 
 ## 1. js에서 완료한 실험
 
