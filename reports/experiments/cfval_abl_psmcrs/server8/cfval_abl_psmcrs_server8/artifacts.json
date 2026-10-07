@@ -1,0 +1,1429 @@
+{
+ "out_root_placeholder": "<OUT_ROOT>",
+ "artifacts": [
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "000e3f2cf1386966b3d7d5781629cacf86b44a29d2a09a065e0b87dae7195beb",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "d335539d872ba98833728079bccc2d112f501063146fd37c65ba0a567fdb2ed3",
+   "size": 15873516
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm0_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/attempt1/launcher_run.log",
+   "sha256": "9597771c54b91667e12b00d0abb6e4f11c908ebbfb06cf5856a0b0fd8839f409",
+   "size": 32096
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/last/attempt1/scores.npz",
+   "sha256": "a1dd2eeb62bde184888da173dae04bf114a5f39ee9cdcc28a18d268b40f45bca",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/last/attempt1.log",
+   "sha256": "177ddecef6c87563ef79061104d671d80b36b4c31c83a1b38ae558464f91d509",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "7316de0461132c40ab5bc41f1732c159d6950faac3c9e92baed0bacf6007efa1",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/best_val/attempt1.log",
+   "sha256": "b075eab1f454f4762926afd0d46c31cd90f430ef022059e9a8fc3c10ccf1a918",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed1_best_val.pt",
+   "sha256": "031485fb4c45a160b43807dcb40e9f087a340c5998c3b45f363ab993da3e4d0c",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed1_last.pt",
+   "sha256": "c8fc30a581b4093b407676972a26683bc9e20f853834e76f31e0d10d093d3673",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm0_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/attempt1/launcher_run.log",
+   "sha256": "95d53fff5344d0fc7022ba331d2f21939098875e654c44e2f68816b165ba18b2",
+   "size": 32536
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/last/attempt1/scores.npz",
+   "sha256": "9c13842760fc8bfc2f3ffab7e62874608ae7aa9b628f71b5e61832dfd2ef099a",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/last/attempt1.log",
+   "sha256": "6d46a8f39bbc87a646f7ef8a3f76a5978a11b6ba58eb204d64b94ad9e7e064b7",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "9c13842760fc8bfc2f3ffab7e62874608ae7aa9b628f71b5e61832dfd2ef099a",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/best_val/attempt1.log",
+   "sha256": "7683f93308950586738e5cc3619083fe271262caa28e0871648655dc0af306b7",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed2_best_val.pt",
+   "sha256": "0842f5dd9ddbea0056a8978dc98702538df2cd728ea63214715b415e8007d516",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed2_last.pt",
+   "sha256": "0ee188891028f72e0817ecae8e5f60945bc623cdf114cba64fb3429527d3945e",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm0_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/attempt1/launcher_run.log",
+   "sha256": "4dffdbfaf410af66a1a6622eb785af020c92ce780f0339ac9e146235e241793e",
+   "size": 32296
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/last/attempt1/scores.npz",
+   "sha256": "04b689484b2828f43830b43633cbb42b7ef25b6f1dec7afe0589c24a0cc43d03",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/last/attempt1.log",
+   "sha256": "a76e22709edea84e038b8bba648c2faf0190a0061b5676dd06498e4a29996ae1",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "5311f1606ddfd3c7c2a00e815350b6b4d974565579a5808d2d75032bbf2713d7",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/best_val/attempt1.log",
+   "sha256": "f7dd2b77d3118de9cb4a6a3f8a6234285662bee28e19c21f51d9577241f99224",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed3_best_val.pt",
+   "sha256": "87c284c775d2b044534433cec54e5f1b7551fee07d059a43d03efd2edacf6a1c",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/attempt1/ckpt/PSM_seed3_last.pt",
+   "sha256": "affbe01e9fd0b67c3c43961262c815704c8ac74e8099fb036f6163b9e9903dea",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm0_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/attempt1/launcher_run.log",
+   "sha256": "53137543e2a7045e81ffd34e088d7caf65ccb9b6eb2c8efe047103bee40445f2",
+   "size": 32436
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/last/attempt1/scores.npz",
+   "sha256": "5eb9f4beba70414e7adefb3fa3bba78b1f54428d2fde0824d4fec09be581beda",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/last/attempt1.log",
+   "sha256": "4ea113f009eeeca4e2b888db8f15bd891cf587f3f9bcbe7c8332154bb7b9652a",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "c296043167fbaf53a975e8dd257d82851c94c1d463f93d5dd13ccb38e71749f7",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/best_val/attempt1.log",
+   "sha256": "2bf2cdbc9a649635e55cb181026d8f54ca62c0c1f8944a847b22c7050435d47d",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "ec15d792f820603aa6fcc95fb36db052818a9f0ac7cc4a4d6827b90c23b1e391",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "b155657d4fce1a445063c133f925a23669bfb8918486125720b3ea8b0c122ed7",
+   "size": 15873516
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm0_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/attempt1/launcher_run.log",
+   "sha256": "1773ef44c44f6b5fe936d3494531dc6a3edb45dde20681617f378cc0fed59093",
+   "size": 32238
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "f467f04358bbabc498f3baa1600dfae8cabf81334093988b88d5ecbdf6c3eedb",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/last/attempt1.log",
+   "sha256": "c1e7b4e725b35fbd07bfd377a49ae1c9e198d6f297769def065355a94fd5d660",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "f467f04358bbabc498f3baa1600dfae8cabf81334093988b88d5ecbdf6c3eedb",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/best_val/attempt1.log",
+   "sha256": "90654a67812a1efdbe7f5485cb07781184071e0ed85b6cef08e71364a0a384e5",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed1_best_val.pt",
+   "sha256": "8af39bf6b3ba22f3710feb05ee4bcaba2f8288ca1cc5eb161b0a793b019f6ccb",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed1_last.pt",
+   "sha256": "9b876c7a46528a41f5aad1aa5367982bd6ac81bf994cab4c32a411d7ca8ec35c",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm0_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/attempt1/launcher_run.log",
+   "sha256": "0e96fb19c1ffb24fa69478dbfd615438d136f9ff09b05560334673296e64dc7e",
+   "size": 32398
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "46afd5fb1ae88f15ce81def58946f3840d540d93561dae30bd966c14fc672c33",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/last/attempt1.log",
+   "sha256": "2820896e2ef5241fe1aef996398b4e4499d987e18442d779390a3cbaac598fdf",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "ed7cd9ead6ce27c4b101cc48a18f3a5b63691b187ca82a5613b033a3ecf677ef",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/best_val/attempt1.log",
+   "sha256": "dfeafb81eba4bd5b0af7a30e83a07b22f10471a487b08faba85104e6ef70aebb",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed2_best_val.pt",
+   "sha256": "6fa927ac4f176abf11a10c6760300cbba8a5c766e01db7aee051a4f96294eff0",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed2_last.pt",
+   "sha256": "f97ccb5c49890f15966439134df8c896f25d681b60443f9fbff2dfabf3aca214",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm0_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/attempt1/launcher_run.log",
+   "sha256": "c48e5de62419ee63f7564b4440c383d7cd699ee85be22fe6b5eb5617d2f32182",
+   "size": 32278
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "b74a2c34747d3aeb8087de5d44c87a6dac38dc43a61a97ef732401f8facb2319",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/last/attempt1.log",
+   "sha256": "702ff8e055c3e6a6b7ddbefd167e87b3ce78c17f290fddcb1e4eca40c270cd9e",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "6a815b91a481fd44a5da55251c4806276fddcb723c17a99496d2c01e05c302e4",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/best_val/attempt1.log",
+   "sha256": "267e8669ce0be6e0430ab1807edb0afba6d0491394b3ca15e4516d17a8609aec",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed3_best_val.pt",
+   "sha256": "a8ceb1974ad38a79fce99eab4b874928581bebf790e7a2c467ca62bb66d034b2",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/attempt1/ckpt/PSM_seed3_last.pt",
+   "sha256": "ac344b576768a57271724a77d8d261984bb59f75fd6dda15d0e760281e632e6e",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm0_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/attempt1/launcher_run.log",
+   "sha256": "354099ec6c23243059f76062359654b672307907312f2ea576940043fc4e1196",
+   "size": 32478
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "77ba7954c1a5c3a397d7389bf51988b644ade9e74ffac02dc978c06857d9402b",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/last/attempt1.log",
+   "sha256": "f5e10e6a2f7815de29e34a1452eea660baf4cea8d2a2ee1108a6e49eb88823cf",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "44311345cad6d7a767f8b1e6be5297a42160de2b92c42c1b41bff2daa52845f6",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/best_val/attempt1.log",
+   "sha256": "105e880a192eb2cd6d8a9594a72847bda0e27539b11feefed2bcbf581482590f",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "c209f103b82efbde6a50b669f663b29f4924dbaa1a5b8754b05323f183de57be",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "a86bb20e5b8f17519f9777a327e67884671c539cecee82b0c2038a4c39008e2d",
+   "size": 15873516
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm2_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/attempt1/launcher_run.log",
+   "sha256": "e2a608b272ecbb825e56bd45cce14f52c38149292a5adc337ad4f2e256ea53a6",
+   "size": 32301
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/last/attempt1/scores.npz",
+   "sha256": "1b676df124a47a3b35909b6c2ca40706f048412fd0f8ca9fb5e7ea7bb07b80fa",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/last/attempt1.log",
+   "sha256": "d05c7edfcb96cfa212cd507d6e5b9d15ed46843f2a3f9e03ffb4e369065769c5",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "a449fc321351f9655c9a786fa62bbd6bcf07d528e4f6e639221df107820c91d3",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/best_val/attempt1.log",
+   "sha256": "ce03a316be5ff3b2b7a136cb5a8f111240450ff536fac26090a85b64f5bee9f7",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed1_best_val.pt",
+   "sha256": "7171be77f0b50048230c656a6491ce09b71a3cbc3b1aa5d3a94e0e417fb5566f",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed1_last.pt",
+   "sha256": "907dffd2bd1572772f755ab2c83093ece5e2d3e888b40b06f5f13517e52ca8c4",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm2_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/attempt1/launcher_run.log",
+   "sha256": "568916b6818e77e64ca05bb82d8fcdcf906d042d786a67de4a53613ed29ed9b4",
+   "size": 31821
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/last/attempt1/scores.npz",
+   "sha256": "cdc4fe882b0c53ed1dc9b27a42224764b94af7617194c9a58e7d7b4af4ab24d8",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/last/attempt1.log",
+   "sha256": "69fc188dc3169f0acbb833fca141740014dfe05bc00003ea416e5d69c037c566",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "651ba1d212f56e5bf4e0a4ceb0203f517687b9506aaaa77721d3bb759ee9238a",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/best_val/attempt1.log",
+   "sha256": "4a1a40605630c0b840cf406d2aa50ac6d42596a709d760627b359f112b37213c",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed2_best_val.pt",
+   "sha256": "086b2d86c589c461be50c03b715f727981a7080a8aa6945b8449ee59ffbd6d06",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed2_last.pt",
+   "sha256": "22f1631f5fad892e5e310381f2a59a5552cff43a740d70e68537a50da6fa8f7f",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm2_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/attempt1/launcher_run.log",
+   "sha256": "f52a22d4da593acfb333f2dbdaaba2d2a515cd440c6573d77d776857a5e2b3f0",
+   "size": 32038
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/last/attempt1/scores.npz",
+   "sha256": "22b41db07e93f02207226739691e99be7d7cf787765198f45fdb6c4608ba27fd",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/last/attempt1.log",
+   "sha256": "760a5cc821a07aa8e227e15432cc477383b43a0379d015058e655925b3f21256",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "0c9e59eea22b96c7d33619f80f420537fd3979aedc21e08c66e99ff607b7c4ce",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/best_val/attempt1.log",
+   "sha256": "5027875b85f7fbf2364b67a1ec8a2b959592617999e63efc3ad4c9ff658237c7",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed3_best_val.pt",
+   "sha256": "aa8b5b417a02e31e65f8e0821cb61492b9f2ec75566bca81910fe2ffc0b8c469",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/attempt1/ckpt/PSM_seed3_last.pt",
+   "sha256": "e1b3be811c763b9be77a391a13a6cbcce3e0db237febed00a3d441bf7a377f59",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm2_crson",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/attempt1/launcher_run.log",
+   "sha256": "64dd33555ea380c15d3b1860e5ed6854951f9b2bbfbcb72d3522692f1a1e0c90",
+   "size": 31858
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/last/attempt1/scores.npz",
+   "sha256": "bd0e4b8c5f6ecfde357c8a127ba07ef3ee72cba2f6a3b12c96e94d90afa482d0",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/last/attempt1.log",
+   "sha256": "da2ac6416fc20f9354ac1d8a02b7fecded7fc9a8e39de7027a68303ab5253996",
+   "size": 3826
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "e2bc9fc64461cdfffbc9c0536dc0df01bed2719dcba58207a26c5a64d841b0d9",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/best_val/attempt1.log",
+   "sha256": "03043c394ef8652483fce61bf949bf3bb854616de066065ea42454c038f004b7",
+   "size": 3846
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "8deb3afd7c11d7e333108b1d76180dcd4358df62861e34230c0219dbf4013e24",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "3fcb2008d45ffad55ca3ba538fab9bc10009740fde5da408ccf32d0506b0ede8",
+   "size": 15873516
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_cf_val_perm2_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/attempt1/launcher_run.log",
+   "sha256": "3244c0a3bb9ec94cf6afdb1fff87809afa0d62dfecdc91fd877e95571b1e3d6d",
+   "size": 32418
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "0033e1f0cfb2c5c65e7c10ae7296359fc9cfd58ad625c4233d7b531bf81b5cf5",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/last/attempt1.log",
+   "sha256": "71a223991eb93016975032a1040c55e9a3242ce44708413ccde3769419ccf716",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "626fc32e7a35e9dcef4a62e20a0be3539ed498ffc70dea49615b54228c36e3ba",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/best_val/attempt1.log",
+   "sha256": "e8d362e97bcdd83615b039ac19896435d66aca36157a642151f8381edd06b19f",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed1_best_val.pt",
+   "sha256": "133726809828efaf10cd889934cfb8ee392c8d1c2fc504d75deebb355938b2c9",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed1_last.pt",
+   "sha256": "2b80b69534e8bcd3152425319c69417aa029be2728dc79a8b2d36a564596b5d9",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed1/psm_cf_val_perm2_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/attempt1/launcher_run.log",
+   "sha256": "248dde8c50fb5ec0b62a5c9ec47d969faa2062b96291abf6ed495c313ea5de45",
+   "size": 32318
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "96ae97ea190e69af5ccb916261f6a0889ba0b4e26d667f2b62fdc80ec5d6280a",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/last/attempt1.log",
+   "sha256": "8c851b205429385c8632fbd09e0b07967bebda9f84b331bdd4e1d9b2e373cef4",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "d4a819e9fd17971e87ca61896727bab3695ff0a193a41140e35f4865ceac3ff0",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/best_val/attempt1.log",
+   "sha256": "425ea06a2ee53af97c526a3b2dfb83e5a8cdce79245936549780e1ea546c84e2",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed1/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed2_best_val.pt",
+   "sha256": "a23683978ddea7dba78abd7f571f45b15d9cabdcd70f3fd9b7490c0dd8e550cc",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed2_last.pt",
+   "sha256": "35b819c914b8f37debcfa99da64b9baab3eb71da361c65586f6f52a775283f95",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed2/psm_cf_val_perm2_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/attempt1/launcher_run.log",
+   "sha256": "66dbc974065f9b5d83c1a6d61c533f07e978b27875e3579a16aa923538048d8c",
+   "size": 32358
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "7ddc3cc53cc57d102cec168c96353a33e4841b965cc4a3a864b012947de4a0a8",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/last/attempt1.log",
+   "sha256": "5f8d0179f703e4c4573f69d277f025cefe829f21e6d659d1b0fe29a26693e526",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "7ddc3cc53cc57d102cec168c96353a33e4841b965cc4a3a864b012947de4a0a8",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/best_val/attempt1.log",
+   "sha256": "6665a279641d6380d6bf259dafa8f1bf594607a79d95d40be7eee390c1f51e40",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed2/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed3_best_val.pt",
+   "sha256": "58f046c86ae056a2ae3cd6999f7c8b1207fb4014f69166ebbfdb86066fccb8aa",
+   "size": 15877824
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/attempt1/ckpt/PSM_seed3_last.pt",
+   "sha256": "492809cb90e9ff6e8e2f13c313162b201507c0d6a471b6771759def40d7654f6",
+   "size": 15873580
+  },
+  {
+   "job_id": "train/PSM/PSM/seed3/psm_cf_val_perm2_crsoff",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/attempt1/launcher_run.log",
+   "sha256": "048a8aaf0aa3ba2fc6a91aa716fae98a7b9eb5a2727edeb8e6fd3db735217e17",
+   "size": 32678
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "e68b403d1a81cda15adc6f91ee50bcfcda23fff745aa7f5545b60e199af6ac9f",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/last/attempt1.log",
+   "sha256": "2d67cea8239f1f9765ca5a5556086b9eddc6bb9e7bf7b4c5f1525cd930de158d",
+   "size": 3831
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "44de8451549a49982cc01cd598af4418046df7da318860971ff0977ca024b0f2",
+   "size": 14091056
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/best_val/attempt1.log",
+   "sha256": "73a1a931a3ab5db275092ea87e1f25231d854c3b8b1ec38b83682d12a691b2f4",
+   "size": 3851
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed3/psm_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  }
+ ]
+}
