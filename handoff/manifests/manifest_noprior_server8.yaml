@@ -1,0 +1,17 @@
+# Campaign cfval_abl_noprior — js/server8 share (SWaT51 seeds 0-3 FIRST, then SMD machine-2-*/3-* x seeds 0-3). Created 2026-09-13.
+# Configs: base *_cf_val.yaml at CODE_SHA 49f630a with ONLY PICAAD.ENABLE_PRIOR_LOSS=False changed (see ablation/configs/). Frozen once executed.
+name: cfval_abl_noprior_server8
+description: js/server8 loss ablation noprior — SWaT51 x4 seeds + SMD 20 entities x4 seeds
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 2
+  eval: {ckpt_tags: [last, best_val], cf: both, calibrate: cfg, verify_native_parity: false}
+train:
+  - {dataset: SWaT, config: <BOOTSTRAP>/server8/ablation/configs/swat_cf_val_noprior.yaml, input_dir: SWaT51, entities: [swat], seeds: [0, 1, 2, 3], expected_n: 51}
+  - dataset: SMD
+    config: <BOOTSTRAP>/server8/ablation/configs/smd_cf_val_noprior.yaml
+    input_dir: SMD
+    entities: [machine-2-1, machine-2-2, machine-2-3, machine-2-4, machine-2-5, machine-2-6, machine-2-7, machine-2-8, machine-2-9, machine-3-1, machine-3-2, machine-3-3, machine-3-4, machine-3-5, machine-3-6, machine-3-7, machine-3-8, machine-3-9, machine-3-10, machine-3-11]
+    seeds: [0, 1, 2, 3]
+eval_only: []

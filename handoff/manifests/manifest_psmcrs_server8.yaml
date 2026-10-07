@@ -1,0 +1,19 @@
+# Campaign cfval_abl_psmcrs — js/server8. PSM 2x2 factorial: CRS loss {on, off} x intervention {off, on}, 4 seeds each = 16 train jobs.
+# Purpose: the SWaT/SMD CRS ablation ran with PERM_PAIRS_PER_BATCH=0, where cls_ref degenerates to the frozen PCMCI prior and the
+# causal-structure loss is therefore a duplicate prior-alignment term. This campaign adds PSM and, for the first time, the
+# PERM_PAIRS_PER_BATCH=2 arm in which cls_ref is actually built from intervention effects as the design intends.
+# Configs: base scripts/configs/psm_cf_val.yaml at CODE_SHA 49f630a with ONLY the two factors changed (see ablation/configs/).
+# LR is 5e-5 for every arm (utils/parser.py forces the PSM fallback; a YAML value cannot override it). Frozen once executed.
+name: cfval_abl_psmcrs_server8
+description: PSM 2x2 - CRS loss (START_CLS_EPOCH 5 vs 99999) x intervention (PERM_PAIRS_PER_BATCH 0 vs 2), seeds 0-3
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 2
+  eval: {ckpt_tags: [last, best_val], cf: both, calibrate: cfg, verify_native_parity: false}
+train:
+  - {dataset: PSM, config: <BOOTSTRAP>/server8/ablation/configs/psm_cf_val_perm0_crson.yaml,  input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3], expected_n: 25}
+  - {dataset: PSM, config: <BOOTSTRAP>/server8/ablation/configs/psm_cf_val_perm0_crsoff.yaml, input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3], expected_n: 25}
+  - {dataset: PSM, config: <BOOTSTRAP>/server8/ablation/configs/psm_cf_val_perm2_crson.yaml,  input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3], expected_n: 25}
+  - {dataset: PSM, config: <BOOTSTRAP>/server8/ablation/configs/psm_cf_val_perm2_crsoff.yaml, input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3], expected_n: 25}
+eval_only: []
