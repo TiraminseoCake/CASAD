@@ -1,0 +1,480 @@
+{
+ "generated_at": "2026-10-12T18:00:52+0900",
+ "generated_by": "ks agent; written outside the execution checkout; nothing in the execution checkout, running jobs or launcher state was modified",
+ "path_placeholders": {
+  "<RUNS>": "ks launcher runs root",
+  "<BOOTSTRAP>": "ks bootstrap root (configs/manifests outside the checkout)",
+  "<DATA_ROOT>": "ks data_npz root",
+  "<EXEC>": "execution checkout at 49f630a"
+ },
+ "campaign_status_snapshot": {
+  "observed_at": "2026-10-12T17:58+0900 (read-only: queue.json, SUCCESS.json, ps, tmux, GPU lock files, nvidia-smi)",
+  "cfval_abl_swatcrs2": {
+   "state": "RUNNING",
+   "design": "SWaT51 seeds 0,1 x {PERM0,PERM2} x {CRS off,on} (8 train, 16 eval, 4 prior)",
+   "queue": "cfval_abl_swatcrs2_ks",
+   "code": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84 (tracked diff empty)",
+   "job_counts": {
+    "prior:success": 4,
+    "train:running": 4,
+    "train:pending": 4,
+    "eval:pending": 16
+   },
+   "failures": 0,
+   "running": [
+    "train seed0/1 x perm0_crsoff/crson, started 2026-10-12 15:45, epoch 5-6 of 80 at 17:58"
+   ],
+   "measured_epoch_time_min": "21.3-22.9 per epoch (4 concurrent jobs, one per GPU)",
+   "launcher": "run_ablation.sh swatcrs2 --execute --no-tmux in tmux session picaad_cfval_abl_swatcrs2_ks; run_experiments.py holds all 4 GPU locks",
+   "gpu": "4 GPUs, one train process each (~1.2 GB used each)",
+   "eta_estimate": "PERM0 trains ~2026-10-13 21-22h; then 8 PERM0 evals (js SWaT eval ~1.5 h each), 4 PERM2 trains (x2.1-2.2 of PERM0 on ks SMD), 8 PERM2 evals -> about 2026-10-16 afternoon-night (estimate, not measured)",
+   "action": "left untouched (no launcher/GPU/config change)"
+  },
+  "cfval_abl_swatcrs": {
+   "state": "DRY-RUN ONLY (16-run plan superseded by swatcrs2); never executed"
+  },
+  "cfval_abl_smdcrs": {
+   "state": "DONE",
+   "stopped": "done",
+   "updated_at": "2026-10-08T07:38:04+0900",
+   "job_counts": {
+    "prior:success": 32,
+    "train:success": 128,
+    "eval:success": 256
+   }
+  },
+  "cfval_abl_smdcrs20": {
+   "state": "DONE",
+   "stopped": "done",
+   "updated_at": "2026-10-11T15:44:59+0900",
+   "job_counts": {
+    "prior:success": 80,
+    "train:success": 320,
+    "eval:success": 640
+   }
+  },
+  "cfval_abl_noalign": {
+   "state": "DONE",
+   "stopped": "done",
+   "updated_at": "2026-09-13T05:35:05+0900",
+   "job_counts": {
+    "prior:success": 9,
+    "train:success": 36,
+    "eval:success": 72
+   },
+   "note": "PSM 4 seeds + SMD machine-1-1..1-8 x 4 seeds; START_CLS_EPOCH=81 (not 99999) with MAX_EPOCH=80, ENABLE_PRIOR_LOSS=False, PERM=0"
+  },
+  "sp2x2": {
+   "state": "DONE",
+   "stopped": "done",
+   "updated_at": "2026-10-06T23:16:07+0900",
+   "code": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+   "job_counts": {
+    "prior:success": 8,
+    "train:success": 8,
+    "eval:success": 8
+   },
+   "note": "PSM seed0 + SMD machine-1-1 seed0 x T0-T3; best_val only; CF off"
+  }
+ },
+ "smd28_analysis_inputs": {
+  "campaigns": [
+   "cfval_abl_smdcrs (machine-1-1..1-8)",
+   "cfval_abl_smdcrs20 (machine-2-1..2-9, machine-3-1..3-11)"
+  ],
+  "files_read_per_run": [
+   "queue.json",
+   "train SUCCESS.json",
+   "train config.yaml (resolved)",
+   "train <entity>_seed<k>_val_metrics.csv",
+   "train launcher_run.log",
+   "best_val checkpoint (sha256 + cls_ref/te_prior buffers + payload cfg/epoch)",
+   "best_val eval SUCCESS.json",
+   "best_val eval provenance.json",
+   "best_val eval metrics.csv"
+  ],
+  "aggregated_files_not_read": [
+   "_launcher/*/eval_summary_*.csv",
+   "<BOOTSTRAP>/ks/smdcrs_best_val_metrics.csv",
+   "<BOOTSTRAP>/ks/smdcrs20_best_val_metrics.csv",
+   "<BOOTSTRAP>/ks/report_numbers.json"
+  ],
+  "excluded_by_design": [
+   "trainer A / 3151f58 reproduction runs",
+   "test-selected checkpoints",
+   "last checkpoints (only best_val is analysed)",
+   "calibrated scores (CALIBRATE=False everywhere)",
+   "fusion variants as primary (P_raw is primary)"
+  ]
+ },
+ "smd28_coverage": {
+  "n_rows": 448,
+  "n_expected": 448,
+  "missing": [],
+  "duplicates": [],
+  "orphan_result_dirs": [],
+  "entities": [
+   "machine-1-1",
+   "machine-1-2",
+   "machine-1-3",
+   "machine-1-4",
+   "machine-1-5",
+   "machine-1-6",
+   "machine-1-7",
+   "machine-1-8",
+   "machine-2-1",
+   "machine-2-2",
+   "machine-2-3",
+   "machine-2-4",
+   "machine-2-5",
+   "machine-2-6",
+   "machine-2-7",
+   "machine-2-8",
+   "machine-2-9",
+   "machine-3-1",
+   "machine-3-10",
+   "machine-3-11",
+   "machine-3-2",
+   "machine-3-3",
+   "machine-3-4",
+   "machine-3-5",
+   "machine-3-6",
+   "machine-3-7",
+   "machine-3-8",
+   "machine-3-9"
+  ],
+  "seeds": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "arms": {
+   "smd_cf_val_perm0_crsoff": [
+    0,
+    0
+   ],
+   "smd_cf_val_perm0_crson": [
+    0,
+    1
+   ],
+   "smd_cf_val_perm2_crsoff": [
+    2,
+    0
+   ],
+   "smd_cf_val_perm2_crson": [
+    2,
+    1
+   ]
+  },
+  "all_train_success": true,
+  "all_eval_success": true,
+  "n_nonfinite_metric_values": 0
+ },
+ "smd28_integrity": {
+  "training_code_sha": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+  "queue_code": {
+   "cfval_abl_smdcrs": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "cfval_abl_smdcrs20": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "queue_job_counts": {
+   "cfval_abl_smdcrs": {
+    "prior:success": 32,
+    "train:success": 128,
+    "eval:success": 256
+   },
+   "cfval_abl_smdcrs20": {
+    "prior:success": 80,
+    "train:success": 320,
+    "eval:success": 640
+   }
+  },
+  "config_sha256_by_arm": {
+   "smd_cf_val_perm0_crsoff": [
+    "9685527eb303cffac6dc62319a3f58e5c0cf3ef2e5a55957fb542979ab43ac08"
+   ],
+   "smd_cf_val_perm0_crson": [
+    "6e58263257029584f2153ab4ac877f4cc96897681843ff740e523004d7c57255"
+   ],
+   "smd_cf_val_perm2_crsoff": [
+    "1ae5fe9cae6f4c64ed00caa648dfa6aebcd4d18ab6a941903dc1c32108a48143"
+   ],
+   "smd_cf_val_perm2_crson": [
+    "7defc385d0136b4c46789fbcb7cbb4a237ca3dd760718f5fe14aaaa770bd3dcb"
+   ]
+  },
+  "resolved_config_keys_that_vary_across_448_runs": [
+   "PICAAD.INTERVENTION.PERM_PAIRS_PER_BATCH",
+   "PICAAD.START_CLS_EPOCH"
+  ],
+  "resolved_config_keys_excluded_as_run_identity": [
+   "DATA.ENTITIES",
+   "RESULT_DIR",
+   "RESULT_DIR_LITERAL",
+   "SEEDS",
+   "TRAIN.CKPT_DIR"
+  ],
+  "resolved_config_values": {
+   "cfg_MAX_EPOCH": [
+    "80"
+   ],
+   "cfg_BASE_LR": [
+    "0.0005"
+   ],
+   "cfg_VAL_FRAC": [
+    "0.2"
+   ],
+   "cfg_VAL_ENABLE": [
+    "True"
+   ],
+   "cfg_PRIOR_TYPE": [
+    "pcmci"
+   ],
+   "cfg_CALIBRATE": [
+    "False"
+   ],
+   "fit_protocol": [
+    "train_sub_val_v2"
+   ],
+   "calibrate": [
+    "False"
+   ],
+   "gamma": [
+    "1.0"
+   ],
+   "cf_top_k": [
+    "15"
+   ],
+   "ckpt_format": [
+    "val"
+   ],
+   "ckpt_protocol": [
+    "val_pred_mae_v2"
+   ]
+  },
+  "log_use_cstruct_true_epochs_by_arm": {
+   "smd_cf_val_perm0_crsoff": [
+    0
+   ],
+   "smd_cf_val_perm0_crson": [
+    76
+   ],
+   "smd_cf_val_perm2_crsoff": [
+    0
+   ],
+   "smd_cf_val_perm2_crson": [
+    76
+   ]
+  },
+  "log_perm_loss_nonzero_epochs_by_arm": {
+   "smd_cf_val_perm0_crsoff": [
+    0
+   ],
+   "smd_cf_val_perm0_crson": [
+    0
+   ],
+   "smd_cf_val_perm2_crsoff": [
+    80
+   ],
+   "smd_cf_val_perm2_crson": [
+    80
+   ]
+  },
+  "checkpoint_max_abs_cls_ref_minus_normalized_prior_by_arm": {
+   "smd_cf_val_perm0_crsoff": [
+    5.960464477539063e-08,
+    2.384185791015625e-07
+   ],
+   "smd_cf_val_perm0_crson": [
+    5.960464477539063e-08,
+    2.384185791015625e-07
+   ],
+   "smd_cf_val_perm2_crsoff": [
+    0.49144601821899414,
+    0.9994915723800659
+   ],
+   "smd_cf_val_perm2_crson": [
+    0.49760377407073975,
+    0.9996968507766724
+   ]
+  },
+  "best_val_epoch_range_by_arm": {
+   "smd_cf_val_perm0_crsoff": [
+    31,
+    80
+   ],
+   "smd_cf_val_perm0_crson": [
+    35,
+    80
+   ],
+   "smd_cf_val_perm2_crsoff": [
+    14,
+    80
+   ],
+   "smd_cf_val_perm2_crson": [
+    7,
+    80
+   ]
+  },
+  "evaluator_signature": [
+   "{\"USE_MEDIAN_VUS_WINDOW\": true, \"VUS_THRE\": 250, \"VUS_VERSION\": \"opt\", \"start_idx\": 9}"
+  ],
+  "data_npz_sha256_matches_reference_28_of_28": true,
+  "checks_performed": [
+   "queue code = 49f630a with empty tracked diff; train/eval SUCCESS identity code and checkpoint/eval code fingerprints = 49f630a, not dirty",
+   "config file sha256 unchanged since the run; resolved configs differ across all 448 runs only in PERM_PAIRS_PER_BATCH and START_CLS_EPOCH",
+   "arm name == resolved PERM_PAIRS_PER_BATCH and (START_CLS_EPOCH <= MAX_EPOCH)",
+   "log: 80 epochs; use_cstruct=True on 76 epochs from ep5 for CRS on, 0 for CRS off; perm loss non-zero on 80/80 epochs for PERM2, 0 for PERM0",
+   "checkpoint: max|cls_ref - normalize(te_prior_weight)| <= 2.4e-7 for PERM0, >= 0.49 for PERM2",
+   "split: val_frac 0.2, boundary = round(0.8*T_train) as in datasets/split.py, train_sub + val = train, fit_protocol train_sub_val(_v2), prior cache key contains the split id and _pcmci_",
+   "mu/sd in checkpoint equal train_sub statistics recomputed at eval (max diff 0.0)",
+   "best_val checkpoint epoch == argmin of validation pred MAE (first minimum) == final best_epoch_so_far; checkpoint val_mae == that minimum",
+   "checkpoint file sha256 on disk == provenance sha256; eval restored strictly, state unchanged, set_te_prior not called after load",
+   "metrics.csv: 6 variants, entity/seed/epoch match, 0 non-finite values; CALIBRATE False, gamma 1.0, P_AGG mean, C_AGG fro, CF top_k 15",
+   "evaluator settings identical across runs; VUS window constant within each entity",
+   "one attempt per logical job on disk; no orphan result directories; no duplicate logical keys"
+  ],
+  "failures": [],
+  "published_package_consistency": "best_val rows of the published smdcrs/smdcrs20 metrics.csv equal the analysis input for all 6 variants x 9 metrics x 448 runs (24,192 values) plus checkpoint epoch and sha256: 0 mismatches"
+ },
+ "references": {
+  "PSM_2x2_js": {
+   "branch": "results/cfval_abl_psmcrs/server8",
+   "commit": "54aab1d5af12d9d18d2831d71386e681f1dc1d2d",
+   "file": "reports/experiments/cfval_abl_psmcrs/server8/cfval_abl_psmcrs_server8/metrics.csv",
+   "git_blob": "b19c8e7d4bd7c213537a859ab64cc84d3c643286",
+   "sha256": "f0a06c8439f85a7310ed50af88d82511ac89a97e1e94f069bf8b28963d6bd693",
+   "rows_used": "best_val, P_raw (+ ckpt_val_mae), 4 arms x 4 seeds; training_code_sha 49f630a; result_kind val_ckpt_eval"
+  },
+  "data_identity": {
+   "branch": "results/data-identity",
+   "commit": "123a4e85871a7f387160b9176d81a0433eb5325d",
+   "file": "reports/data_identity/cfval_smd28_swat51_reference_hashes.json",
+   "sha256": "32f209eae60f91b5faaf03a465e4e4325468d11359644d3447e662cd12473a38"
+  }
+ },
+ "analysis": {
+  "scripts": {
+   "scripts/collect_smd28.py": "8b8b30d5bfdf4dbac1c426cc1f5a0c5e1d27be857b0d8f7fc9d8c231a21c8558",
+   "scripts/analyze_smd28.py": "f6a790d997d791bef92f0f6d608ed20a162b7ef5c409b356c4e6fd4b884725aa"
+  },
+  "outputs": {
+   "smd28_crs_perm_paired.csv": "e8df0ab8689860b059648486646146c50e2a3d74a5113bf838241067b6db1cec",
+   "smd28_entity_effects.csv": "938f3d6c12ff938aabc68dbf77394122e56c73874bf88603658c62e526d9d1d5",
+   "smd28_uncertainty.csv": "a19a80b9aaecfb4443b0ddbba0bf607248f33d7613b885001dd1dd0d0e62d649"
+  },
+  "intermediate": {
+   "supporting/smd28_runs.csv": "c53ed1053bb65aaf9751b95109a70a571c9306d1e2b77e3dfe540bf487e483a0"
+  },
+  "primary": "variant P_raw, AUC-PR, best_val checkpoint (validation pred MAE)",
+  "effects": {
+   "crs_at_perm0": "a01-a00",
+   "crs_at_perm2": "a11-a10",
+   "interaction": "(a11-a10)-(a01-a00)",
+   "crs_main": "((a01-a00)+(a11-a10))/2",
+   "perm_main": "((a10-a00)+(a11-a01))/2"
+  },
+  "uncertainty": {
+   "method": "paired cluster bootstrap over entities; each drawn entity contributes its 4 seeds x 4 arms together; percentile 95% CI",
+   "B": 10000,
+   "rng": "numpy.random.default_rng(20261012), one draw matrix per scope reused for every metric/quantity",
+   "secondary": "one-sample t on entity means (df = n_entities-1)",
+   "reference": "one-sample t on 4 seed-level macro means (df=3; entity set treated as fixed)",
+   "not_done": "the 112 (entity, seed) pairs are never treated as independent samples"
+  },
+  "subsets": "SMD8 (ks, machine-1-*) and SMD20 (js set, machine-2-*/3-*) are reported separately as references; the 28-entity estimate is computed from raw rows (equal weight per entity), never as a 50:50 mix of subset means"
+ },
+ "published": [
+  {
+   "campaign": "cfval_abl_smdcrs",
+   "branch": "results/cfval_abl_smdcrs/ks",
+   "commit": "94050082bc990b9ba8b7310da8bb646f5623ed97",
+   "package": "reports/experiments/cfval_abl_smdcrs/ks/cfval_abl_smdcrs_ks",
+   "content_sha256": "f9e8fb605983976d874f472fabcc5e0fc99d136599dbc09f921e107c67db203d",
+   "complete": true,
+   "job_counts": {
+    "success": 416
+   },
+   "training_code_sha": [
+    "49f630ac8d324ba01390c1a1dcaa4386cd94ae84"
+   ],
+   "export_tool": "scripts/export_results.py at 49f630a (execution checkout), then path redaction + leak scan by <BOOTSTRAP>/ks/publish_redacted_ks.sh",
+   "parent_commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+   "files": 6,
+   "publish_wrapper_sha256": "a7beefc24efd663375f095e9562c1d285031556e40726583558f69687e97e432"
+  },
+  {
+   "campaign": "cfval_abl_smdcrs20",
+   "branch": "results/cfval_abl_smdcrs20/ks",
+   "commit": "8b15ea7e7830e0b601ad9e3b24b2e452d5e605bd",
+   "package": "reports/experiments/cfval_abl_smdcrs20/ks/cfval_abl_smdcrs20_ks",
+   "content_sha256": "fbeb984cfea62ddd7cf5b7d71b2e984436eb14fa77da1b92d4e8e53f11ecdf86",
+   "complete": true,
+   "job_counts": {
+    "success": 1040
+   },
+   "training_code_sha": [
+    "49f630ac8d324ba01390c1a1dcaa4386cd94ae84"
+   ],
+   "export_tool": "scripts/export_results.py at 49f630a (execution checkout), then path redaction + leak scan by <BOOTSTRAP>/ks/publish_redacted_ks.sh",
+   "parent_commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+   "files": 6,
+   "publish_wrapper_sha256": "a7beefc24efd663375f095e9562c1d285031556e40726583558f69687e97e432"
+  },
+  {
+   "campaign": "cfval_abl_noalign",
+   "branch": "results/cfval_abl_noalign/ks",
+   "commit": "04e66ebfd60b85227a871839043e026f5ca2631b",
+   "package": "reports/experiments/cfval_abl_noalign/ks/cfval_abl_noalign_ks",
+   "content_sha256": "e6a483e8d18a8fc72a5b2797517b538c83fde0d25efd13eaf63b96d56f9d1aa0",
+   "complete": true,
+   "job_counts": {
+    "success": 117
+   },
+   "training_code_sha": [
+    "49f630ac8d324ba01390c1a1dcaa4386cd94ae84"
+   ],
+   "export_tool": "scripts/export_results.py at 49f630a (execution checkout), then path redaction + leak scan by <BOOTSTRAP>/ks/publish_redacted_ks.sh",
+   "parent_commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+   "files": 6,
+   "publish_wrapper_sha256": "a7beefc24efd663375f095e9562c1d285031556e40726583558f69687e97e432"
+  },
+  {
+   "campaign": "sp2x2",
+   "branch": "results/sp2x2/ks",
+   "commit": "097ad24cfc341b6de2a4f500afb07ff43b75f30e",
+   "package": "reports/experiments/sp2x2/ks/soft_prior_2x2_ks",
+   "content_sha256": "8ecea3618e5586c8876ea3d06583081017f3087cc049760386a5a836bfbe2d68",
+   "complete": true,
+   "job_counts": {
+    "success": 24
+   },
+   "training_code_sha": [
+    "f50147db4d35297fa72dc2b7e15555c27a1d01bc"
+   ],
+   "export_tool": "scripts/export_results.py at 49f630a (execution checkout), then path redaction + leak scan by <BOOTSTRAP>/ks/publish_redacted_ks.sh",
+   "parent_commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+   "files": 6,
+   "publish_wrapper_sha256": "a7beefc24efd663375f095e9562c1d285031556e40726583558f69687e97e432"
+  }
+ ],
+ "publication_rules_applied": [
+  "only reports/experiments/<campaign>/ks/<run_id> staged (6 files per branch)",
+  "no checkpoint, scores.npz, data NPZ, log or symlink",
+  "absolute paths -> placeholders; user name -> <USER>; leak scan (absolute paths, user name, key/token patterns, file types, size) = 0 before commit",
+  "plain push, no force; remote ancestry checked before push; execution checkout HEAD/index unchanged (49f630a, clean)"
+ ],
+ "known_limitations": [
+  "PERM_PAIRS_PER_BATCH=2 switches on two things at once: the intervention loss (0.1 x perm in group_robust) and the cls_ref update from intervention effects; the 2x2 cannot separate them",
+  "source-lag intervention windows overlap (lag windows share 4 steps), so a (tau, src) intervention is not lag-specific",
+  "intervention sampling is proportional to PCMCI row out-degree; rows with out-degree 0 are never intervened",
+  "SWaT (cfval_abl_swatcrs2) still running; no SWaT CRS x PERM result exists yet",
+  "PSM is one entity with 4 seeds; its uncertainty is seed-level only"
+ ]
+}
