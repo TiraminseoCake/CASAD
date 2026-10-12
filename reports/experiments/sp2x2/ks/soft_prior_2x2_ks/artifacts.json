@@ -1,0 +1,453 @@
+{
+ "out_root_placeholder": "<OUT_ROOT>",
+ "artifacts": [
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t0",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t0/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "aa216a0c978ac043f83334659f51a5a93a5d48c49badeb69d9077d6f83db1b8c",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t0",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t0/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "92d93e030f3a712e57c3f7bff9011032dc1ea22b25b57f71ba7f977c3d79aa5b",
+   "size": 15873452
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t0",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t0/attempt1/launcher_run.log",
+   "sha256": "adc805b8cffb64d3559041a32f43a9fb7db9dd2166b5334bc682924d3a231671",
+   "size": 31967
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val/attempt1/scores.npz",
+   "sha256": "558368f0c8059be001d1678a0552432f31411c2a8561520f30057635f88b7db6",
+   "size": 1757900
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val/attempt1.log",
+   "sha256": "44120876ded7772fd5d93ba47bc3857aa52db3e477a040587909a23e473195d3",
+   "size": 2677
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t1",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t1/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "247f2e7c036200035697b30a47064b801c3a724ad903935b6740a3c6416e6f42",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t1",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t1/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "a9ce83dc344529330322ab2fc2fb8a3b5c68e23155183af5c24daac347ef2a15",
+   "size": 15873452
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t1",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t1/attempt1/launcher_run.log",
+   "sha256": "bd5b78d33965291ad1113c51a9815d2c038ecad6ece0a7a2f66ea5f724e5077d",
+   "size": 31987
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val/attempt1/scores.npz",
+   "sha256": "9b5592db46182886bb3bf42af53b45caf53c3c7c5e4c6772323c46c360767eda",
+   "size": 1757900
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val/attempt1.log",
+   "sha256": "dd568e3129c9a0b1f3897a8fa4bfa4a625d44f2ad416e3f7a136d32e3f6864f5",
+   "size": 2677
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t2",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t2/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "e0b2030d2ab22b5918c8659a239174975e78df7cee3a49e2963e09cecb701deb",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t2",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t2/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "77b88332311e0619e2a960e4d5dcf52ce964b6e9c65d336bedceb6edb91ee77f",
+   "size": 15873452
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t2",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t2/attempt1/launcher_run.log",
+   "sha256": "e799f71839b0b3bf4e15d3eff20b7d10680a79d0bd2dd97166653aa3d2029b53",
+   "size": 31967
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val/attempt1/scores.npz",
+   "sha256": "63b6e11907fc8d93236e405d176e3b8a1b013ef7d50fe7ddef3f66b8f4a0a381",
+   "size": 1757900
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val/attempt1.log",
+   "sha256": "29da75cb05845bd3f226ecd134010f78c48e921651578c5244bd56e36c8f0c22",
+   "size": 2677
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t3",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t3/attempt1/ckpt/PSM_seed0_best_val.pt",
+   "sha256": "4e8d88c368edea5cad006c05c7d8e7949389f1bdc35f3798dc21f1d90427c28d",
+   "size": 15877760
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t3",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t3/attempt1/ckpt/PSM_seed0_last.pt",
+   "sha256": "95201b4dfabd5cc78170d7be4c2ddfb2ec82edc5c03c6d23e25a5a6dc86cd638",
+   "size": 15873516
+  },
+  {
+   "job_id": "train/PSM/PSM/seed0/psm_sp2x2_t3",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t3/attempt1/launcher_run.log",
+   "sha256": "343d8812cd267e049190c2f1bc3db1302bd20421c0c7f00ab62e1a662bf0f099",
+   "size": 31947
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val",
+   "kind": "scores",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val/attempt1/scores.npz",
+   "sha256": "9ea3220fb43a8d11bc92e2c4fb37b282259fe0846d04bc03c10033698929b1d1",
+   "size": 1757900
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val",
+   "kind": "log",
+   "path": "PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val/attempt1.log",
+   "sha256": "4cea00b07279d3a65bb754e5474a735b0cb4a2baa98b13fda6ba3a85e4bda789",
+   "size": 2677
+  },
+  {
+   "job_id": "eval/PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/PSM/PSM.npz",
+   "sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "shapes": {
+    "train": [
+     132481,
+     25
+    ],
+    "test": [
+     87841,
+     25
+    ],
+    "label": [
+     87841
+    ]
+   }
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t0",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+   "sha256": "807208f66f6b04c88c6b9f072a0cbbc4195dcaf90695a3d9b3d74f51a2333876",
+   "size": 24142648
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t0",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1/ckpt/machine-1-1_seed0_last.pt",
+   "sha256": "27145b0f104926790f45c07de898ed75d158bd35abb0e3fd514aba0a066ef1fb",
+   "size": 24136324
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t0",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1/launcher_run.log",
+   "sha256": "090850de605b835a28d74964d878bf501b89d0a1db38366024c302e07ba21770",
+   "size": 31984
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val",
+   "kind": "scores",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val/attempt1/scores.npz",
+   "sha256": "86efeb8bfdbf2879076103806eae805dd682ba3ef4f3301e2cbf321f480682e4",
+   "size": 570660
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val/attempt1.log",
+   "sha256": "22a29f1214165a90746d000d37e3fd7c8d398806e80b38b38a0985d3dad3306c",
+   "size": 2732
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+   "sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "shapes": {
+    "train": [
+     28479,
+     38
+    ],
+    "test": [
+     28479,
+     38
+    ],
+    "label": [
+     28479
+    ]
+   }
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t1",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+   "sha256": "5da19ca2dbab51b6cc55a87f2acde6dc7e11f69636b5c9179916c046063f4237",
+   "size": 24142648
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t1",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1/ckpt/machine-1-1_seed0_last.pt",
+   "sha256": "aaf93147cf8b45636d52a6a7f4abaa08df21ed3dcf7f852f104a72e1d886cb95",
+   "size": 24136324
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t1",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1/launcher_run.log",
+   "sha256": "10c4f4009cd99454eb8501ec671abf3c4175b2859c9a20abfe89b5c77f76da86",
+   "size": 32104
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val",
+   "kind": "scores",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val/attempt1/scores.npz",
+   "sha256": "0dcf524d64637bcbcaf73d4b71ca024f11d932bf93d7a5bad35e67eb8161c74d",
+   "size": 570660
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val/attempt1.log",
+   "sha256": "09a2818205811600c8049bc2b2572682872770946d4cb2c508083eab7f5c2e51",
+   "size": 2732
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+   "sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "shapes": {
+    "train": [
+     28479,
+     38
+    ],
+    "test": [
+     28479,
+     38
+    ],
+    "label": [
+     28479
+    ]
+   }
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t2",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+   "sha256": "af669a6579f8a4cbfa2012fe61d58e74da749659832433cb46ad3ccc61b1b84c",
+   "size": 24142648
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t2",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1/ckpt/machine-1-1_seed0_last.pt",
+   "sha256": "691a2308abe906c9ced34fe0419907229f1b06f04abc988bc132827a5609405a",
+   "size": 24136324
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t2",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1/launcher_run.log",
+   "sha256": "29a6fe7093bb02bca6fa0612386c4f49d2bdf4760f627fec48b56d1053f0e6f5",
+   "size": 31964
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val",
+   "kind": "scores",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val/attempt1/scores.npz",
+   "sha256": "bbdacdfff9cf32e4cd21da44a468b3c6544ee109579408c0c7b410bb80b4096b",
+   "size": 570660
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val/attempt1.log",
+   "sha256": "e6cd917bdd3837b1cc81c5bdf003cb408875eda60817d8dcb4e544c470a5423d",
+   "size": 2732
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+   "sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "shapes": {
+    "train": [
+     28479,
+     38
+    ],
+    "test": [
+     28479,
+     38
+    ],
+    "label": [
+     28479
+    ]
+   }
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t3",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+   "sha256": "7f141a41f51f8ec01b7faa747e25dff5e91c9b7515ee18650b9baae9b54e2f3f",
+   "size": 24142648
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t3",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1/ckpt/machine-1-1_seed0_last.pt",
+   "sha256": "2f48ba07133b858408e42515072762543738ee26cd1248f808fbc89688d0872c",
+   "size": 24136324
+  },
+  {
+   "job_id": "train/SMD/machine-1-1/seed0/smd_sp2x2_t3",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1/launcher_run.log",
+   "sha256": "1111de75b7679da916a0dfafbc89a79326468c875654fd629d51c0600fd93d46",
+   "size": 31984
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val",
+   "kind": "scores",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val/attempt1/scores.npz",
+   "sha256": "9f04d1cf12c42b101a5cbf04ded52a3bcb7fa316724a9b93ad969ebb0c7bf820",
+   "size": 570660
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val",
+   "kind": "log",
+   "path": "SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val/attempt1.log",
+   "sha256": "7d9fbde55bc410c839da4a9a818960a7f85432b8efe5b14dd9b121b032572463",
+   "size": 2732
+  },
+  {
+   "job_id": "eval/SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+   "sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "shapes": {
+    "train": [
+     28479,
+     38
+    ],
+    "test": [
+     28479,
+     38
+    ],
+    "label": [
+     28479
+    ]
+   }
+  }
+ ]
+}

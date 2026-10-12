@@ -1,0 +1,1510 @@
+{
+ "train": {
+  "train/PSM/PSM/seed0/psm_sp2x2_t0": {
+   "dataset": "PSM",
+   "entity": "PSM",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/psm_sp2x2_t0.yaml",
+   "config_sha256": "011a101b4404c4a6b15f04fb09f0089f33e9379a63510216d1f6abee23f88a06",
+   "data_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791289689.9515748,
+   "finished_at": 1791294490.4004004,
+   "duration_s": 4800.448825597763,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.2255892531743166,
+    "best_epoch": 80,
+    "best_val_pred_mae": 0.2255892531743166,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t0/attempt1/ckpt/PSM_seed0_best_val.pt",
+     "sha256": "aa216a0c978ac043f83334659f51a5a93a5d48c49badeb69d9077d6f83db1b8c",
+     "size": 15877760
+    },
+    "last": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t0/attempt1/ckpt/PSM_seed0_last.pt",
+     "sha256": "92d93e030f3a712e57c3f7bff9011032dc1ea22b25b57f71ba7f977c3d79aa5b",
+     "size": 15873452
+    }
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t0/attempt1"
+  },
+  "train/PSM/PSM/seed0/psm_sp2x2_t1": {
+   "dataset": "PSM",
+   "entity": "PSM",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/psm_sp2x2_t1.yaml",
+   "config_sha256": "6466e3e883af9137e29b60fee10417e49f5fe2a15578b061d6d1b86dca12d48e",
+   "data_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791289695.1330292,
+   "finished_at": 1791294428.8450303,
+   "duration_s": 4733.712001085281,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.2256053734423372,
+    "best_epoch": 80,
+    "best_val_pred_mae": 0.2256053734423372,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t1/attempt1/ckpt/PSM_seed0_best_val.pt",
+     "sha256": "247f2e7c036200035697b30a47064b801c3a724ad903935b6740a3c6416e6f42",
+     "size": 15877760
+    },
+    "last": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t1/attempt1/ckpt/PSM_seed0_last.pt",
+     "sha256": "a9ce83dc344529330322ab2fc2fb8a3b5c68e23155183af5c24daac347ef2a15",
+     "size": 15873452
+    }
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t1/attempt1"
+  },
+  "train/PSM/PSM/seed0/psm_sp2x2_t2": {
+   "dataset": "PSM",
+   "entity": "PSM",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/psm_sp2x2_t2.yaml",
+   "config_sha256": "0e7f93abf52b64c9abf78cbf0299cd27649d614707e78d88e0769f131ff17a6c",
+   "data_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791289700.327728,
+   "finished_at": 1791294585.8416991,
+   "duration_s": 4885.513971090317,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.2258663359619813,
+    "best_epoch": 80,
+    "best_val_pred_mae": 0.2258663359619813,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t2/attempt1/ckpt/PSM_seed0_best_val.pt",
+     "sha256": "e0b2030d2ab22b5918c8659a239174975e78df7cee3a49e2963e09cecb701deb",
+     "size": 15877760
+    },
+    "last": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t2/attempt1/ckpt/PSM_seed0_last.pt",
+     "sha256": "77b88332311e0619e2a960e4d5dcf52ce964b6e9c65d336bedceb6edb91ee77f",
+     "size": 15873452
+    }
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t2/attempt1"
+  },
+  "train/PSM/PSM/seed0/psm_sp2x2_t3": {
+   "dataset": "PSM",
+   "entity": "PSM",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/psm_sp2x2_t3.yaml",
+   "config_sha256": "062be5153ffb8206b387ead283f35a5e9f91e9511a2ee37b9d5f49662ca4ec1f",
+   "data_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791289705.5213783,
+   "finished_at": 1791294496.1646159,
+   "duration_s": 4790.64323759079,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.2267058183908615,
+    "best_epoch": 80,
+    "best_val_pred_mae": 0.2267058183908615,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t3/attempt1/ckpt/PSM_seed0_best_val.pt",
+     "sha256": "4e8d88c368edea5cad006c05c7d8e7949389f1bdc35f3798dc21f1d90427c28d",
+     "size": 15877760
+    },
+    "last": {
+     "file": "PSM/PSM/seed0/psm_sp2x2_t3/attempt1/ckpt/PSM_seed0_last.pt",
+     "sha256": "95201b4dfabd5cc78170d7be4c2ddfb2ec82edc5c03c6d23e25a5a6dc86cd638",
+     "size": 15873516
+    }
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t3/attempt1"
+  },
+  "train/SMD/machine-1-1/seed0/smd_sp2x2_t0": {
+   "dataset": "SMD",
+   "entity": "machine-1-1",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/smd_sp2x2_t0.yaml",
+   "config_sha256": "71396cc394570e6ac4a46894baf1af87dc3f2be1e2d8975723a3110ce1f42128",
+   "data_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791294574.945775,
+   "finished_at": 1791295981.1498604,
+   "duration_s": 1406.2040853500366,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.1806970010815186,
+    "best_epoch": 78,
+    "best_val_pred_mae": 0.1798028193507504,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+     "sha256": "807208f66f6b04c88c6b9f072a0cbbc4195dcaf90695a3d9b3d74f51a2333876",
+     "size": 24142648
+    },
+    "last": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1/ckpt/machine-1-1_seed0_last.pt",
+     "sha256": "27145b0f104926790f45c07de898ed75d158bd35abb0e3fd514aba0a066ef1fb",
+     "size": 24136324
+    }
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1"
+  },
+  "train/SMD/machine-1-1/seed0/smd_sp2x2_t1": {
+   "dataset": "SMD",
+   "entity": "machine-1-1",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/smd_sp2x2_t1.yaml",
+   "config_sha256": "ad50fce0fa27102e0466385019c308f9b7231eca3013698c8d1c889f50eb5b69",
+   "data_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791294635.4433959,
+   "finished_at": 1791296026.5815058,
+   "duration_s": 1391.138109922409,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.1820655681467514,
+    "best_epoch": 79,
+    "best_val_pred_mae": 0.1798230459698633,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+     "sha256": "5da19ca2dbab51b6cc55a87f2acde6dc7e11f69636b5c9179916c046063f4237",
+     "size": 24142648
+    },
+    "last": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1/ckpt/machine-1-1_seed0_last.pt",
+     "sha256": "aaf93147cf8b45636d52a6a7f4abaa08df21ed3dcf7f852f104a72e1d886cb95",
+     "size": 24136324
+    }
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1"
+  },
+  "train/SMD/machine-1-1/seed0/smd_sp2x2_t2": {
+   "dataset": "SMD",
+   "entity": "machine-1-1",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/smd_sp2x2_t2.yaml",
+   "config_sha256": "d6922de35e58a6ce3eed1571d93ffa73e52f6609c37f53366af24c53770f5df6",
+   "data_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791294640.9630277,
+   "finished_at": 1791296016.3716285,
+   "duration_s": 1375.40860080719,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.1820707010580528,
+    "best_epoch": 79,
+    "best_val_pred_mae": 0.1796166839561481,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+     "sha256": "af669a6579f8a4cbfa2012fe61d58e74da749659832433cb46ad3ccc61b1b84c",
+     "size": 24142648
+    },
+    "last": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1/ckpt/machine-1-1_seed0_last.pt",
+     "sha256": "691a2308abe906c9ced34fe0419907229f1b06f04abc988bc132827a5609405a",
+     "size": 24136324
+    }
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1"
+  },
+  "train/SMD/machine-1-1/seed0/smd_sp2x2_t3": {
+   "dataset": "SMD",
+   "entity": "machine-1-1",
+   "seed": 0,
+   "config": "scripts/configs/soft_prior_2x2/smd_sp2x2_t3.yaml",
+   "config_sha256": "b60ccd145d4edce2838660748a5f5d22b15594d93c9dd549ea4ed758dd5ab0ba",
+   "data_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+   "training_code": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": null,
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1791294734.575712,
+   "finished_at": 1791296106.89362,
+   "duration_s": 1372.3179080486298,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.1823147981885914,
+    "best_epoch": 79,
+    "best_val_pred_mae": 0.1795781794957357,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+     "sha256": "7f141a41f51f8ec01b7faa747e25dff5e91c9b7515ee18650b9baae9b54e2f3f",
+     "size": 24142648
+    },
+    "last": {
+     "file": "SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1/ckpt/machine-1-1_seed0_last.pt",
+     "sha256": "2f48ba07133b858408e42515072762543738ee26cd1248f808fbc89688d0872c",
+     "size": 24136324
+    }
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1"
+  }
+ },
+ "eval": {
+  "eval/PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/PSM/PSM/seed0/psm_sp2x2_t0/attempt1/ckpt/PSM_seed0_best_val.pt",
+    "sha256": "aa216a0c978ac043f83334659f51a5a93a5d48c49badeb69d9077d6f83db1b8c",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 0,
+    "entity": "PSM",
+    "val_mae": 0.22558925317431663,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 105985,
+     "T_train_sub": 105985,
+     "T_val": 26496,
+     "T_test": 87841,
+     "split_id": "val0.2_b105985",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "PSM_PSM_pcmci_val0.2_b105985_b28ccc92eaf5efce",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/PSM/PSM.npz",
+     "file_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+     "shapes": {
+      "train": [
+       132481,
+       25
+      ],
+      "test": [
+       87841,
+       25
+      ],
+      "label": [
+       87841
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/PSM/PSM.npz",
+    "npz_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+    "shapes": {
+     "train": [
+      132481,
+      25
+     ],
+     "test": [
+      87841,
+      25
+     ],
+     "label": [
+      87841
+     ]
+    },
+    "dims": {
+     "N_data": 25,
+     "N_ckpt_state": 25,
+     "N_mu_sd": 25,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 105985,
+    "val_rows": 26496,
+    "test_rows": 87841,
+    "boundary": 105985,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b105985"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 5,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 172
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 139.99,
+   "finished_at": "2026-10-06T22:50:32+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t0/eval/best_val/attempt1",
+   "train_job": "train/PSM/PSM/seed0/psm_sp2x2_t0"
+  },
+  "eval/PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/PSM/PSM/seed0/psm_sp2x2_t1/attempt1/ckpt/PSM_seed0_best_val.pt",
+    "sha256": "247f2e7c036200035697b30a47064b801c3a724ad903935b6740a3c6416e6f42",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 0,
+    "entity": "PSM",
+    "val_mae": 0.22560537344233728,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 105985,
+     "T_train_sub": 105985,
+     "T_val": 26496,
+     "T_test": 87841,
+     "split_id": "val0.2_b105985",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "PSM_PSM_pcmci_val0.2_b105985_b28ccc92eaf5efce",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/PSM/PSM.npz",
+     "file_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+     "shapes": {
+      "train": [
+       132481,
+       25
+      ],
+      "test": [
+       87841,
+       25
+      ],
+      "label": [
+       87841
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/PSM/PSM.npz",
+    "npz_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+    "shapes": {
+     "train": [
+      132481,
+      25
+     ],
+     "test": [
+      87841,
+      25
+     ],
+     "label": [
+      87841
+     ]
+    },
+    "dims": {
+     "N_data": 25,
+     "N_ckpt_state": 25,
+     "N_mu_sd": 25,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 105985,
+    "val_rows": 26496,
+    "test_rows": 87841,
+    "boundary": 105985,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b105985"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 5,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 172
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 140.63,
+   "finished_at": "2026-10-06T22:49:31+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t1/eval/best_val/attempt1",
+   "train_job": "train/PSM/PSM/seed0/psm_sp2x2_t1"
+  },
+  "eval/PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/PSM/PSM/seed0/psm_sp2x2_t2/attempt1/ckpt/PSM_seed0_best_val.pt",
+    "sha256": "e0b2030d2ab22b5918c8659a239174975e78df7cee3a49e2963e09cecb701deb",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 0,
+    "entity": "PSM",
+    "val_mae": 0.22586633596198136,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 105985,
+     "T_train_sub": 105985,
+     "T_val": 26496,
+     "T_test": 87841,
+     "split_id": "val0.2_b105985",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "PSM_PSM_pcmci_val0.2_b105985_b28ccc92eaf5efce",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/PSM/PSM.npz",
+     "file_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+     "shapes": {
+      "train": [
+       132481,
+       25
+      ],
+      "test": [
+       87841,
+       25
+      ],
+      "label": [
+       87841
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/PSM/PSM.npz",
+    "npz_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+    "shapes": {
+     "train": [
+      132481,
+      25
+     ],
+     "test": [
+      87841,
+      25
+     ],
+     "label": [
+      87841
+     ]
+    },
+    "dims": {
+     "N_data": 25,
+     "N_ckpt_state": 25,
+     "N_mu_sd": 25,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 105985,
+    "val_rows": 26496,
+    "test_rows": 87841,
+    "boundary": 105985,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b105985"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 5,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 172
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 141.03,
+   "finished_at": "2026-10-06T22:52:08+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t2/eval/best_val/attempt1",
+   "train_job": "train/PSM/PSM/seed0/psm_sp2x2_t2"
+  },
+  "eval/PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/PSM/PSM/seed0/psm_sp2x2_t3/attempt1/ckpt/PSM_seed0_best_val.pt",
+    "sha256": "4e8d88c368edea5cad006c05c7d8e7949389f1bdc35f3798dc21f1d90427c28d",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 0,
+    "entity": "PSM",
+    "val_mae": 0.22670581839086154,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 105985,
+     "T_train_sub": 105985,
+     "T_val": 26496,
+     "T_test": 87841,
+     "split_id": "val0.2_b105985",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "PSM_PSM_pcmci_val0.2_b105985_b28ccc92eaf5efce",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/PSM/PSM.npz",
+     "file_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+     "shapes": {
+      "train": [
+       132481,
+       25
+      ],
+      "test": [
+       87841,
+       25
+      ],
+      "label": [
+       87841
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/PSM/PSM.npz",
+    "npz_sha256": "4500f5ac38d093fa5048cf357979c342460688908990e336bc33070b592f5dec",
+    "shapes": {
+     "train": [
+      132481,
+      25
+     ],
+     "test": [
+      87841,
+      25
+     ],
+     "label": [
+      87841
+     ]
+    },
+    "dims": {
+     "N_data": 25,
+     "N_ckpt_state": 25,
+     "N_mu_sd": 25,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 105985,
+    "val_rows": 26496,
+    "test_rows": 87841,
+    "boundary": 105985,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b105985"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 5,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 172
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 141.78,
+   "finished_at": "2026-10-06T22:50:39+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "PSM/PSM/seed0/psm_sp2x2_t3/eval/best_val/attempt1",
+   "train_job": "train/PSM/PSM/seed0/psm_sp2x2_t3"
+  },
+  "eval/SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SMD/machine-1-1/seed0/smd_sp2x2_t0/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+    "sha256": "807208f66f6b04c88c6b9f072a0cbbc4195dcaf90695a3d9b3d74f51a2333876",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 78,
+    "payload_current_epoch": 78,
+    "seed": 0,
+    "entity": "machine-1-1",
+    "val_mae": 0.17980281935075046,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 22783,
+     "T_train_sub": 22783,
+     "T_val": 5696,
+     "T_test": 28479,
+     "split_id": "val0.2_b22783",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SMD_machine-1-1_pcmci_val0.2_b22783_f62a5d49b7679981",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+     "file_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+     "shapes": {
+      "train": [
+       28479,
+       38
+      ],
+      "test": [
+       28479,
+       38
+      ],
+      "label": [
+       28479
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 78,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+    "npz_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+    "shapes": {
+     "train": [
+      28479,
+      38
+     ],
+     "test": [
+      28479,
+      38
+     ],
+     "label": [
+      28479
+     ]
+    },
+    "dims": {
+     "N_data": 38,
+     "N_ckpt_state": 38,
+     "N_mu_sd": 38,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 22783,
+    "val_rows": 5696,
+    "test_rows": 28479,
+    "boundary": 22783,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b22783"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 433,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 56
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 53.03,
+   "finished_at": "2026-10-06T23:13:56+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t0/eval/best_val/attempt1",
+   "train_job": "train/SMD/machine-1-1/seed0/smd_sp2x2_t0"
+  },
+  "eval/SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SMD/machine-1-1/seed0/smd_sp2x2_t1/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+    "sha256": "5da19ca2dbab51b6cc55a87f2acde6dc7e11f69636b5c9179916c046063f4237",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 79,
+    "payload_current_epoch": 79,
+    "seed": 0,
+    "entity": "machine-1-1",
+    "val_mae": 0.17982304596986332,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 22783,
+     "T_train_sub": 22783,
+     "T_val": 5696,
+     "T_test": 28479,
+     "split_id": "val0.2_b22783",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SMD_machine-1-1_pcmci_val0.2_b22783_f62a5d49b7679981",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+     "file_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+     "shapes": {
+      "train": [
+       28479,
+       38
+      ],
+      "test": [
+       28479,
+       38
+      ],
+      "label": [
+       28479
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 79,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+    "npz_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+    "shapes": {
+     "train": [
+      28479,
+      38
+     ],
+     "test": [
+      28479,
+      38
+     ],
+     "label": [
+      28479
+     ]
+    },
+    "dims": {
+     "N_data": 38,
+     "N_ckpt_state": 38,
+     "N_mu_sd": 38,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 22783,
+    "val_rows": 5696,
+    "test_rows": 28479,
+    "boundary": 22783,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b22783"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 433,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 56
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 52.26,
+   "finished_at": "2026-10-06T23:14:40+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t1/eval/best_val/attempt1",
+   "train_job": "train/SMD/machine-1-1/seed0/smd_sp2x2_t1"
+  },
+  "eval/SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SMD/machine-1-1/seed0/smd_sp2x2_t2/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+    "sha256": "af669a6579f8a4cbfa2012fe61d58e74da749659832433cb46ad3ccc61b1b84c",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 79,
+    "payload_current_epoch": 79,
+    "seed": 0,
+    "entity": "machine-1-1",
+    "val_mae": 0.1796166839561481,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 22783,
+     "T_train_sub": 22783,
+     "T_val": 5696,
+     "T_test": 28479,
+     "split_id": "val0.2_b22783",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SMD_machine-1-1_pcmci_val0.2_b22783_f62a5d49b7679981",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+     "file_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+     "shapes": {
+      "train": [
+       28479,
+       38
+      ],
+      "test": [
+       28479,
+       38
+      ],
+      "label": [
+       28479
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 79,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+    "npz_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+    "shapes": {
+     "train": [
+      28479,
+      38
+     ],
+     "test": [
+      28479,
+      38
+     ],
+     "label": [
+      28479
+     ]
+    },
+    "dims": {
+     "N_data": 38,
+     "N_ckpt_state": 38,
+     "N_mu_sd": 38,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 22783,
+    "val_rows": 5696,
+    "test_rows": 28479,
+    "boundary": 22783,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b22783"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 433,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 56
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 57.94,
+   "finished_at": "2026-10-06T23:14:36+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t2/eval/best_val/attempt1",
+   "train_job": "train/SMD/machine-1-1/seed0/smd_sp2x2_t2"
+  },
+  "eval/SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SMD/machine-1-1/seed0/smd_sp2x2_t3/attempt1/ckpt/machine-1-1_seed0_best_val.pt",
+    "sha256": "7f141a41f51f8ec01b7faa747e25dff5e91c9b7515ee18650b9baae9b54e2f3f",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 79,
+    "payload_current_epoch": 79,
+    "seed": 0,
+    "entity": "machine-1-1",
+    "val_mae": 0.17957817949573573,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 22783,
+     "T_train_sub": 22783,
+     "T_val": 5696,
+     "T_test": 28479,
+     "split_id": "val0.2_b22783",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SMD_machine-1-1_pcmci_val0.2_b22783_f62a5d49b7679981",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+     "file_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+     "shapes": {
+      "train": [
+       28479,
+       38
+      ],
+      "test": [
+       28479,
+       38
+      ],
+      "label": [
+       28479
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 79,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SMD/machine-1-1.npz",
+    "npz_sha256": "e44ecdc5bbb2725b2552f5e5c6a380588ccfb04f606c260294438d8a6c80fdb5",
+    "shapes": {
+     "train": [
+      28479,
+      38
+     ],
+     "test": [
+      28479,
+      38
+     ],
+     "label": [
+      28479
+     ]
+    },
+    "dims": {
+     "N_data": 38,
+     "N_ckpt_state": 38,
+     "N_mu_sd": 38,
+     "N_expected_cfg": 0
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 22783,
+    "val_rows": 5696,
+    "test_rows": 28479,
+    "boundary": 22783,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b22783"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 0.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "off",
+    "cfg_use_counterfactual": false
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "off",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 433,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 56
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 55.72,
+   "finished_at": "2026-10-06T23:16:04+0900",
+   "code_fingerprint": {
+    "commit": "f50147db4d35297fa72dc2b7e15555c27a1d01bc",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SMD/machine-1-1/seed0/smd_sp2x2_t3/eval/best_val/attempt1",
+   "train_job": "train/SMD/machine-1-1/seed0/smd_sp2x2_t3"
+  }
+ }
+}
