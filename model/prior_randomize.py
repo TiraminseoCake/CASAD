@@ -111,6 +111,91 @@ def rewire_checks(w, g, w_new, g_new) -> dict:
     }
 
 
+def _edge_mask(w_tau, g_tau):
+    return (g_tau > 0) | (w_tau > 0)
+
+
+def _multiset_equal(a, b, mask_a, mask_b, axis_groups):
+    """True if, for every group index, the sorted values of a (where mask_a) equal those of b (where mask_b)."""
+    for idx in axis_groups:
+        if sorted(a[idx][mask_a[idx]].tolist()) != sorted(b[idx][mask_b[idx]].tolist()):
+            return False
+    return True
+
+
+def _rank(x):
+    r = np.empty(len(x)); r[np.argsort(x, kind='mergesort')] = np.arange(len(x)); return r
+
+
+def _corr(x, y):
+    if len(x) < 3 or np.std(x) == 0 or np.std(y) == 0:
+        return None
+    return float(np.corrcoef(x, y)[0, 1])
+
+
+def rewire_report(w, g, w_new, g_new) -> dict:
+    """Which statistics of the input prior the randomized prior keeps EXACTLY, and how much the others change.
+
+    Degrees and edge counts include self edges unless named 'cross'. 'strength' = sum of prior weights. Arrays are
+    [tau, src, tgt]; weights are the (normalized) prior weights as stored in the cache.
+    """
+    w, g, w_new, g_new = (np.asarray(x) for x in (w, g, w_new, g_new))
+    T, N, _ = w.shape
+    m0 = np.stack([_edge_mask(w[t], g[t]) for t in range(T)])
+    m1 = np.stack([_edge_mask(w_new[t], g_new[t]) for t in range(T)])
+    c0 = np.stack([_cross_mask(w[t], g[t]) for t in range(T)])
+    c1 = np.stack([_cross_mask(w_new[t], g_new[t]) for t in range(T)])
+    d = np.arange(N)
+    lag_tgt = [(t, slice(None), j) for t in range(T) for j in range(N)]
+    lag = [(t,) for t in range(T)]
+    lag_src = [(t, i, slice(None)) for t in range(T) for i in range(N)]
+    src = [(slice(None), i, slice(None)) for i in range(N)]
+    exact = {
+        'out_degree_per_lag_source': bool(np.array_equal(m0.sum(2), m1.sum(2))),
+        'out_degree_per_source_all_lags': bool(np.array_equal(m0.sum((0, 2)), m1.sum((0, 2)))),
+        'in_degree_per_lag_target': bool(np.array_equal(m0.sum(1), m1.sum(1))),
+        'edges_per_lag': bool(np.array_equal(m0.sum((1, 2)), m1.sum((1, 2)))),
+        'cross_edges_per_lag': bool(np.array_equal(c0.sum((1, 2)), c1.sum((1, 2)))),
+        'self_edges_every_lag': bool(np.array_equal(w[:, d, d], w_new[:, d, d]) and np.array_equal(g[:, d, d], g_new[:, d, d])),
+        'weight_multiset_per_lag_target': _multiset_equal(w, w_new, m0, m1, lag_tgt),
+        'gate_multiset_per_lag_target': _multiset_equal(g, g_new, m0, m1, lag_tgt),
+        'weight_multiset_per_lag': _multiset_equal(w, w_new, m0, m1, lag),
+        'weight_multiset_global': sorted(w[m0].tolist()) == sorted(w_new[m1].tolist()),
+        'in_strength_per_lag_target': bool(np.allclose(w.sum(1), w_new.sum(1), rtol=0, atol=1e-6)),
+        'column_sum_per_target': bool(np.allclose(w.reshape(T * N, N).sum(0), w_new.reshape(T * N, N).sum(0), rtol=0, atol=1e-6)),
+        'half_gate_count': int(np.sum(g == 0.5)) == int(np.sum(g_new == 0.5)),
+        # expected False (reported, not required):
+        'weight_multiset_per_lag_source': _multiset_equal(w, w_new, m0, m1, lag_src),
+        'weight_multiset_per_source': _multiset_equal(w, w_new, m0, m1, src),
+        'out_strength_per_lag_source': bool(np.allclose(w.sum(2), w_new.sum(2), rtol=0, atol=1e-6)),
+    }
+    s0, s1 = w.sum(2), w_new.sum(2)                       # out-strength [tau, src]
+    act = m0.sum(2) > 0
+    tot0, tot1 = s0.sum(0), s1.sum(0)
+
+    def recip(c):
+        return int(sum(np.sum(np.triu(c[t] & c[t].T, 1)) for t in range(T)))
+
+    def multi_lag(c):
+        return int(np.sum(c.sum(0) >= 2))
+
+    def sym_half(gg, c):
+        return int(sum(np.sum(np.triu((gg[t] == 0.5) & (gg[t].T == 0.5) & c[t], 1)) for t in range(T)))
+    inter, union = int(np.sum(c0 & c1)), int(np.sum(c0 | c1))
+    changed = {
+        'out_strength_per_lag_source_corr': _corr(s0[act], s1[act]),
+        'out_strength_per_lag_source_spearman': _corr(_rank(s0[act]), _rank(s1[act])) if act.sum() >= 3 else None,
+        'out_strength_per_lag_source_rel_l1': float(np.abs(s1 - s0).sum() / max(s0.sum(), 1e-12)),
+        'out_strength_per_source_corr': _corr(tot0, tot1),
+        'reciprocal_cross_pairs': [recip(c0), recip(c1)],                 # (i->j and j->i at the same lag) input, random
+        'pairs_linked_at_2plus_lags': [multi_lag(c0), multi_lag(c1)],     # same (src, tgt) at >= 2 lags
+        'symmetric_half_gate_pairs': [sym_half(g, c0), sym_half(g_new, c1)],
+        'cross_support_jaccard': (inter / union) if union else 1.0,
+        'cross_edges_kept_fraction': (inter / int(c0.sum())) if c0.sum() else 1.0,
+    }
+    return {'exact': exact, 'changed': changed}
+
+
 def prepare_seed_prior(cfg, te_weight_np, te_gate_np, entity_name: str, seed: int):
     """Returns (te_weight, te_gate, prior_info) for one (entity, seed); te_* are None for PRIOR.TYPE='none'."""
     p = cfg.PICAAD.PRIOR
@@ -137,5 +222,6 @@ def prepare_seed_prior(cfg, te_weight_np, te_gate_np, entity_name: str, seed: in
     if bad or stats['checks']['column_sums_max_abs_diff'] > 1e-5:
         raise RuntimeError(f'randomized prior violates invariants {bad} / {stats["checks"]}')
     info.update({'salt': str(p.RANDOMIZE_SALT), 'rng_seed': rseed, 'swaps_per_edge': int(p.RANDOMIZE_SWAPS),
-                 'weight_sha256': array_sha256(w_new), 'gate_sha256': array_sha256(g_new), **stats})
+                 'weight_sha256': array_sha256(w_new), 'gate_sha256': array_sha256(g_new), **stats,
+                 'report': rewire_report(te_weight_np, te_gate_np, w_new, g_new)})
     return w_new, g_new, info

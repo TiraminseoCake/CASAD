@@ -80,7 +80,8 @@ def _p3_cfg(tmp, arm, max_epoch=2, perm=0, start_cls=99999, run_name=None):
     cfg.PICAAD.SCORING.SCORE_GAMMA = 0.0
     cfg.PICAAD.PRIOR.TYPE = 'none' if arm == 'n' else 'pcmci'
     cfg.PICAAD.PRIOR.RANDOMIZE = 'degree_preserving_v1' if arm == 'r' else 'none'
-    cfg.PICAAD.DYNAMIC_GRAPH = arm != 'd'
+    cfg.PICAAD.DYNAMIC_GRAPH = True
+    cfg.PICAAD.USE_DYNAMIC_DELTA = arm != 'd'
     cfg.RESULT_DIR = os.path.join(tmp, run_name or f'run_{arm}')
     cfg.TRAIN.CKPT_DIR = os.path.join(cfg.RESULT_DIR, 'ckpt')
     return cfg
@@ -167,6 +168,33 @@ class TestRewire(unittest.TestCase):
                 if p['cross_edges'] >= 8:
                     self.assertGreater(p['slots_with_new_source'], 0.5 * p['cross_edges'], f'{f}: {p}')
 
+    PRESERVED = ('out_degree_per_lag_source', 'out_degree_per_source_all_lags', 'in_degree_per_lag_target',
+                 'edges_per_lag', 'cross_edges_per_lag', 'self_edges_every_lag', 'weight_multiset_per_lag_target',
+                 'gate_multiset_per_lag_target', 'weight_multiset_per_lag', 'weight_multiset_global',
+                 'in_strength_per_lag_target', 'column_sum_per_target', 'half_gate_count')
+    NOT_PRESERVED = ('weight_multiset_per_lag_source', 'weight_multiset_per_source', 'out_strength_per_lag_source')
+
+    def test_rewire_report_exact_and_changed(self):
+        """Item 4: which statistics are kept exactly (always True) and which are not (False once edges move)."""
+        from model.prior_randomize import rewire_report
+        rng = np.random.default_rng(21)
+        seen_false = {k: False for k in self.NOT_PRESERVED}
+        for trial in range(8):
+            w, g = _random_prior(rng, N=int(rng.integers(10, 30)), density=float(rng.uniform(0.05, 0.2)))
+            w2, g2, _ = degree_preserving_rewire(w, g, np.random.default_rng(100 + trial), 10)
+            r = rewire_report(w, g, w2, g2)
+            for k in self.PRESERVED:
+                self.assertIs(r['exact'][k], True, f'trial {trial}: {k}')
+            for k in self.NOT_PRESERVED:
+                seen_false[k] |= (r['exact'][k] is False)
+            c = r['changed']
+            self.assertLess(c['cross_support_jaccard'], 1.0)
+            self.assertEqual(len(c['reciprocal_cross_pairs']), 2)
+        self.assertTrue(all(seen_false.values()), seen_false)
+        same = rewire_report(w, g, w, g)                               # identity: everything preserved
+        self.assertTrue(all(same['exact'].values()))
+        self.assertEqual(same['changed']['cross_support_jaccard'], 1.0)
+
     def test_rewire_deterministic_and_seed_specific(self):
         cfg = get_cfg_defaults(); cfg.DATA.NAME = 'SMD'; cfg.PICAAD.PRIOR.RANDOMIZE = 'degree_preserving_v1'
         w, g = _random_prior(np.random.default_rng(3), N=20, density=0.15)
@@ -215,8 +243,8 @@ class TestNoPriorModel(unittest.TestCase):
         self.N = 7
         self.w, self.g = _random_prior(np.random.default_rng(11), T=self.cfg.PICAAD.TAU_MAX, N=self.N, density=0.2)
 
-    def _model(self, seed=0, prior=None, dynamic=True):
-        cfg = self.cfg.clone(); cfg.PICAAD.DYNAMIC_GRAPH = dynamic
+    def _model(self, seed=0, prior=None, dynamic=True, delta=True):
+        cfg = self.cfg.clone(); cfg.PICAAD.DYNAMIC_GRAPH = dynamic; cfg.PICAAD.USE_DYNAMIC_DELTA = delta
         torch.manual_seed(seed); np.random.seed(seed); random.seed(seed)
         m = build_model(cfg, N=self.N)
         if prior is not None:
@@ -350,13 +378,46 @@ class TestNoPriorModel(unittest.TestCase):
             self.assertTrue(all(torch.isfinite(t).all() for t in (out[1], out[3])))
 
     def test_delta_removed_model(self):
-        m = self._model(seed=0, prior=(self.w, self.g), dynamic=False)
-        self.assertFalse(hasattr(m, 'dynamic_q'))
+        """Arm D: dynamic_q/k are built (as in A) but delta is never added -> static routing weights."""
+        m = self._model(seed=0, prior=(self.w, self.g), delta=False)
+        self.assertTrue(hasattr(m, 'dynamic_q') and hasattr(m, 'dynamic_k'))
         X = torch.randn(4, self.cfg.PICAAD.L, self.N)
         with torch.no_grad():
             C = torch.randn(4, m.tau_max, self.N, m.d)
             self.assertIsNone(m._compute_dynamic_delta(C))
             self.assertEqual(m(X)[3].dim(), 3)                      # static routing weights [tau, src, tgt]
+
+    def test_d_init_and_rng_identical_to_a(self):
+        """Same seed: arm D (USE_DYNAMIC_DELTA=False) has exactly A's initial state and leaves the global RNG where A
+        leaves it (so the DataLoader shuffles identically). Building without q/k (DYNAMIC_GRAPH=False, the first
+        implementation) changes edge_value_head and the RNG state - the cause of the A/D mismatch."""
+        def built(**kw):
+            m = self._model(seed=0, **kw)
+            return m.state_dict(), torch.get_rng_state().clone()
+        sa, ra = built()
+        sd, rd = built(delta=False)
+        so, ro = built(dynamic=False)
+        self.assertEqual(sorted(sa), sorted(sd))
+        for k in sa:
+            self.assertTrue(torch.equal(sa[k], sd[k]), k)
+        self.assertTrue(torch.equal(ra, rd))
+        self.assertFalse(torch.equal(ra, ro))
+        self.assertEqual(sorted(k for k in so if not torch.equal(sa[k], so[k])), ['edge_value_head.bias', 'edge_value_head.weight'])
+        self.assertEqual(sorted(set(sa) - set(so)), ['dynamic_k.weight', 'dynamic_q.weight'])
+
+    def test_d_forward_equals_a_without_delta(self):
+        """D's forward == A's forward with delta forced to None (same parameters)."""
+        a = self._model(seed=0, prior=(self.w, self.g))
+        d = self._model(seed=0, prior=(self.w, self.g), delta=False)
+        X = torch.randn(4, self.cfg.PICAAD.L, self.N, generator=torch.Generator().manual_seed(8))
+        a.eval(); d.eval(); a._current_epoch = d._current_epoch = 3
+        with torch.no_grad(), mock.patch.object(PICAAD, '_compute_dynamic_delta', lambda self_, C: None):
+            ya = a(X)
+        with torch.no_grad():
+            yd = d(X)
+            self.assertFalse(torch.equal(a(X)[1], yd[1]))            # delta really matters for A
+        for i in (1, 3, 6):
+            self.assertTrue(torch.equal(ya[i], yd[i]), i)
 
 
 # ----------------------------------------------------------------------------- end-to-end (synthetic)
@@ -399,6 +460,9 @@ class TestEndToEndArms(unittest.TestCase):
         # same with interventions + CRS on (stage-2 shape): no prior may enter sampling / reference / cstruct
         cls.runs['n_perm2'] = _run_main(_p3_cfg(cls.tmp, 'n', perm=2, start_cls=1, run_name='run_n_perm2'))
         cls.runs['n_perm2_b'] = _run_main(_p3_cfg(cls.tmp, 'n', perm=2, start_cls=1, run_name='run_n_perm2_b'))
+        # arm D must be exactly "arm A with delta switched off"
+        with mock.patch.object(PICAAD, '_compute_dynamic_delta', lambda self_, C: None):
+            cls.runs['a_nodelta'] = _run_main(_p3_cfg(cls.tmp, 'a', run_name='run_a_nodelta'))
 
     @classmethod
     def tearDownClass(cls):
@@ -453,7 +517,18 @@ class TestEndToEndArms(unittest.TestCase):
         self.assertEqual(info['weight_sha256'], pr['weight_sha256'])
         exp = normalize_causal_tensor_torch(torch.from_numpy(wr).clamp_min(0.0))
         self.assertTrue(torch.equal(ck_r['state_dict']['te_prior_weight'], exp))
-        self.assertNotIn('dynamic_q.weight', ck_d['state_dict'])
+        # D keeps dynamic_q/k; they never receive gradients, so they stay at their (A-identical) initial values
+        cfg_d = _p3_cfg(self.tmp, 'd')
+        torch.manual_seed(0); np.random.seed(0); random.seed(0)
+        fresh = build_model(cfg_d, N=6).state_dict()
+        for k in ('dynamic_q.weight', 'dynamic_k.weight'):
+            self.assertTrue(torch.equal(ck_d['state_dict'][k], fresh[k]), k)
+        self.assertFalse(torch.equal(ck_a['state_dict']['dynamic_q.weight'], fresh['dynamic_q.weight']))
+        rep_ = pr['report']['exact']
+        for k in ('out_degree_per_lag_source', 'in_degree_per_lag_target', 'edges_per_lag', 'self_edges_every_lag',
+                  'weight_multiset_per_lag_target', 'weight_multiset_per_lag', 'weight_multiset_global',
+                  'column_sum_per_target'):
+            self.assertTrue(rep_[k], k)
 
     def test_eval_all_arms_cf_off(self):
         """T6: eval_ckpt restores every arm; CF off -> no CF forward; no-prior provenance."""
@@ -474,21 +549,29 @@ class TestEndToEndArms(unittest.TestCase):
                         os.path.join(self.tmp, 'eval_n_cf'), data_input_dir=os.path.join(self.tmp, 'npz'),
                         cf='both', device='cpu', calibrate='off')
 
-    def test_data_order_same_for_a_n_r(self):
-        """T9: arms a, n and r consume identical batches (prior handling uses no global RNG)."""
+    def test_data_order_same_for_all_arms(self):
+        """T9: arms a, n, r and d consume identical batches (prior handling uses no global RNG; d builds q/k)."""
         self.assertGreaterEqual(len(self.batches['a']), 6)
-        self.assertEqual(self.batches['a'], self.batches['n'])
-        self.assertEqual(self.batches['a'], self.batches['r'])
+        for arm in 'nrd':
+            self.assertEqual(self.batches['a'], self.batches[arm], arm)
 
-    def test_init_state_same_for_a_n_r_outside_prior_params(self):
-        """Initial non-prior parameters of a/n/r are identical (checked on the epoch-0 rebuild with the same seed)."""
+    def test_d_equals_a_with_delta_switched_off(self):
+        """Training arm D == training arm A with delta forced to None: identical checkpoint state and val curve."""
+        (cd, vd), (cx, vx) = self.runs['d'], self.runs['a_nodelta']
+        self.assertEqual(_sd_hash(cd['state_dict']), _sd_hash(cx['state_dict']))
+        pd.testing.assert_frame_equal(vd, vx)
+        self.assertNotEqual(_sd_hash(cd['state_dict']), _sd_hash(self.runs['a'][0]['state_dict']))
+
+    def test_init_state_same_for_all_arms_outside_prior_params(self):
+        """Initial non-prior parameters of a/n/r/d are identical (checked on the epoch-0 rebuild with the same seed)."""
         hs = {}
-        for arm in 'anr':
+        for arm in 'anrd':
             cfg = _p3_cfg(self.tmp, arm)
             torch.manual_seed(0); np.random.seed(0); random.seed(0)
             m = build_model(cfg, N=6)
             hs[arm] = {k: v for k, v in _state_hashes(m).items() if k not in PRIOR_TOUCHED}
-        self.assertEqual(hs['a'], hs['n']); self.assertEqual(hs['a'], hs['r'])
+        for arm in 'nrd':
+            self.assertEqual(hs['a'], hs[arm], arm)
 
 
 # ----------------------------------------------------------------------------- configs / manifests
@@ -541,7 +624,8 @@ class TestConfigsAndManifests(unittest.TestCase):
             arm = os.path.basename(path).split('_p3_')[1][0]
             self.assertEqual(P.PRIOR.TYPE, 'none' if arm == 'n' else 'pcmci')
             self.assertEqual(P.PRIOR.RANDOMIZE, 'degree_preserving_v1' if arm == 'r' else 'none')
-            self.assertEqual(P.DYNAMIC_GRAPH, arm != 'd')
+            self.assertTrue(P.DYNAMIC_GRAPH)
+            self.assertEqual(P.USE_DYNAMIC_DELTA, arm != 'd')
 
     def test_manifests_plan(self):
         import scripts.run_experiments as rx

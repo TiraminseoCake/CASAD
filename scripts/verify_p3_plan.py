@@ -6,7 +6,7 @@ Checks, for every planned job of one P3 manifest (docs/p3_structural_ablation_pr
   * job counts: train = arms x entities x seeds, eval = train (best_val only), one prior warm-up per (entity, config)
   * every train job's config resolved exactly as main.py does (utils/parser.load_config with the job's CLI opts):
     prediction-only flags, dataset LR, epochs, VAL, and - within one (dataset, entity, seed) - the four arms differ
-    only in PRIOR.TYPE / PRIOR.RANDOMIZE / DYNAMIC_GRAPH
+    only in PRIOR.TYPE / PRIOR.RANDOMIZE / USE_DYNAMIC_DELTA
   * config sha256 recorded in the plan identity == the file on disk
   * data NPZ sha256 == the reference (results/data-identity JSON, or --expect_sha for other entities)
   * prior: arms a/r/d resolve to the SAME PCMCI+ cache key and that cache file exists (cache hit, no recomputation);
@@ -31,7 +31,7 @@ if REPO not in sys.path:
     sys.path.insert(0, REPO)
 sys.dont_write_bytecode = True
 
-ARM_KEYS = {'PICAAD.PRIOR.TYPE', 'PICAAD.PRIOR.RANDOMIZE', 'PICAAD.DYNAMIC_GRAPH'}
+ARM_KEYS = {'PICAAD.PRIOR.TYPE', 'PICAAD.PRIOR.RANDOMIZE', 'PICAAD.USE_DYNAMIC_DELTA'}
 RUN_KEYS = {'RESULT_DIR', 'TRAIN.CKPT_DIR', 'SEEDS', 'DATA.ENTITIES'}
 LR = {'PSM': 5e-05, 'SMD': 5e-04, 'SWaT': 5e-04}
 
@@ -130,7 +130,7 @@ def main():
             'LR': abs(cfg.SOLVER.BASE_LR - LR[cfg.DATA.NAME]) < 1e-12,
             'arm_type': P.PRIOR.TYPE == ('none' if arm == 'n' else 'pcmci'),
             'arm_randomize': P.PRIOR.RANDOMIZE == ('degree_preserving_v1' if arm == 'r' else 'none'),
-            'arm_dynamic': P.DYNAMIC_GRAPH == (arm != 'd'),
+            'arm_delta': P.USE_DYNAMIC_DELTA == (arm != 'd'), 'dynamic_graph_built': P.DYNAMIC_GRAPH is True,
         }
         for k, ok in checks.items():
             if not ok:

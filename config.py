@@ -72,6 +72,10 @@ _C.PICAAD.MHSA_RESIDUAL = False
 _C.PICAAD.PRED_TEMP = 1.0
 _C.PICAAD.SELF_LOOP_BIAS = 1.0
 _C.PICAAD.DYNAMIC_GRAPH = True
+# P3 arm D: False builds dynamic_q/k exactly as above (same init / RNG / batch order) but never adds delta.
+# DYNAMIC_GRAPH=False instead skips building q/k, which shifts the RNG and so the init of later modules and
+# the batch order. Default True = original behaviour.
+_C.PICAAD.USE_DYNAMIC_DELTA = True
 _C.PICAAD.GRAPH_HIDDEN = 16
 _C.PICAAD.GATE_INIT = 0.15
 _C.PICAAD.CAUSAL_ATTN_MASK_SCALE = 0.5

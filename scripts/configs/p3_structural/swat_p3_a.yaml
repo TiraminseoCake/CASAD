@@ -6,7 +6,7 @@
 # Prediction-only objective for every arm: ENABLE_PRIOR_LOSS=False, START_CLS_EPOCH=99999 (CRS loss never),
 # PERM_PAIRS_PER_BATCH=0 (no intervention loss, cls_ref never updated from interventions), auxiliary losses off.
 # CALIBRATE=False, USE_COUNTERFACTUAL=False: evaluate best_val with scripts/eval_ckpt.py --cf off --calibrate off.
-# Arm keys: PRIOR.TYPE=pcmci  PRIOR.RANDOMIZE=none  DYNAMIC_GRAPH=True
+# Arm keys: PRIOR.TYPE=pcmci  PRIOR.RANDOMIZE=none  USE_DYNAMIC_DELTA=True  (DYNAMIC_GRAPH=True in every arm)
 #
 # Protocol: docs/p3_structural_ablation_protocol.md
 #
@@ -38,6 +38,7 @@ PICAAD:
     SCORE_GAMMA: 0.0
     USE_COUNTERFACTUAL: false
   START_CLS_EPOCH: 99999
+  USE_DYNAMIC_DELTA: true
 SEEDS:
 - 0
 - 1

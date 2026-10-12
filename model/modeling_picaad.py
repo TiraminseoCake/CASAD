@@ -41,7 +41,10 @@ class PICAAD(nn.Module):
                  gat_dropout: float = 0.1,
                  # Option B / SLP: fill diagonal (τ, τ) blocks with the per-τ
                  # prior. No effect when use_gat=False.
-                 gat_same_lag_prior: bool = False):
+                 gat_same_lag_prior: bool = False,
+                 # P3 arm D: build dynamic_q/k exactly as with delta (same parameters, same RNG draws, so the same
+                 # initialization of every later module and the same batch order) but never add delta.
+                 use_dynamic_delta: bool = True):
         super().__init__()
         self.N = N
         self.L = L
@@ -51,6 +54,7 @@ class PICAAD(nn.Module):
         self.pred_temp = float(pred_temp)
         self.self_loop_bias = float(self_loop_bias)
         self.dynamic_graph = bool(dynamic_graph)
+        self.use_dynamic_delta = bool(use_dynamic_delta)
         self.graph_hidden = int(graph_hidden)
         self.te_prior_blend = float(te_prior_blend)
         self.causal_attn_mask_scale = float(causal_attn_mask_scale)
@@ -201,7 +205,7 @@ class PICAAD(nn.Module):
         return gate * (0.05 + 0.95 * self.te_prior_gate)
 
     def _compute_dynamic_delta(self, C_all):
-        if not self.dynamic_graph:
+        if not self.dynamic_graph or not self.use_dynamic_delta:
             return None
         q = self.dynamic_q(C_all)
         k = self.dynamic_k(C_all)

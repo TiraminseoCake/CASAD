@@ -13,10 +13,12 @@ Common to every arm (prediction-only objective, docs/p3_structural_ablation_prot
     PICAAD.SCORING.SCORE_GAMMA               0.0
     SOLVER.MAX_EPOCH 80, VAL.ENABLE True, VAL.FRAC 0.2, VAL.SELECTION_METRIC pred_mae
 Arm keys (the ONLY keys that differ between arms of one dataset):
-    a  PCMCI+ prior          PRIOR.TYPE pcmci  PRIOR.RANDOMIZE none                  DYNAMIC_GRAPH True
-    n  no prior              PRIOR.TYPE none   PRIOR.RANDOMIZE none                  DYNAMIC_GRAPH True
-    r  matched random prior  PRIOR.TYPE pcmci  PRIOR.RANDOMIZE degree_preserving_v1  DYNAMIC_GRAPH True
-    d  delta removed         PRIOR.TYPE pcmci  PRIOR.RANDOMIZE none                  DYNAMIC_GRAPH False
+    a  PCMCI+ prior          PRIOR.TYPE pcmci  PRIOR.RANDOMIZE none                  USE_DYNAMIC_DELTA True
+    n  no prior              PRIOR.TYPE none   PRIOR.RANDOMIZE none                  USE_DYNAMIC_DELTA True
+    r  matched random prior  PRIOR.TYPE pcmci  PRIOR.RANDOMIZE degree_preserving_v1  USE_DYNAMIC_DELTA True
+    d  delta removed         PRIOR.TYPE pcmci  PRIOR.RANDOMIZE none                  USE_DYNAMIC_DELTA False
+DYNAMIC_GRAPH stays True in every arm: arm d keeps dynamic_q/k (same init, RNG stream and batch order as a) and
+only stops adding delta. (DYNAMIC_GRAPH=False would skip building q/k and shift the RNG; see protocol section 2.)
 
 Run:  python scripts/make_p3_configs.py
 """
@@ -31,13 +33,13 @@ if REPO not in sys.path:
     sys.path.insert(0, REPO)
 
 ARMS = {
-    'a': {'label': 'PCMCI+ prior', 'PRIOR': {'TYPE': 'pcmci', 'RANDOMIZE': 'none'}, 'DYNAMIC_GRAPH': True},
-    'n': {'label': 'no prior', 'PRIOR': {'TYPE': 'none', 'RANDOMIZE': 'none'}, 'DYNAMIC_GRAPH': True},
+    'a': {'label': 'PCMCI+ prior', 'PRIOR': {'TYPE': 'pcmci', 'RANDOMIZE': 'none'}, 'USE_DYNAMIC_DELTA': True},
+    'n': {'label': 'no prior', 'PRIOR': {'TYPE': 'none', 'RANDOMIZE': 'none'}, 'USE_DYNAMIC_DELTA': True},
     'r': {'label': 'sparsity/lag-matched random prior', 'PRIOR': {'TYPE': 'pcmci', 'RANDOMIZE': 'degree_preserving_v1'},
-          'DYNAMIC_GRAPH': True},
-    'd': {'label': 'dynamic correction removed', 'PRIOR': {'TYPE': 'pcmci', 'RANDOMIZE': 'none'}, 'DYNAMIC_GRAPH': False},
+          'USE_DYNAMIC_DELTA': True},
+    'd': {'label': 'dynamic correction removed', 'PRIOR': {'TYPE': 'pcmci', 'RANDOMIZE': 'none'}, 'USE_DYNAMIC_DELTA': False},
 }
-ARM_KEYS = ('PICAAD.PRIOR.TYPE', 'PICAAD.PRIOR.RANDOMIZE', 'PICAAD.DYNAMIC_GRAPH')
+ARM_KEYS = ('PICAAD.PRIOR.TYPE', 'PICAAD.PRIOR.RANDOMIZE', 'PICAAD.USE_DYNAMIC_DELTA')
 
 BASES = {
     'psm': 'scripts/configs/psm_cf_val.yaml',
@@ -54,7 +56,7 @@ HEADER = """# P3 structural ablation - arm {arm} ({label})
 # Prediction-only objective for every arm: ENABLE_PRIOR_LOSS=False, START_CLS_EPOCH=99999 (CRS loss never),
 # PERM_PAIRS_PER_BATCH=0 (no intervention loss, cls_ref never updated from interventions), auxiliary losses off.
 # CALIBRATE=False, USE_COUNTERFACTUAL=False: evaluate best_val with scripts/eval_ckpt.py --cf off --calibrate off.
-# Arm keys: PRIOR.TYPE={ptype}  PRIOR.RANDOMIZE={rand}  DYNAMIC_GRAPH={dyn}
+# Arm keys: PRIOR.TYPE={ptype}  PRIOR.RANDOMIZE={rand}  USE_DYNAMIC_DELTA={dyn}  (DYNAMIC_GRAPH=True in every arm)
 #
 # Protocol: docs/p3_structural_ablation_protocol.md
 #
@@ -79,7 +81,8 @@ def overrides(arm: str) -> dict:
         'PICAAD': {
             'ENABLE_PRIOR_LOSS': False,
             'START_CLS_EPOCH': 99999,
-            'DYNAMIC_GRAPH': a['DYNAMIC_GRAPH'],
+            'DYNAMIC_GRAPH': True,
+            'USE_DYNAMIC_DELTA': a['USE_DYNAMIC_DELTA'],
             'PRIOR': dict(a['PRIOR']),
             'INTERVENTION': {'PERM_PAIRS_PER_BATCH': 0},
             'SCORING': {'CALIBRATE': False, 'USE_COUNTERFACTUAL': False, 'SCORE_GAMMA': 0.0},
@@ -109,7 +112,7 @@ def main():
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w') as f:
             f.write(HEADER.format(arm=arm.upper(), label=a['label'], base=base_rel, ptype=a['PRIOR']['TYPE'],
-                                  rand=a['PRIOR']['RANDOMIZE'], dyn=a['DYNAMIC_GRAPH']))
+                                  rand=a['PRIOR']['RANDOMIZE'], dyn=a['USE_DYNAMIC_DELTA']))
             f.write('\n')
             f.write(body)
         print(f'wrote {rel}')
