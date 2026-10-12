@@ -242,8 +242,15 @@ def restore_model(cfg: CfgNode, ck: dict, device):
     model._current_epoch = ep
     model.eval()
     flags = {'has_te_prior': model.has_te_prior, 'has_cls_ref': model.has_cls_ref, 'has_w_ref': model.has_w_ref}
-    if not all(flags.values()):
-        raise EvalError(f'restored model lacks reference buffers: {flags}')
+    # P3 no-prior checkpoints (saved config PRIOR.TYPE='none') legitimately carry no prior; every other
+    # checkpoint must still have all three references.
+    no_prior = str(cfg.PICAAD.PRIOR.TYPE) == 'none'
+    expected = {'has_te_prior': not no_prior, 'has_cls_ref': True, 'has_w_ref': True}
+    if flags != expected:
+        raise EvalError(f'restored reference/prior flags {flags} != expected {expected} '
+                        f'(PRIOR.TYPE={cfg.PICAAD.PRIOR.TYPE})')
+    if no_prior and (bool(model.te_prior_weight.abs().sum() != 0) or bool(model.te_prior_gate.abs().sum() != 0)):
+        raise EvalError('PRIOR.TYPE=none checkpoint carries non-zero te_prior buffers')
     return model, {'restored_epoch': ep, 'epoch_source': src, 'warmup_ramp': float(model._warmup_ramp()), 'flags': flags}
 
 
@@ -420,6 +427,7 @@ def evaluate(ck_path: str, out_dir: str, data_input_dir: str | None = None, cf: 
                        'protocol': ck.get('protocol'), 'payload_epoch': ck.get('epoch'), 'payload_current_epoch': ck.get('current_epoch'),
                        'seed': ck.get('seed'), 'entity': ck['entity'], 'val_mae': ck.get('val_mae'),
                        'split_info': ck.get('split_info'), 'prior_cache_key': ck.get('prior_cache_key'),
+                       'prior_info': ck.get('prior_info'),
                        'data_fingerprint_in_ckpt': ck.get('data_fingerprint'), 'code_fingerprint_in_ckpt': ck.get('code_fingerprint'),
                        'native_test_metrics_in_payload': ck.get('metrics')},
         'restore': restore_info | {'set_te_prior_called_after_load': False, 'strict_load': True},

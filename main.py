@@ -20,6 +20,7 @@ from model.build import (
     build_causal_prior_cached,
     build_model,
 )
+from model.prior_randomize import prepare_seed_prior
 from model.scoring import (
     counterfactual_score_windows,
     fit_cf_profile,
@@ -60,12 +61,20 @@ def _run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device, provenance=No
     test scoring is a separate explicit step (Phase 2 evaluator).
     """
     print(f'\n[seed {seed}] training ...', flush=True)
+    # P3: per-seed prior (unchanged arrays by default; None for PRIOR.TYPE=none; rewired for RANDOMIZE).
+    # Uses only a local RNG, so it does not move the global RNG state that set_seed fixes below.
+    seed_weight_np, seed_gate_np, prior_info = prepare_seed_prior(cfg, te_weight_np, te_gate_np, entity.name, seed)
+    if prior_info['type'] == 'none' or prior_info['randomize'] != 'none':
+        print(f'[seed {seed}] prior: {prior_info["type"]} randomize={prior_info["randomize"]} '
+              f'weight_sha256={prior_info.get("weight_sha256")}', flush=True)
+    if provenance is not None:
+        provenance = dict(provenance, prior_info=prior_info)
     set_seed(seed)
 
     writer = _make_writer(cfg, entity.name, seed)
 
     model = build_model(cfg, N=entity.N).to(device)
-    apply_prior_to_model(cfg, model, te_weight_np, te_gate_np)
+    apply_prior_to_model(cfg, model, seed_weight_np, seed_gate_np)
 
     val_enabled = bool(cfg.VAL.ENABLE)
     ckpt_dir = cfg.TRAIN.CKPT_DIR or (os.path.join(cfg.RESULT_DIR, 'ckpt') if val_enabled else '')
@@ -321,7 +330,8 @@ def main():
         if cfg.VAL.ENABLE:
             provenance = {
                 'split_id': split_id,
-                'prior_cache_key': _prior_cache_key(cfg, entity.train_z, entity.name, split_id=split_id),
+                'prior_cache_key': (None if cfg.PICAAD.PRIOR.TYPE == 'none'
+                                    else _prior_cache_key(cfg, entity.train_z, entity.name, split_id=split_id)),
                 'data_fingerprint': _npz_fingerprint(os.path.join(cfg.DATA.INPUT_DIR, f'{name}.npz')),
             }
 

@@ -540,6 +540,7 @@ class PicaadTrainer:
             'cfg': self.cfg.dump(),
             'data_fingerprint': self.provenance.get('data_fingerprint'),
             'prior_cache_key': self.provenance.get('prior_cache_key'),
+            'prior_info': self.provenance.get('prior_info'),   # P3: prior type / randomization / array sha256
             'code_fingerprint': _git_fingerprint(),
             'torch_version': torch.__version__,
         }

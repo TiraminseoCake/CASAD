@@ -86,10 +86,18 @@ def build_causal_prior(cfg, train_TN: np.ndarray):
             self_mass=cfg.PICAAD.PRIOR.SELF_MASS,
             seed=cfg.PICAAD.PRIOR.SEED,
         )
+    if prior_type == 'none':
+        return None, None
     raise ValueError(f'Unknown PICAAD.PRIOR.TYPE: {prior_type}')
 
 
 def apply_prior_to_model(cfg, model: PICAAD, te_weight_np, te_gate_np):
+    if te_weight_np is None or te_gate_np is None:
+        # P3 no-prior: set_te_prior is never called, so no init / routing / gate / loss / reference path
+        # sees a prior and the te_prior_* buffers stay zero with _has_te_prior False.
+        if cfg.PICAAD.PRIOR.TYPE != 'none':
+            raise ValueError(f'prior arrays missing although PICAAD.PRIOR.TYPE={cfg.PICAAD.PRIOR.TYPE!r}')
+        return
     model.set_te_prior(
         torch.from_numpy(te_weight_np),
         torch.from_numpy(te_gate_np),
@@ -151,6 +159,10 @@ def build_causal_prior_cached(cfg, train_TN: np.ndarray, entity_name: str,
     full-train prior.
     """
     p = cfg.PICAAD.PRIOR
+    if p.TYPE == 'none':
+        # nothing is computed, read or written (no PCMCI+, no cache access)
+        print('  [prior] PRIOR.TYPE=none: no prior built or loaded', flush=True)
+        return None, None
     if not p.CACHE_ENABLE:
         return build_causal_prior(cfg, train_TN)
 

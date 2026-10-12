@@ -112,7 +112,15 @@ _C.PICAAD.ENABLE_INV_LOSS = False
 
 # causal prior
 _C.PICAAD.PRIOR = CN()
-_C.PICAAD.PRIOR.TYPE = 'pcmci'       # te | cte | pcmci
+_C.PICAAD.PRIOR.TYPE = 'pcmci'       # te | cte | pcmci | none
+# P3 structural ablation (docs/p3_structural_ablation_protocol.md).
+#   TYPE='none': no prior is built, loaded or applied (set_te_prior is never called).
+#   RANDOMIZE='degree_preserving_v1': the loaded prior's cross edges are rewired per seed within each lag
+#   (in/out-degree, self edges and per-target slot values preserved) before set_te_prior.
+# Defaults ('pcmci' / 'none') keep the original code path bit-identical.
+_C.PICAAD.PRIOR.RANDOMIZE = 'none'
+_C.PICAAD.PRIOR.RANDOMIZE_SALT = 'p3-random-v1'
+_C.PICAAD.PRIOR.RANDOMIZE_SWAPS = 10  # swap attempts per rewirable edge
 _C.PICAAD.PRIOR.BLEND = 0.35         # te_prior_blend
 _C.PICAAD.PRIOR.INIT_SCALE = 0.25    # te_init_scale
 _C.PICAAD.PRIOR.SELF_MASS = 0.25

@@ -1,0 +1,25 @@
+# P3 structural ablation - ks share, PSM (stage 1).
+# Protocol: docs/p3_structural_ablation_protocol.md (fixed before any P3 training).
+# Arms (configs from scripts/make_p3_configs.py; only PRIOR.TYPE / PRIOR.RANDOMIZE / DYNAMIC_GRAPH differ):
+#   a  PCMCI+ prior   n  no prior   r  sparsity/lag-matched random prior   d  dynamic correction removed
+# Prediction-only objective for every arm; best_val (validation pred MAE) evaluated with CF and calibration off.
+# Real-data training requires a separate approval (2026-10-12 decision): this manifest is for dry-run/verification.
+name: p3_structural_psm_ks
+description: >
+  P3 stage 1, PSM: 4 arms x seeds 0-3 = 16 training jobs, 16 best_val evaluations (CF off).
+defaults:
+  threads_per_job: 4
+  dataloader_workers: 0
+  prior_workers: 2
+  eval:
+    # "off" MUST stay quoted (YAML 1.1 reads a bare off as boolean False).
+    ckpt_tags: [best_val]
+    cf: "off"
+    calibrate: "off"
+    verify_native_parity: false
+train:
+  - {dataset: PSM, config: scripts/configs/p3_structural/psm_p3_a.yaml, input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3]}
+  - {dataset: PSM, config: scripts/configs/p3_structural/psm_p3_n.yaml, input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3]}
+  - {dataset: PSM, config: scripts/configs/p3_structural/psm_p3_r.yaml, input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3]}
+  - {dataset: PSM, config: scripts/configs/p3_structural/psm_p3_d.yaml, input_dir: PSM, entities: [PSM], seeds: [0, 1, 2, 3]}
+eval_only: []
