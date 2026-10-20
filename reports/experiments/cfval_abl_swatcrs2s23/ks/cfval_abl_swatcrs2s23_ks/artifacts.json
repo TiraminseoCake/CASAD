@@ -1,0 +1,717 @@
+{
+ "out_root_placeholder": "<OUT_ROOT>",
+ "artifacts": [
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed2_best_val.pt",
+   "sha256": "2e38024c5b5f59c61f600db3ee6c31ffd0467c866322d34f92e633352451b660",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed2_last.pt",
+   "sha256": "3aa719d269525ae33d1bd374e669adf177e70be633065570a51a910e25c0d749",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm0_crsoff",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/launcher_run.log",
+   "sha256": "48230219f51eae3fd98ac0236dc53fb96ee6667ad588356106a1cb935e6c781c",
+   "size": 31723
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "772c4441593a26b838b1537beb8f1a76b4fc18a4cde96341a57004518410b952",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last/attempt1.log",
+   "sha256": "ebe084e6c3323397da2bb7b77c2fff721c6a65e3882b637ae536ec30caa4640f",
+   "size": 3705
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "1acc99ba33b581c3ed258eda250106f60e1e158f79c540f696b76e7b2073c138",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val/attempt1.log",
+   "sha256": "489876bbf324c04a88b13e3f1af7d04546b873c6be9c15cbceecec2db5ab51ea",
+   "size": 3725
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed3_best_val.pt",
+   "sha256": "bb8362c7fb32868125bce374e7cd27d848a14d3320ce1c45e2616374d4295c2d",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm0_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed3_last.pt",
+   "sha256": "d75b9fccb81d54a3cb1a24b5d021d5f71ed99b3da65d823226b686b955204d8d",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm0_crsoff",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/launcher_run.log",
+   "sha256": "72fa65147de471d4acb96dd63ef18ce15ea351f860551a04564e0467e7322d1f",
+   "size": 31623
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "0007839cd5168c3aa5730292289fe51fcc12f02590be3caadf0b2827d49ce505",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last/attempt1.log",
+   "sha256": "7c8aa21bb3328c282274715b225d86bb78770d56046a6cbaceac95ef9f39e73d",
+   "size": 3705
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "d1bc271b17af8de981e30664f6622f15d2c1bdc7802eb7c0b8febc3391f85717",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val/attempt1.log",
+   "sha256": "b9a5ad3fcbd4ac7bcaa1acd1f35f704eea7a911420532490985cbb1a14ed2ed0",
+   "size": 3725
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed2_best_val.pt",
+   "sha256": "cf8b8c118d59a654722b6e3a19b1d702aa8c1830f1c7d4f6a9f35031807105d5",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed2_last.pt",
+   "sha256": "afef63f1db583e31de38d01d6c115efb7fea28c22f6f903be2368dc62b13030c",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm0_crson",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/launcher_run.log",
+   "sha256": "55c6b352d6aeb241088b6c34cde4356ab53a4bd9b495229750baaefa4670996f",
+   "size": 31541
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last/attempt1/scores.npz",
+   "sha256": "cc71fdf21f50dbab0f158cd85698b92315d9222b383e01fbb61bf16edf9855a9",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last/attempt1.log",
+   "sha256": "5aef68ed7a929779e9f41927c15669fac482444e14dea872708efd4c53741986",
+   "size": 3700
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "cc71fdf21f50dbab0f158cd85698b92315d9222b383e01fbb61bf16edf9855a9",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val/attempt1.log",
+   "sha256": "04ea7311de668797226175ed104227debce581728ea835d198b0fa7ada51d69e",
+   "size": 3720
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed3_best_val.pt",
+   "sha256": "d54ff26692f1b59175e8c0bb1c5012f2a1af703773c4c55a8c6888b6b65b0bc3",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm0_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed3_last.pt",
+   "sha256": "930be405338620ce5c31c4dfe3906d314577312a7da55c8d3c3126e6d118aa4d",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm0_crson",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/launcher_run.log",
+   "sha256": "b625f7b5eb1a549b7f8e42b3a3ee3cdab91fe37a011357abf8724a4994d855db",
+   "size": 31561
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last/attempt1/scores.npz",
+   "sha256": "f5e16dacf28cda56483b8a23fcbde46f049523d0c5730cd053a78ca16b1202ad",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last/attempt1.log",
+   "sha256": "53a3118c4bfafd53bc83c6ac86bcb34333be6497bba8009529088adb92b132f7",
+   "size": 3700
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "0b74c59623d23c0aa80ab2643c717db930d2a45f5211fa3b8b43ddeb6e9bb774",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val/attempt1.log",
+   "sha256": "302cc11c37c9b9cdaf4913c8c5b2ce08da03e45762b523031cdf10e8991bb293",
+   "size": 3720
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed2_best_val.pt",
+   "sha256": "c0057ad3707419b8eae78bc7e3f98bf2ce818cbb20d27e62709ad1afd74bd31b",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed2_last.pt",
+   "sha256": "4085e73f3d4084b4f43c745fffe5367a5578a215b78053f1fa267fb729623046",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm2_crsoff",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/launcher_run.log",
+   "sha256": "27e58d1507a8161f4e1ff215ebdcf7ca6b19b7284a992bf6f7fc21187cab44ac",
+   "size": 31501
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "e9e5ea0d6aede9fde1a27703a9780658496c7a6b51a6bb2166709b25083542ba",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last/attempt1.log",
+   "sha256": "a8b14395f736d77fab9cd1d57ec082e7fce61f56cafb8d421af34af79bbde6ef",
+   "size": 3705
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "03b17d0c3fdbd4c4f611c13ca3965de823a344147852ae7cda46e2444d326c72",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val/attempt1.log",
+   "sha256": "70ffc19b3fe222963bdf58eb55d1b67d11f09dca8494402b3278eb45fcedec0e",
+   "size": 3725
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed3_best_val.pt",
+   "sha256": "9d2ae6768271d6d2e551e4f25fccbcfb737100c034283abb888408f1fd40f3e6",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm2_crsoff",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed3_last.pt",
+   "sha256": "5fb354a3a550489c570cb0d98b785fe89507d9b336822774553fe9fdd84d2424",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm2_crsoff",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/launcher_run.log",
+   "sha256": "39a1b900c0eff7cbddcc15d82d39721ab00c51656d5e9c2495eda20b229022a9",
+   "size": 31502
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last/attempt1/scores.npz",
+   "sha256": "c01eb43ae3db244a6697eb3173b384009b2dbe5142445f8ed706bc4f778ddf5e",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last/attempt1.log",
+   "sha256": "66b2f72b8711a6452b5f5f4f6cd97f6c3401ad057f9fdb3696c9f1bc0bf4e048",
+   "size": 3705
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val/attempt1/scores.npz",
+   "sha256": "749cf2fde561de71e52d1b16d7c0c44922d78dbdc0d90fcc834d963e87a0ba90",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val/attempt1.log",
+   "sha256": "a0c37333c700b9a45e3e8186a67536a97b957a73aad4324c7ca5f334f4c20962",
+   "size": 3725
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed2_best_val.pt",
+   "sha256": "cc987b7f8fb9ad83ef70cffedce5708cbaccb336eee17f4935af7c6c361f4116",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed2_last.pt",
+   "sha256": "972efd6f8bdc6a8238107de8c33f71f80de7dc6fd28d4c66897f363104586d96",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed2/swat_cf_val_perm2_crson",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/launcher_run.log",
+   "sha256": "1728bb43175d5308c16ee9352558eabc45c4230917600ff252e20656cfaddd91",
+   "size": 31089
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last/attempt1/scores.npz",
+   "sha256": "8e47eac47a46650ccec2bc804c0214b17d7e8998dfeee17a2912e90a7be54268",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last/attempt1.log",
+   "sha256": "c63ad033ba562584b764fe76aad33fde0f5060da674811acb45553fcd7c699c1",
+   "size": 3700
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "386517190847dbaed5537a67e5e878652aca98b243b35bfa9fbb409c8067354e",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val/attempt1.log",
+   "sha256": "69578a3604a33fe70b0b48390ecfa7e0c165db767796cedd6791f996fc4edd97",
+   "size": 3719
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "best_val",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed3_best_val.pt",
+   "sha256": "f9b3fd11eb3845f972c66e79061c2be025fc30b41210ea051fd07172693dae6b",
+   "size": 32472405
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm2_crson",
+   "kind": "checkpoint",
+   "tag": "last",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed3_last.pt",
+   "sha256": "07764ca71738377944fb7f4f8dce6bd7d1075417fbf765532fa4680eb4eac643",
+   "size": 32463233
+  },
+  {
+   "job_id": "train/SWaT/swat/seed3/swat_cf_val_perm2_crson",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/launcher_run.log",
+   "sha256": "9b069160fc59e5d56d0622b99cccc8a5db987f8aabea24f2f96397b02b039b98",
+   "size": 31245
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last/attempt1/scores.npz",
+   "sha256": "ae0987e82c8e1622cbc915f44f7bec49fabcf58dba43958a1dd8deb69b722655",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last/attempt1.log",
+   "sha256": "1a6b8bbae59ecc7cc1378c95cd9c0a90abc091526ca0ad3d79e2d42c9a25ef4d",
+   "size": 3700
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val",
+   "kind": "scores",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val/attempt1/scores.npz",
+   "sha256": "3417006481d885a0acfa69a42d1c451e118f8dc3715c74c3ef13872badcd50b3",
+   "size": 63354820
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val",
+   "kind": "log",
+   "path": "SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val/attempt1.log",
+   "sha256": "41ce81353942a7da88249e11d87a8afec1bf113f3b737de0833ac0cd91418f93",
+   "size": 3720
+  },
+  {
+   "job_id": "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val",
+   "kind": "data_npz",
+   "path": "<DATA_ROOT>/SWaT51/swat.npz",
+   "sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "shapes": {
+    "train": [
+     495000,
+     51
+    ],
+    "test": [
+     449919,
+     51
+    ],
+    "label": [
+     449919
+    ]
+   }
+  }
+ ]
+}

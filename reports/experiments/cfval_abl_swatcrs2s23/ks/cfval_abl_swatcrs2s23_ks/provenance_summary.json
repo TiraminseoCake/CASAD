@@ -1,0 +1,3558 @@
+{
+ "train": {
+  "train/SWaT/swat/seed2/swat_cf_val_perm0_crsoff": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 2,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm0_crsoff.yaml",
+   "config_sha256": "b5dba2a50e92ef5f1d736c8dce68ff975454e7d7d7a331afab4c74f88a36eb54",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792141075.6501064,
+   "finished_at": 1792244379.321342,
+   "duration_s": 103303.67123556137,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0051428281755355,
+    "best_epoch": 59,
+    "best_val_pred_mae": 0.0049107645926399,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed2_best_val.pt",
+     "sha256": "2e38024c5b5f59c61f600db3ee6c31ffd0467c866322d34f92e633352451b660",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed2_last.pt",
+     "sha256": "3aa719d269525ae33d1bd374e669adf177e70be633065570a51a910e25c0d749",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1"
+  },
+  "train/SWaT/swat/seed3/swat_cf_val_perm0_crsoff": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 3,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm0_crsoff.yaml",
+   "config_sha256": "b5dba2a50e92ef5f1d736c8dce68ff975454e7d7d7a331afab4c74f88a36eb54",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792142878.9299965,
+   "finished_at": 1792247382.4061697,
+   "duration_s": 104503.47617316246,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0051362669680361,
+    "best_epoch": 72,
+    "best_val_pred_mae": 0.0049462348384827,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed3_best_val.pt",
+     "sha256": "bb8362c7fb32868125bce374e7cd27d848a14d3320ce1c45e2616374d4295c2d",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed3_last.pt",
+     "sha256": "d75b9fccb81d54a3cb1a24b5d021d5f71ed99b3da65d823226b686b955204d8d",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1"
+  },
+  "train/SWaT/swat/seed2/swat_cf_val_perm0_crson": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 2,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm0_crson.yaml",
+   "config_sha256": "b3791c98da0f4b21206884f381693ed5bc116c0f33b58a38af6307f19d13b8a3",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792144080.800548,
+   "finished_at": 1792249184.6393929,
+   "duration_s": 105103.83884477615,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0049293918750308,
+    "best_epoch": 80,
+    "best_val_pred_mae": 0.0049293918750308,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed2_best_val.pt",
+     "sha256": "cf8b8c118d59a654722b6e3a19b1d702aa8c1830f1c7d4f6a9f35031807105d5",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed2_last.pt",
+     "sha256": "afef63f1db583e31de38d01d6c115efb7fea28c22f6f903be2368dc62b13030c",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1"
+  },
+  "train/SWaT/swat/seed3/swat_cf_val_perm0_crson": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 3,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm0_crson.yaml",
+   "config_sha256": "b3791c98da0f4b21206884f381693ed5bc116c0f33b58a38af6307f19d13b8a3",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792145282.3623521,
+   "finished_at": 1792225761.156037,
+   "duration_s": 80478.79368495941,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0052403948032815,
+    "best_epoch": 76,
+    "best_val_pred_mae": 0.0049704159083291,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed3_best_val.pt",
+     "sha256": "d54ff26692f1b59175e8c0bb1c5012f2a1af703773c4c55a8c6888b6b65b0bc3",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed3_last.pt",
+     "sha256": "930be405338620ce5c31c4dfe3906d314577312a7da55c8d3c3126e6d118aa4d",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1"
+  },
+  "train/SWaT/swat/seed2/swat_cf_val_perm2_crsoff": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 2,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm2_crsoff.yaml",
+   "config_sha256": "3bac0fefff6b2a62930de9b382415677a66afd1bc42071afa8d40df71abb236c",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792237774.189254,
+   "finished_at": 1792466996.7184224,
+   "duration_s": 229222.5291683674,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0048756304110764,
+    "best_epoch": 67,
+    "best_val_pred_mae": 0.0046879191827483,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed2_best_val.pt",
+     "sha256": "c0057ad3707419b8eae78bc7e3f98bf2ce818cbb20d27e62709ad1afd74bd31b",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed2_last.pt",
+     "sha256": "4085e73f3d4084b4f43c745fffe5367a5578a215b78053f1fa267fb729623046",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1"
+  },
+  "train/SWaT/swat/seed3/swat_cf_val_perm2_crsoff": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 3,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm2_crsoff.yaml",
+   "config_sha256": "3bac0fefff6b2a62930de9b382415677a66afd1bc42071afa8d40df71abb236c",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792255192.2550375,
+   "finished_at": 1792483799.0036247,
+   "duration_s": 228606.7485871315,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0062780537919,
+    "best_epoch": 53,
+    "best_val_pred_mae": 0.0055135827829411,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed3_best_val.pt",
+     "sha256": "9d2ae6768271d6d2e551e4f25fccbcfb737100c034283abb888408f1fd40f3e6",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed3_last.pt",
+     "sha256": "5fb354a3a550489c570cb0d98b785fe89507d9b336822774553fe9fdd84d2424",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1"
+  },
+  "train/SWaT/swat/seed2/swat_cf_val_perm2_crson": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 2,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm2_crson.yaml",
+   "config_sha256": "09c846baa5ba02084beb5296ed0fd79ffc923bbba45d50146ce419bb7ddf3610",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792258194.0414596,
+   "finished_at": 1792483198.6196272,
+   "duration_s": 225004.57816767693,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.0156226175922394,
+    "best_epoch": 2,
+    "best_val_pred_mae": 0.0111169817294397,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed2_best_val.pt",
+     "sha256": "cc987b7f8fb9ad83ef70cffedce5708cbaccb336eee17f4935af7c6c361f4116",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed2_last.pt",
+     "sha256": "972efd6f8bdc6a8238107de8c33f71f80de7dc6fd28d4c66897f363104586d96",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1"
+  },
+  "train/SWaT/swat/seed3/swat_cf_val_perm2_crson": {
+   "dataset": "SWaT",
+   "entity": "swat",
+   "seed": 3,
+   "config": "<PATH1>/ks/ablation/configs/swat_cf_val_perm2_crson.yaml",
+   "config_sha256": "09c846baa5ba02084beb5296ed0fd79ffc923bbba45d50146ce419bb7ddf3610",
+   "data_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+   "training_code": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "python": "<HOME>/.conda/envs/<USER>/bin/python",
+   "val_enabled": true,
+   "epochs_override": null,
+   "expected_n": 51,
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "started_at": 1792259994.72174,
+   "finished_at": 1792486199.8417113,
+   "duration_s": 226205.11997127533,
+   "val_metrics": {
+    "epochs": 80,
+    "last_epoch": 80,
+    "last_val_pred_mae": 0.011776569589028,
+    "best_epoch": 79,
+    "best_val_pred_mae": 0.0108407187543519,
+    "all_finite": true
+   },
+   "checkpoints": {
+    "best_val": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed3_best_val.pt",
+     "sha256": "f9b3fd11eb3845f972c66e79061c2be025fc30b41210ea051fd07172693dae6b",
+     "size": 32472405
+    },
+    "last": {
+     "file": "SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed3_last.pt",
+     "sha256": "07764ca71738377944fb7f4f8dce6bd7d1075417fbf765532fa4680eb4eac643",
+     "size": 32463233
+    }
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1"
+  }
+ },
+ "eval": {
+  "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed2_last.pt",
+    "sha256": "3aa719d269525ae33d1bd374e669adf177e70be633065570a51a910e25c0d749",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.005142828175535562,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     17,
+     46,
+     8,
+     47,
+     3,
+     38,
+     28,
+     7,
+     22,
+     39,
+     16,
+     27
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.0021621766500175,
+     0.014367716386914253,
+     0.001926165190525353,
+     0.013866136781871319,
+     0.00555455731227994,
+     0.014984666369855404,
+     0.0018859382253140211,
+     0.014514578506350517,
+     0.004264554008841515,
+     0.019895093515515327,
+     0.014367576688528061,
+     0.0037127123214304447,
+     0.003356714965775609,
+     0.012637482956051826,
+     0.004157750867307186
+    ],
+    "profile_std": [
+     0.020761685445904732,
+     0.020652679726481438,
+     0.022210480645298958,
+     0.00923734437674284,
+     0.019579768180847168,
+     0.008695483207702637,
+     0.017113687470555305,
+     0.024445075541734695,
+     0.03830251842737198,
+     0.1310790330171585,
+     0.013488627038896084,
+     0.01961977407336235,
+     0.018644999712705612,
+     0.010665764100849628,
+     0.03854310140013695
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5302.37,
+   "finished_at": "2026-10-18T00:08:04+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm0_crsoff"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed2_best_val.pt",
+    "sha256": "2e38024c5b5f59c61f600db3ee6c31ffd0467c866322d34f92e633352451b660",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 59,
+    "payload_current_epoch": 59,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.004910764592639924,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 59,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     17,
+     46,
+     47,
+     8,
+     3,
+     38,
+     28,
+     7,
+     22,
+     39,
+     16,
+     20
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.0022185235284268856,
+     0.01580129750072956,
+     0.002112753689289093,
+     0.014362975023686886,
+     0.005696346517652273,
+     0.0018153940327465534,
+     0.014869185164570808,
+     0.014139034785330296,
+     0.003108356846496463,
+     0.01979556493461132,
+     0.014553298242390156,
+     0.003741544671356678,
+     0.003336390247568488,
+     0.012733453884720802,
+     0.010878251865506172
+    ],
+    "profile_std": [
+     0.021223973482847214,
+     0.020585529506206512,
+     0.024043601006269455,
+     0.009077816270291805,
+     0.019592177122831345,
+     0.017064129933714867,
+     0.011529051698744297,
+     0.02344462461769581,
+     0.01939757540822029,
+     0.12841610610485077,
+     0.013417299836874008,
+     0.019727034494280815,
+     0.018816782161593437,
+     0.009191056713461876,
+     0.0278368778526783
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5106.16,
+   "finished_at": "2026-10-18T00:54:50+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm0_crsoff/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm0_crsoff"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed3_last.pt",
+    "sha256": "d75b9fccb81d54a3cb1a24b5d021d5f71ed99b3da65d823226b686b955204d8d",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.00513626696803617,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     17,
+     46,
+     47,
+     8,
+     3,
+     28,
+     38,
+     7,
+     22,
+     39,
+     16,
+     27
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.001490707858465612,
+     0.012278502807021141,
+     0.002706228056922555,
+     0.012600002810359001,
+     0.00944302137941122,
+     0.0018398979445919394,
+     0.015138991177082062,
+     0.015117018483579159,
+     0.01238400861620903,
+     0.003466241527348757,
+     0.014436021447181702,
+     0.004012086894363165,
+     0.003378438064828515,
+     0.01298817154020071,
+     0.005156561266630888
+    ],
+    "profile_std": [
+     0.017005156725645065,
+     0.02353931963443756,
+     0.03163960203528404,
+     0.007545600179582834,
+     0.08332531154155731,
+     0.014996016398072243,
+     0.010396912693977356,
+     0.022632841020822525,
+     0.015107382088899612,
+     0.02649112418293953,
+     0.01343528926372528,
+     0.02029103972017765,
+     0.018617061898112297,
+     0.010147210210561752,
+     0.05486045032739639
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5158.54,
+   "finished_at": "2026-10-18T01:25:44+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm0_crsoff"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm0_crsoff/attempt1/ckpt/swat_seed3_best_val.pt",
+    "sha256": "bb8362c7fb32868125bce374e7cd27d848a14d3320ce1c45e2616374d4295c2d",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 72,
+    "payload_current_epoch": 72,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.004946234838482729,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 72,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     17,
+     46,
+     47,
+     8,
+     3,
+     28,
+     38,
+     7,
+     22,
+     39,
+     16,
+     27
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.0014185510808601975,
+     0.012134751304984093,
+     0.0026560628321021795,
+     0.012651892378926277,
+     0.009629203006625175,
+     0.0017879902152344584,
+     0.014188429340720177,
+     0.01550648920238018,
+     0.012397853657603264,
+     0.003928845282644033,
+     0.014407692477107048,
+     0.003948904573917389,
+     0.0034081514459103346,
+     0.01300141867250204,
+     0.005372087471187115
+    ],
+    "profile_std": [
+     0.016304003074765205,
+     0.023562436923384666,
+     0.03119201585650444,
+     0.007476167753338814,
+     0.08634798973798752,
+     0.014669413678348064,
+     0.0113266222178936,
+     0.022685769945383072,
+     0.015144621022045612,
+     0.033705320209264755,
+     0.013262174092233181,
+     0.020257024094462395,
+     0.018817275762557983,
+     0.009755556471645832,
+     0.05861257016658783
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5195.79,
+   "finished_at": "2026-10-18T01:36:23+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm0_crsoff/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm0_crsoff"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed2_last.pt",
+    "sha256": "afef63f1db583e31de38d01d6c115efb7fea28c22f6f903be2368dc62b13030c",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.004929391875030881,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     24,
+     19,
+     49,
+     46,
+     17,
+     3,
+     8,
+     47,
+     7,
+     28,
+     38,
+     39,
+     16,
+     22,
+     9
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.012694581411778927,
+     0.0038064836990088224,
+     0.0027750199660658836,
+     0.005823640152812004,
+     0.013519670814275742,
+     0.01734834536910057,
+     0.01759863831102848,
+     0.0026950205210596323,
+     0.015078287571668625,
+     0.018551403656601906,
+     0.0030369956512004137,
+     0.0034916922450065613,
+     0.013188718818128109,
+     0.0040573375299572945,
+     0.009201743640005589
+    ],
+    "profile_std": [
+     0.02327912673354149,
+     0.023510880768299103,
+     0.02750536985695362,
+     0.01945287548005581,
+     0.00713565805926919,
+     0.024909183382987976,
+     0.005138422828167677,
+     0.015395338647067547,
+     0.01407951395958662,
+     0.10831248015165329,
+     0.019108550623059273,
+     0.01924286037683487,
+     0.010700993239879608,
+     0.019576916471123695,
+     0.015591556206345558
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5129.34,
+   "finished_at": "2026-10-18T02:25:20+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm0_crson"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed2_best_val.pt",
+    "sha256": "cf8b8c118d59a654722b6e3a19b1d702aa8c1830f1c7d4f6a9f35031807105d5",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.004929391875030881,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     24,
+     19,
+     49,
+     46,
+     17,
+     3,
+     8,
+     47,
+     7,
+     28,
+     38,
+     39,
+     16,
+     22,
+     9
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.012694581411778927,
+     0.0038064836990088224,
+     0.0027750199660658836,
+     0.005823640152812004,
+     0.013519670814275742,
+     0.01734834536910057,
+     0.01759863831102848,
+     0.0026950205210596323,
+     0.015078287571668625,
+     0.018551403656601906,
+     0.0030369956512004137,
+     0.0034916922450065613,
+     0.013188718818128109,
+     0.0040573375299572945,
+     0.009201743640005589
+    ],
+    "profile_std": [
+     0.02327912673354149,
+     0.023510880768299103,
+     0.02750536985695362,
+     0.01945287548005581,
+     0.00713565805926919,
+     0.024909183382987976,
+     0.005138422828167677,
+     0.015395338647067547,
+     0.01407951395958662,
+     0.10831248015165329,
+     0.019108550623059273,
+     0.01924286037683487,
+     0.010700993239879608,
+     0.019576916471123695,
+     0.015591556206345558
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5100.21,
+   "finished_at": "2026-10-18T02:54:53+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm0_crson/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm0_crson"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed3_last.pt",
+    "sha256": "930be405338620ce5c31c4dfe3906d314577312a7da55c8d3c3126e6d118aa4d",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.0052403948032815,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     46,
+     17,
+     3,
+     8,
+     47,
+     28,
+     7,
+     38,
+     39,
+     16,
+     22,
+     0
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.002235520863905549,
+     0.0138019360601902,
+     0.0013180285459384322,
+     0.010023063980042934,
+     0.01501739677041769,
+     0.01501659769564867,
+     0.01590169034898281,
+     0.0017404159298166633,
+     0.012388610281050205,
+     0.01433864701539278,
+     0.0032967727165669203,
+     0.00344835314899683,
+     0.012599261477589607,
+     0.003927489276975393,
+     0.01821170747280121
+    ],
+    "profile_std": [
+     0.019207246601581573,
+     0.027630839496850967,
+     0.0131226796656847,
+     0.0892975777387619,
+     0.011112213134765625,
+     0.023742763325572014,
+     0.008583156391978264,
+     0.014436211436986923,
+     0.015105689875781536,
+     0.013675549998879433,
+     0.021499082446098328,
+     0.019072121009230614,
+     0.008831584826111794,
+     0.0202789269387722,
+     0.006731495261192322
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5406.63,
+   "finished_at": "2026-10-17T18:59:29+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm0_crson"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm0_crson/attempt1/ckpt/swat_seed3_best_val.pt",
+    "sha256": "d54ff26692f1b59175e8c0bb1c5012f2a1af703773c4c55a8c6888b6b65b0bc3",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 76,
+    "payload_current_epoch": 76,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.004970415908329113,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 76,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     46,
+     17,
+     3,
+     8,
+     47,
+     28,
+     7,
+     38,
+     39,
+     16,
+     22,
+     0
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.0024145094212144613,
+     0.014092751778662205,
+     0.001453256350941956,
+     0.010113993659615517,
+     0.015317696146667004,
+     0.015452847816050053,
+     0.01600996032357216,
+     0.001809437875635922,
+     0.01242959126830101,
+     0.014499330893158913,
+     0.003321488155052066,
+     0.0034562244545668364,
+     0.012700044550001621,
+     0.0038864233065396547,
+     0.0176871158182621
+    ],
+    "profile_std": [
+     0.019681435078382492,
+     0.02793882042169571,
+     0.014478030614554882,
+     0.08809085935354233,
+     0.011128516867756844,
+     0.0241378266364336,
+     0.009154196828603745,
+     0.014837127178907394,
+     0.015214545652270317,
+     0.01364432368427515,
+     0.02137618325650692,
+     0.018896659836173058,
+     0.009169051423668861,
+     0.020373282954096794,
+     0.00784956943243742
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5481.97,
+   "finished_at": "2026-10-17T20:40:52+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm0_crson/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm0_crson"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed2_last.pt",
+    "sha256": "4085e73f3d4084b4f43c745fffe5367a5578a215b78053f1fa267fb729623046",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.0048756304110764035,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     17,
+     46,
+     47,
+     8,
+     3,
+     28,
+     38,
+     7,
+     22,
+     39,
+     16,
+     27
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.005166896618902683,
+     0.011822802945971489,
+     0.004811515565961599,
+     0.013301698490977287,
+     0.005092998500913382,
+     0.0015579323517158628,
+     0.011407378129661083,
+     0.01748712547123432,
+     0.012361560948193073,
+     0.0038755934219807386,
+     0.014322366565465927,
+     0.003933025058358908,
+     0.0035550929605960846,
+     0.01141720823943615,
+     0.0036038148682564497
+    ],
+    "profile_std": [
+     0.049335330724716187,
+     0.025000331923365593,
+     0.05057565122842789,
+     0.007160070817917585,
+     0.019694728776812553,
+     0.016078142449259758,
+     0.00721600791439414,
+     0.022584153339266777,
+     0.015076923184096813,
+     0.03136424347758293,
+     0.013308485969901085,
+     0.020106300711631775,
+     0.02111351676285267,
+     0.006534316577017307,
+     0.029386868700385094
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5024.74,
+   "finished_at": "2026-10-20T13:53:43+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm2_crsoff"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed2_best_val.pt",
+    "sha256": "c0057ad3707419b8eae78bc7e3f98bf2ce818cbb20d27e62709ad1afd74bd31b",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 67,
+    "payload_current_epoch": 67,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.004687919182748343,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 67,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     17,
+     46,
+     47,
+     8,
+     3,
+     28,
+     38,
+     7,
+     22,
+     39,
+     16,
+     27
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.005245370324701071,
+     0.012128789909183979,
+     0.0047183893620967865,
+     0.01318815816193819,
+     0.005214138422161341,
+     0.0016130446456372738,
+     0.011292990297079086,
+     0.0156724750995636,
+     0.01239551231265068,
+     0.004127505235373974,
+     0.014351160265505314,
+     0.00389870791696012,
+     0.0035748824011534452,
+     0.01144544780254364,
+     0.0036622912157326937
+    ],
+    "profile_std": [
+     0.05049464851617813,
+     0.02561209537088871,
+     0.05000680312514305,
+     0.007457243278622627,
+     0.020137369632720947,
+     0.016919570043683052,
+     0.0074978843331336975,
+     0.024686643853783607,
+     0.015106894075870514,
+     0.035545382648706436,
+     0.013400215655565262,
+     0.019984550774097443,
+     0.021616626530885696,
+     0.0063282158225774765,
+     0.029686778783798218
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 4982.87,
+   "finished_at": "2026-10-20T15:23:03+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm2_crsoff/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm2_crsoff"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed3_last.pt",
+    "sha256": "5fb354a3a550489c570cb0d98b785fe89507d9b336822774553fe9fdd84d2424",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.00627805379190001,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     46,
+     17,
+     47,
+     8,
+     3,
+     38,
+     28,
+     7,
+     22,
+     39,
+     16,
+     20
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.001993972109630704,
+     0.010545100085437298,
+     0.001958907349035144,
+     0.011414213106036186,
+     0.01669035665690899,
+     0.008575188927352428,
+     0.008379691280424595,
+     0.012235574424266815,
+     0.0030603292398154736,
+     0.012305345386266708,
+     0.014334364794194698,
+     0.0038523776456713676,
+     0.0038770237006247044,
+     0.03135829046368599,
+     0.052378036081790924
+    ],
+    "profile_std": [
+     0.01974019780755043,
+     0.021830612793564796,
+     0.02151855081319809,
+     0.11541759967803955,
+     0.010742038488388062,
+     0.03837365284562111,
+     0.0020239742007106543,
+     0.021020222455263138,
+     0.019734539091587067,
+     0.015048906207084656,
+     0.013394865207374096,
+     0.019357336685061455,
+     0.02590753510594368,
+     0.049179550260305405,
+     0.1393132209777832
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5212.69,
+   "finished_at": "2026-10-20T18:36:53+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 1,
+    "uuid": "GPU-b7584f5d-0177-b980-d91e-e83b90844914",
+    "child_CUDA_VISIBLE_DEVICES": "1",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm2_crsoff"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm2_crsoff/attempt1/ckpt/swat_seed3_best_val.pt",
+    "sha256": "9d2ae6768271d6d2e551e4f25fccbcfb737100c034283abb888408f1fd40f3e6",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 53,
+    "payload_current_epoch": 53,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.005513582782941105,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 53,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     46,
+     17,
+     47,
+     8,
+     3,
+     28,
+     38,
+     7,
+     22,
+     39,
+     16,
+     27
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.001886372803710401,
+     0.010771824978291988,
+     0.0017380670178681612,
+     0.011706460267305374,
+     0.017208904027938843,
+     0.011127162724733353,
+     0.009611954912543297,
+     0.013174866326153278,
+     0.012388167902827263,
+     0.0030874537769705057,
+     0.014353052712976933,
+     0.003781738458201289,
+     0.0037303087301552296,
+     0.03286564722657204,
+     0.003154470818117261
+    ],
+    "profile_std": [
+     0.01839238591492176,
+     0.022567009553313255,
+     0.019182901829481125,
+     0.11559457331895828,
+     0.011538175866007805,
+     0.03773286193609238,
+     0.0047140284441411495,
+     0.022309347987174988,
+     0.015190615318715572,
+     0.019794650375843048,
+     0.013427777215838432,
+     0.01951589621603489,
+     0.024670559912919998,
+     0.051624201238155365,
+     0.021953554823994637
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5191.03,
+   "finished_at": "2026-10-20T19:16:32+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 2,
+    "uuid": "GPU-41c97de9-4b36-559a-07b0-daee110e5b88",
+    "child_CUDA_VISIBLE_DEVICES": "2",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm2_crsoff/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm2_crsoff"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed2_last.pt",
+    "sha256": "972efd6f8bdc6a8238107de8c33f71f80de7dc6fd28d4c66897f363104586d96",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.01562261759223941,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     24,
+     19,
+     3,
+     17,
+     8,
+     16,
+     49,
+     46,
+     9,
+     38,
+     47,
+     26,
+     20,
+     22,
+     7
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.06073850765824318,
+     0.04042462259531021,
+     0.05022085830569267,
+     0.032706212252378464,
+     0.07013167440891266,
+     0.036273930221796036,
+     0.030577396973967552,
+     0.03909383341670036,
+     0.04936245083808899,
+     0.05176995322108269,
+     0.040154531598091125,
+     0.10355436056852341,
+     0.05507688224315643,
+     0.024775108322501183,
+     0.047059252858161926
+    ],
+    "profile_std": [
+     0.05349161848425865,
+     0.05081487074494362,
+     0.07947776466608047,
+     0.025291239842772484,
+     0.058434031903743744,
+     0.034358106553554535,
+     0.03895039111375809,
+     0.052635371685028076,
+     0.07109823822975159,
+     0.025457022711634636,
+     0.0375465452671051,
+     0.044007059186697006,
+     0.08169601112604141,
+     0.03411659598350525,
+     0.02608405612409115
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5726.08,
+   "finished_at": "2026-10-20T18:35:26+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm2_crson"
+  },
+  "eval/SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed2/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed2_best_val.pt",
+    "sha256": "cc987b7f8fb9ad83ef70cffedce5708cbaccb336eee17f4935af7c6c361f4116",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 2,
+    "payload_current_epoch": 2,
+    "seed": 2,
+    "entity": "swat",
+    "val_mae": 0.011116981729439708,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 2,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 0.4,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     19,
+     24,
+     49,
+     46,
+     28,
+     38,
+     17,
+     8,
+     39,
+     7,
+     3,
+     27,
+     47,
+     0,
+     16
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.004778676200658083,
+     0.022640544921159744,
+     0.004934397991746664,
+     0.005218735430389643,
+     0.012269822880625725,
+     0.003177609061822295,
+     0.009571033529937267,
+     0.013098468072712421,
+     0.0038366271182894707,
+     0.014822961762547493,
+     0.019600648432970047,
+     0.0027938743587583303,
+     0.0013189410092309117,
+     0.014903050847351551,
+     0.00923157762736082
+    ],
+    "profile_std": [
+     0.04779786616563797,
+     0.03945476934313774,
+     0.052176617085933685,
+     0.02024393156170845,
+     0.0148399006575346,
+     0.019769566133618355,
+     0.011278418824076653,
+     0.002028839197009802,
+     0.023541515693068504,
+     0.013009191490709782,
+     0.028715908527374268,
+     0.020315108820796013,
+     0.012863746844232082,
+     0.014292079955339432,
+     0.004520168527960777
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5114.56,
+   "finished_at": "2026-10-20T18:25:15+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed2/swat_cf_val_perm2_crson/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed2/swat_cf_val_perm2_crson"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed3_last.pt",
+    "sha256": "07764ca71738377944fb7f4f8dce6bd7d1075417fbf765532fa4680eb4eac643",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 80,
+    "payload_current_epoch": 80,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.01177656958902803,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 80,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     3,
+     24,
+     16,
+     17,
+     8,
+     19,
+     46,
+     49,
+     20,
+     0,
+     9,
+     47,
+     38,
+     28,
+     7
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.04877406731247902,
+     0.04077037796378136,
+     0.0749165415763855,
+     0.06727331131696701,
+     0.07434683293104172,
+     0.06696995347738266,
+     0.039406586438417435,
+     0.07097668200731277,
+     0.15964293479919434,
+     0.037917714565992355,
+     0.037715036422014236,
+     0.1401955485343933,
+     0.05593461915850639,
+     0.08598067611455917,
+     0.03613041341304779
+    ],
+    "profile_std": [
+     0.07573375850915909,
+     0.06717126816511154,
+     0.1468430757522583,
+     0.032136015594005585,
+     0.02052406594157219,
+     0.034152835607528687,
+     0.17373521625995636,
+     0.023088499903678894,
+     0.30772337317466736,
+     0.008295013569295406,
+     0.06557916104793549,
+     0.04764479398727417,
+     0.020684102550148964,
+     0.02918187528848648,
+     0.01912306249141693
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5393.01,
+   "finished_at": "2026-10-20T19:59:55+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 3,
+    "uuid": "GPU-09bc87ab-f9d3-566d-2b42-21f91e3f1ae1",
+    "child_CUDA_VISIBLE_DEVICES": "3",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/last/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm2_crson"
+  },
+  "eval/SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val": {
+   "checkpoint": {
+    "path": "<OUT_ROOT>/SWaT/swat/seed3/swat_cf_val_perm2_crson/attempt1/ckpt/swat_seed3_best_val.pt",
+    "sha256": "f9b3fd11eb3845f972c66e79061c2be025fc30b41210ea051fd07172693dae6b",
+    "format": "val",
+    "protocol": "val_pred_mae_v2",
+    "payload_epoch": 79,
+    "payload_current_epoch": 79,
+    "seed": 3,
+    "entity": "swat",
+    "val_mae": 0.010840718754351964,
+    "split_info": {
+     "val_enabled": true,
+     "val_frac": 0.2,
+     "val_boundary": 396000,
+     "T_train_sub": 396000,
+     "T_val": 99000,
+     "T_test": 449919,
+     "split_id": "val0.2_b396000",
+     "fit_protocol": "train_sub_val_v2"
+    },
+    "prior_cache_key": "SWaT_swat_pcmci_val0.2_b396000_7ea968cfe424e9b7",
+    "data_fingerprint_in_ckpt": {
+     "path": "<DATA_ROOT>/SWaT51/swat.npz",
+     "file_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+     "shapes": {
+      "train": [
+       495000,
+       51
+      ],
+      "test": [
+       449919,
+       51
+      ],
+      "label": [
+       449919
+      ]
+     }
+    },
+    "code_fingerprint_in_ckpt": {
+     "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+     "dirty": false,
+     "modified_tracked": []
+    },
+    "native_test_metrics_in_payload": null
+   },
+   "restore": {
+    "restored_epoch": 79,
+    "epoch_source": "payload.current_epoch",
+    "warmup_ramp": 1.0,
+    "flags": {
+     "has_te_prior": true,
+     "has_cls_ref": true,
+     "has_w_ref": true
+    },
+    "set_te_prior_called_after_load": false,
+    "strict_load": true
+   },
+   "data": {
+    "npz_path": "<DATA_ROOT>/SWaT51/swat.npz",
+    "npz_sha256": "fc2f0e762bafa30584a3badc56102402fd9d4ea90e9b8066e0346624f8c88843",
+    "shapes": {
+     "train": [
+      495000,
+      51
+     ],
+     "test": [
+      449919,
+      51
+     ],
+     "label": [
+      449919
+     ]
+    },
+    "dims": {
+     "N_data": 51,
+     "N_ckpt_state": 51,
+     "N_mu_sd": 51,
+     "N_expected_cfg": 51
+    },
+    "fit_protocol": "train_sub_val",
+    "fit_rows": 396000,
+    "val_rows": 99000,
+    "test_rows": 449919,
+    "boundary": 396000,
+    "stats_check": {
+     "max_abs_mu_diff": 0.0,
+     "max_abs_sd_diff": 0.0
+    },
+    "split_id": "val0.2_b396000"
+   },
+   "scoring": {
+    "calibrate": false,
+    "A_off": "P_raw + C_raw",
+    "A_on": "A_off + gamma*CF_raw",
+    "A_off_cal": null,
+    "A_on_cal": null,
+    "gamma": 1.0,
+    "P_AGG": "mean",
+    "C_AGG": "fro",
+    "CAUSAL_LAG_AGG": "mean",
+    "GRAPH_LAG_AGG": "mean"
+   },
+   "cf": {
+    "requested": "both",
+    "cfg_use_counterfactual": true,
+    "top_k": 15,
+    "fill_value": 0.0,
+    "gamma": 1.0,
+    "sources": [
+     3,
+     24,
+     16,
+     17,
+     8,
+     19,
+     46,
+     49,
+     20,
+     0,
+     9,
+     47,
+     38,
+     28,
+     7
+    ],
+    "fit_windows": 395991,
+    "profile_mean": [
+     0.04744470492005348,
+     0.039076823741197586,
+     0.07362807542085648,
+     0.07436215877532959,
+     0.0802995041012764,
+     0.06708764284849167,
+     0.04013225808739662,
+     0.07004180550575256,
+     0.15871590375900269,
+     0.034852661192417145,
+     0.03699394315481186,
+     0.14497821033000946,
+     0.05519943684339523,
+     0.08668980747461319,
+     0.03626617044210434
+    ],
+    "profile_std": [
+     0.07351227849721909,
+     0.06272057443857193,
+     0.14388644695281982,
+     0.023995142430067062,
+     0.02214067243039608,
+     0.03342766314744949,
+     0.17516855895519257,
+     0.022411786019802094,
+     0.3052694499492645,
+     0.00973336398601532,
+     0.06413038820028305,
+     0.04853912815451622,
+     0.019415536895394325,
+     0.03002357855439186,
+     0.01934177801012993
+    ]
+   },
+   "calibration": {
+    "enabled": false,
+    "requested": "cfg",
+    "cfg_calibrate": false
+   },
+   "evaluator": {
+    "USE_MEDIAN_VUS_WINDOW": true,
+    "sliding_window_used": 444,
+    "VUS_VERSION": "opt",
+    "VUS_THRE": 250,
+    "start_idx": 9,
+    "note": "threshold-based F1 metrics use the evaluator's label-based search; report as diagnostics"
+   },
+   "forward_passes": {
+    "test_base_forward": 3515,
+    "cf_profile_fit_forward": 49504,
+    "test_cf_forward": 56240
+   },
+   "native_parity": null,
+   "state_unchanged": true,
+   "device": "cuda",
+   "torch_version": "2.6.0+cu124",
+   "elapsed_s": 5519.66,
+   "finished_at": "2026-10-20T20:12:03+0900",
+   "code_fingerprint": {
+    "commit": "49f630ac8d324ba01390c1a1dcaa4386cd94ae84",
+    "modified_tracked": []
+   },
+   "gpu": {
+    "index": 0,
+    "uuid": "GPU-5d39dce3-e07f-29d6-5702-fce811dfb358",
+    "child_CUDA_VISIBLE_DEVICES": "0",
+    "child_logical_device": "cuda:0"
+   },
+   "attempt_dir": "SWaT/swat/seed3/swat_cf_val_perm2_crson/eval/best_val/attempt1",
+   "train_job": "train/SWaT/swat/seed3/swat_cf_val_perm2_crson"
+  }
+ }
+}
