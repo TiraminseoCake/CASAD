@@ -43,6 +43,35 @@ DATASETS = {
     'PSM_GAT_SLP':  ('scripts/configs/psm_gat_slp.yaml',  ['PSM']),
     'SMD_GAT_SLP':  ('scripts/configs/smd_gat_slp.yaml',  SMD_ENTITIES),
     'SWaT_GAT_SLP': ('scripts/configs/swat_gat_slp.yaml', ['swat']),
+    # GPDC prior variants
+    'PSM_GPDC':     ('scripts/configs/psm_gpdc.yaml',     ['PSM']),
+    'SMD_GPDC':     ('scripts/configs/smd_gpdc.yaml',     SMD_ENTITIES),
+    'SWaT_GPDC':    ('scripts/configs/swat_gpdc.yaml',    ['swat']),
+    # Intervention loss variants
+    'SWaT_INT_MARGIN':      ('scripts/configs/swat_int_margin.yaml',      ['swat']),
+    'SWaT_INT_CONTRASTIVE': ('scripts/configs/swat_int_contrastive.yaml', ['swat']),
+    'PSM_INT_CONTRASTIVE':  ('scripts/configs/psm_int_contrastive.yaml',  ['PSM']),
+    'SMD_INT_CONTRASTIVE':  ('scripts/configs/smd_int_contrastive.yaml',  SMD_ENTITIES),
+    # Gradient-based intervention
+    'SWaT_INT_GRADIENT':    ('scripts/configs/swat_int_gradient.yaml',    ['swat']),
+    'PSM_INT_GRADIENT':     ('scripts/configs/psm_int_gradient.yaml',     ['PSM']),
+    'SMD_INT_GRADIENT':     ('scripts/configs/smd_int_gradient.yaml',     SMD_ENTITIES),
+    # Counterfactual scoring
+    'SWaT_CF':              ('scripts/configs/swat_cf.yaml',              ['swat']),
+    'PSM_CF':               ('scripts/configs/psm_cf.yaml',               ['PSM']),
+    'SMD_CF':               ('scripts/configs/smd_cf.yaml',               SMD_ENTITIES),
+    # Ablation: w/o Prior
+    'SWaT_ABL_NP':  ('scripts/configs/swat_abl_no_prior.yaml', ['swat']),
+    'PSM_ABL_NP':   ('scripts/configs/psm_abl_no_prior.yaml',  ['PSM']),
+    'SMD_ABL_NP':   ('scripts/configs/smd_abl_no_prior.yaml',  SMD_ENTITIES),
+    # Ablation: w/o CRS
+    'SWaT_ABL_NC':  ('scripts/configs/swat_abl_no_crs.yaml',   ['swat']),
+    'PSM_ABL_NC':   ('scripts/configs/psm_abl_no_crs.yaml',    ['PSM']),
+    'SMD_ABL_NC':   ('scripts/configs/smd_abl_no_crs.yaml',    SMD_ENTITIES),
+    # Ablation: w/o Intervention
+    'SWaT_ABL_NI':  ('scripts/configs/swat_abl_no_int.yaml',   ['swat']),
+    'PSM_ABL_NI':   ('scripts/configs/psm_abl_no_int.yaml',    ['PSM']),
+    'SMD_ABL_NI':   ('scripts/configs/smd_abl_no_int.yaml',    SMD_ENTITIES),
 }
 
 

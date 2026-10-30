@@ -1,0 +1,28 @@
+  [prior] cache hit: data/prior_cache/SMD_machine-3-3_pcmci_1de883e070152793.npz
+Loaded /home/mschae/CASAD/results/parallel/smd_paper_align_20260901/machine-3-3/seed0/ckpt/machine-3-3_seed0_ep80.pt
+[seed 0] computing counterfactual profile (train) ...
+[seed 0] computing counterfactual scores (test) ...
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] baseline      F1=25.06  R-F1=47.67  Aff-F=88.70  A-ROC=76.69  A-PR=16.26  V-ROC=77.32  V-PR=14.82
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=0.1     F1=25.63  R-F1=47.67  Aff-F=88.66  A-ROC=76.78  A-PR=16.65  V-ROC=77.37  V-PR=15.14
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=0.3     F1=25.07  R-F1=47.67  Aff-F=87.98  A-ROC=76.25  A-PR=16.45  V-ROC=76.82  V-PR=14.98
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=0.5     F1=23.94  R-F1=46.42  Aff-F=86.91  A-ROC=75.64  A-PR=15.58  V-ROC=76.19  V-PR=13.94
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=0.7     F1=22.79  R-F1=44.23  Aff-F=86.66  A-ROC=75.10  A-PR=14.58  V-ROC=75.66  V-PR=13.48
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=1.0     F1=20.97  R-F1=40.70  Aff-F=85.24  A-ROC=74.38  A-PR=13.05  V-ROC=74.96  V-PR=12.39
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=1.5     F1=19.57  R-F1=29.30  Aff-F=81.57  A-ROC=73.42  A-PR=11.23  V-ROC=73.98  V-PR=10.20
+/home/mschae/.conda/envs/oraclead/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+[machine-3-3 seed 0] gamma=2.0     F1=17.85  R-F1=20.86  Aff-F=80.15  A-ROC=72.71  A-PR=10.27  V-ROC=73.19  V-PR=8.92

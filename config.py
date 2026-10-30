@@ -99,6 +99,16 @@ _C.PICAAD.WREF_EMA = 0.9
 _C.PICAAD.START_CLS_EPOCH = 5
 _C.PICAAD.START_WREF_EPOCH = 3
 _C.PICAAD.TRAIN_LOSS_TYPE = 'l1'     # l1 | l2root
+_C.PICAAD.VAL_RATIO = 0.2
+_C.PICAAD.EARLY_STOP = True
+_C.PICAAD.PATIENCE = 10
+
+# per-loss enable flags (ablation toggle)
+_C.PICAAD.ENABLE_PRIOR_LOSS = True
+_C.PICAAD.ENABLE_GATE_LOSS = False
+_C.PICAAD.ENABLE_GRAPH_LOSS = False
+_C.PICAAD.ENABLE_LAGMONO_LOSS = False
+_C.PICAAD.ENABLE_INV_LOSS = False
 
 # causal prior
 _C.PICAAD.PRIOR = CN()
@@ -129,6 +139,9 @@ _C.PICAAD.INTERVENTION.PERM_PAIRS_PER_BATCH = 2
 _C.PICAAD.INTERVENTION.PERM_MODE = 'permute'   # permute | fill
 _C.PICAAD.INTERVENTION.MODE = 'permute'        # for post-hoc analysis
 _C.PICAAD.INTERVENTION.FILL_VALUE = 0.0
+_C.PICAAD.INTERVENTION.LOSS_TYPE = 'mse'       # mse | margin | contrastive | gradient
+_C.PICAAD.INTERVENTION.MARGIN_HIGH = 0.3
+_C.PICAAD.INTERVENTION.MARGIN_LOW = 0.1
 
 # scoring
 _C.PICAAD.SCORING = CN()
@@ -143,7 +156,12 @@ _C.PICAAD.SCORING.GRAPH_LAG_AGG = 'mean'
 _C.PICAAD.SCORING.SCORE_ALPHA = 1.0
 _C.PICAAD.SCORING.SCORE_BETA = 1.0
 _C.PICAAD.SCORING.CALIB_CLIP_MIN = 0.0
-_C.PICAAD.SCORING.CALIBRATE = False
+_C.PICAAD.SCORING.CALIBRATE = True
+# counterfactual scoring (test-time interventional channel)
+_C.PICAAD.SCORING.USE_COUNTERFACTUAL = False
+_C.PICAAD.SCORING.CF_TOP_K = 15        # intervene on top-k causal sources (0 = all)
+_C.PICAAD.SCORING.CF_FILL_VALUE = 0.0  # value to substitute (0 = population mean after z-score)
+_C.PICAAD.SCORING.SCORE_GAMMA = 1.0    # weight for CF channel in final score
 
 
 # --- paper eval ---

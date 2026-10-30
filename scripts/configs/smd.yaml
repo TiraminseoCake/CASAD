@@ -1,6 +1,6 @@
 DATA:
   NAME: SMD
-  INPUT_DIR: data_npz/SMD
+  INPUT_DIR: data/SMD
 
 SEEDS: [0, 1, 2, 3]
 

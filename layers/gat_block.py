@@ -16,7 +16,6 @@ Key differences from the earlier CTSAD+PICAAD combined model:
 """
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 def build_cross_lag_causal_mask(N: int, tau_max: int, device=None) -> torch.Tensor:

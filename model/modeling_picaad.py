@@ -213,26 +213,28 @@ class PICAAD(nn.Module):
         temp = max(self.pred_temp, 1e-6)
 
         if score.dim() == 3:
-            flat_s = (score / temp).reshape(tau_max * N, N)
             flat_g = gate.reshape(tau_max * N, N)
+            log_g = torch.log(flat_g + 1e-12)
+            flat_s = ((score.reshape(tau_max * N, N) + log_g) / temp)
             flat_s = flat_s - flat_s.max(dim=0, keepdim=True).values
-            unnorm = torch.exp(flat_s) * flat_g
+            unnorm = torch.exp(flat_s)
             weights = unnorm / (unnorm.sum(dim=0, keepdim=True) + 1e-12)
             return weights.view(tau_max, N, N)
 
         if score.dim() == 4:
             B = score.shape[0]
-            flat_s = (score / temp).reshape(B, tau_max * N, N)
             flat_g = gate.reshape(1, tau_max * N, N)
+            log_g = torch.log(flat_g + 1e-12)
+            flat_s = ((score.reshape(B, tau_max * N, N) + log_g) / temp)
             flat_s = flat_s - flat_s.max(dim=1, keepdim=True).values
-            unnorm = torch.exp(flat_s) * flat_g
+            unnorm = torch.exp(flat_s)
             weights = unnorm / (unnorm.sum(dim=1, keepdim=True) + 1e-12)
             return weights.view(B, tau_max, N, N)
 
         raise ValueError(f"score dim must be 3 or 4, got {score.dim()}")
 
-    def get_pred_weights(self, local_delta=None):
-        gate = self._effective_gate()
+    def get_pred_weights(self, local_delta=None, gate_override=None):
+        gate = gate_override if gate_override is not None else self._effective_gate()
 
         if self.has_te_prior and self.te_prior_blend > 0.0:
             prior_bias = self.te_prior_blend * torch.log(self.te_prior_weight.clamp_min(1e-8))
@@ -328,7 +330,7 @@ class PICAAD(nn.Module):
         log_bias = torch.log(soft_gate.clamp_min(1e-6)).T  # [tgt, src]
         return (self.causal_attn_mask_scale * ramp) * log_bias
 
-    def forward(self, X, mask_tau=None, mask_var=None, mask_fill_value=0.0):
+    def forward(self, X, mask_tau=None, mask_var=None, mask_fill_value=0.0, gate_override=None):
         B, L, N = X.shape
         lag_embeds = []
         is_intervention = (mask_tau is not None) and (mask_var is not None)
@@ -385,7 +387,7 @@ class PICAAD(nn.Module):
         recon = torch.zeros(B, self.L - 1, N, device=X.device)
 
         local_delta = self._compute_dynamic_delta(C_all)
-        pred_weights = self.get_pred_weights(local_delta=local_delta)
+        pred_weights = self.get_pred_weights(local_delta=local_delta, gate_override=gate_override)
 
         edge_value = self.edge_value_head(C_all)
 

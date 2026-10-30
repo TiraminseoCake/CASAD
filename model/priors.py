@@ -461,6 +461,9 @@ def build_pcmci_causal_prior(train_TN: np.ndarray,
     if ci_test == "ParCorr":
         from tigramite.independence_tests.parcorr import ParCorr
         cond_ind_test = ParCorr(significance='analytic')
+    elif ci_test == "GPDC":
+        from tigramite.independence_tests.gpdc import GPDC
+        cond_ind_test = GPDC(significance='analytic')
     elif ci_test == "CMIknn":
         from tigramite.independence_tests.cmiknn import CMIknn
         cond_ind_test = CMIknn()

@@ -1,0 +1,3 @@
+  [prior] cache hit: data/prior_cache/SWaT_swat_pcmci_111bdbab8d1fa81a.npz
+Loaded results/parallel/swat_paper_align_20260901/swat/seed3/ckpt/swat_seed3_ep80.pt
+[seed 3] computing counterfactual profile (train) ...

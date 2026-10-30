@@ -12,17 +12,27 @@ def fit_score_calibrator(train_scores: dict):
     for key in ["P_raw", "C_raw", "G_raw"]:
         center, scale = robust_loc_scale(train_scores[key])
         out[key] = {"center": center, "scale": scale}
+    if "CF_raw" in train_scores:
+        center, scale = robust_loc_scale(train_scores["CF_raw"])
+        out["CF_raw"] = {"center": center, "scale": scale}
     return out
 
 
 def apply_score_calibrator(raw_scores: dict, calibrator: dict, clip_min: float = 0.0,
-                           alpha: float = 1.0, beta: float = 1.0):
+                           alpha: float = 1.0, beta: float = 1.0, gamma: float = 0.0):
     Pn = robust_zscore(raw_scores["P_raw"], calibrator["P_raw"]["center"], calibrator["P_raw"]["scale"], clip_min)
     Cn = robust_zscore(raw_scores["C_raw"], calibrator["C_raw"]["center"], calibrator["C_raw"]["scale"], clip_min)
     Gn = robust_zscore(raw_scores["G_raw"], calibrator["G_raw"]["center"], calibrator["G_raw"]["scale"], clip_min)
-    S = (float(alpha) * Cn + float(beta) * Gn).astype(np.float32)
-    A = (Pn * S).astype(np.float32)
-    return {"P": Pn, "C": Cn, "G": Gn, "S": S, "A": A}
+
+    if "CF_raw" in raw_scores and "CF_raw" in calibrator and float(gamma) > 0:
+        CFn = robust_zscore(raw_scores["CF_raw"], calibrator["CF_raw"]["center"], calibrator["CF_raw"]["scale"], clip_min)
+    else:
+        CFn = np.zeros_like(Pn)
+        gamma = 0.0
+
+    S = Cn.copy()
+    A = (Pn + Cn + float(gamma) * CFn).astype(np.float32)
+    return {"P": Pn, "C": Cn, "G": Gn, "CF": CFn, "S": S, "A": A}
 
 
 def score_components_to_timeline(comp_dict, Tt, start):
@@ -53,10 +63,86 @@ def matrix_deviation_per_tau(diff: torch.Tensor, agg: str = "fro", topk: int = 3
     return row_dev.topk(k, dim=2).values.mean(dim=2)
 
 
-def lag_aggregate(per_tau: torch.Tensor, mode: str = "mean"):
+def lag_aggregate(per_tau: torch.Tensor, mode: str = "rms"):
     if mode == "max":
         return per_tau.max(dim=1).values
-    return per_tau.mean(dim=1)
+    if mode == "mean":
+        return per_tau.mean(dim=1)
+    return torch.sqrt(per_tau.pow(2).mean(dim=1) + 1e-12)
+
+
+def _select_cf_sources(model, top_k):
+    """Select source variables to intervene on, ranked by gate importance."""
+    gate = model.edge_gate().detach()   # [tau_max, N, N]
+    src_importance = gate.sum(dim=(0, 2))  # [N]
+    if top_k > 0 and top_k < model.N:
+        return src_importance.topk(top_k).indices.tolist()
+    return list(range(model.N))
+
+
+@torch.no_grad()
+def counterfactual_score_windows(model, series_TN, device, batch,
+                                  top_k=15, fill_value=0.0):
+    """Do-calculus counterfactual: do(X_s = normal).
+
+    For each source src, implements Pearl's do-operator:
+      1. Replace X_src with fill_value in input (set src to "normal")
+      2. Cut incoming edges to src in gate (src is now exogenous)
+      3. Keep outgoing edges from src (causal influence path preserved)
+      4. Measure prediction change as causal effect
+
+    Returns (effects, src_indices):
+      effects: [W, k] — causal effect per window per source
+      src_indices: list of k source variable indices
+    """
+    model.eval()
+    ds = SlidingWindowDataset(series_TN, model.L)
+    loader = DataLoader(ds, batch_size=batch, shuffle=False, drop_last=False, num_workers=0)
+
+    src_indices = _select_cf_sources(model, top_k)
+    k = len(src_indices)
+    W = len(ds)
+    effects = np.zeros((W, k), dtype=np.float32)
+    offset = 0
+
+    base_gate = model._effective_gate()  # [tau_max, N, N]
+
+    for X in loader:
+        X = X.to(device)
+        _, pred, *_ = model(X)
+        x_true = X[:, -1, :]
+        base_err = (x_true - pred).abs()   # [B, N]
+
+        bsz = X.shape[0]
+        for j, src in enumerate(src_indices):
+            X_cf = X.clone()
+            X_cf[:, :, src] = float(fill_value)
+
+            gate_cf = base_gate.clone()
+            gate_cf[:, :, src] = 0.0       # cut incoming edges to src (do-operator)
+
+            _, cf_pred, *_ = model(X_cf, gate_override=gate_cf)
+            cf_err = (x_true - cf_pred).abs()
+            delta = (cf_err - base_err).mean(dim=1)   # [B]
+            effects[offset:offset + bsz, j] = delta.cpu().numpy()
+
+        offset += bsz
+
+    return effects, src_indices
+
+
+def fit_cf_profile(effects):
+    """Compute normal profile (mean, std) from training-set effects."""
+    return {
+        "mean": effects.mean(axis=0),        # [k]
+        "std": effects.std(axis=0) + 1e-8,   # [k]
+    }
+
+
+def cf_anomaly_score(effects, profile):
+    """Z-score of current effects vs normal profile, aggregated per window."""
+    z = (effects - profile["mean"]) / profile["std"]   # [W, k]
+    return np.abs(z).mean(axis=1).astype(np.float32)   # [W]
 
 
 @torch.no_grad()
@@ -80,7 +166,7 @@ def score_windows_raw(model, series_TN, device, batch, scoring_cfg):
 
     for X in loader:
         X = X.to(device)
-        recon, pred, C_all, pred_weights, edge_value, edge_effect, edge_strength, gate, local_delta = model(X)
+        _, pred, _, pred_weights, _, _, edge_strength, _, _ = model(X)
 
         x_true_next = X[:, -1, :]
         err = (x_true_next - pred).abs()
@@ -115,15 +201,28 @@ def score_windows_raw(model, series_TN, device, batch, scoring_cfg):
     return {"P_raw": P_w, "C_raw": C_w, "G_raw": G_w}
 
 
-def score_windows(model, series_TN, device, batch, scoring_cfg, calibrator=None):
+def score_windows(model, series_TN, device, batch, scoring_cfg,
+                  calibrator=None, cf_profile=None):
     raw = score_windows_raw(model, series_TN, device, batch, scoring_cfg)
+
+    use_cf = getattr(scoring_cfg, 'USE_COUNTERFACTUAL', False) and cf_profile is not None
+    if use_cf:
+        cf_effects, _ = counterfactual_score_windows(
+            model, series_TN, device, batch,
+            top_k=getattr(scoring_cfg, 'CF_TOP_K', 15),
+            fill_value=getattr(scoring_cfg, 'CF_FILL_VALUE', 0.0),
+        )
+        raw["CF_raw"] = cf_anomaly_score(cf_effects, cf_profile)
+
+    gamma = getattr(scoring_cfg, 'SCORE_GAMMA', 0.0) if use_cf else 0.0
+
     if calibrator is not None:
         cal = apply_score_calibrator(
-            raw,
-            calibrator,
+            raw, calibrator,
             clip_min=scoring_cfg.CALIB_CLIP_MIN,
             alpha=scoring_cfg.SCORE_ALPHA,
             beta=scoring_cfg.SCORE_BETA,
+            gamma=gamma,
         )
     else:
         cal = {
@@ -131,8 +230,15 @@ def score_windows(model, series_TN, device, batch, scoring_cfg, calibrator=None)
             "C": raw["C_raw"].astype(np.float32),
             "G": raw["G_raw"].astype(np.float32),
         }
-        cal["S"] = (scoring_cfg.SCORE_ALPHA * cal["C"] + scoring_cfg.SCORE_BETA * cal["G"]).astype(np.float32)
-        cal["A"] = (cal["P"] * cal["S"]).astype(np.float32)
+        if use_cf:
+            cal["CF"] = raw["CF_raw"].astype(np.float32)
+        else:
+            cal["CF"] = np.zeros_like(cal["P"])
+        cal["S"] = cal["C"].copy()
+        if use_cf and float(gamma) > 0:
+            cal["A"] = (cal["P"] + cal["C"] + float(gamma) * cal["CF"]).astype(np.float32)
+        else:
+            cal["A"] = (cal["P"] + cal["C"]).astype(np.float32)
 
     out = {}
     out.update(raw)

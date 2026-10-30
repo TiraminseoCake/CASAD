@@ -1,6 +1,6 @@
 DATA:
   NAME: PSM
-  INPUT_DIR: data_npz/PSM
+  INPUT_DIR: data/PSM
 
 SEEDS: [0, 1, 2, 3]
 

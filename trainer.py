@@ -1,18 +1,24 @@
 """PicaadTrainer: encapsulates the train loop, per-epoch eval, and reference
 tensor (w_ref/cls_ref) maintenance for a single (entity, seed) run.
 """
-import os
+import copy
 
 import numpy as np
 import torch
 import torch.nn as nn
+from torch.utils.data import DataLoader
 
+from datasets.build import split_train_val
 from datasets.loader import get_train_dataloader
+from datasets.sliding_window import SlidingWindowDataset
 from layers.ops import (
     make_self_causal_fallback_torch,
     normalize_causal_tensor_torch,
 )
-from model.intervention import permutation_alignment_and_epoch_cls
+from model.intervention import (
+    gradient_sensitivity_and_epoch_cls,
+    permutation_alignment_and_epoch_cls,
+)
 from model.losses import (
     causal_structure_loss,
     graph_stability_loss,
@@ -53,13 +59,25 @@ class PicaadTrainer:
             lr=cfg.SOLVER.BASE_LR,
             weight_decay=cfg.SOLVER.WEIGHT_DECAY,
         )
-        self.train_loader = get_train_dataloader(cfg, entity.train_z)
+        val_ratio = getattr(cfg.PICAAD, 'VAL_RATIO', 0.0)
+        if val_ratio > 0:
+            train_data, self.val_data = split_train_val(entity.train_z, val_ratio)
+        else:
+            train_data = entity.train_z
+            self.val_data = None
+        self.train_loader = get_train_dataloader(cfg, train_data)
 
     def train(self):
         cfg = self.cfg
         Tlag = self.model.tau_max
         N = self.model.N
         epochs = cfg.SOLVER.MAX_EPOCH
+
+        early_stop = getattr(cfg.PICAAD, 'EARLY_STOP', False) and self.val_data is not None
+        patience = getattr(cfg.PICAAD, 'PATIENCE', 10)
+        best_val_loss = float('inf')
+        patience_counter = 0
+        best_state = None
 
         for ep in range(1, epochs + 1):
             self.model.train()
@@ -76,16 +94,18 @@ class PicaadTrainer:
             last_use_cstruct = False
             last_use_graph_loss = False
 
+            use_grad_int = (cfg.PICAAD.INTERVENTION.LOSS_TYPE == 'gradient')
+
             for X, env in self.train_loader:
                 X = X.to(self.device)
+                if use_grad_int:
+                    X.requires_grad_(True)
                 env = torch.as_tensor(env, device=self.device, dtype=torch.long)
 
-                out = self.model(X)
-                (recon, pred, C_all, pred_weights,
-                 edge_value, edge_effect, edge_strength, gate, local_delta) = out
+                (_, pred, _, pred_weights,
+                 _, _, edge_strength, _, _) = self.model(X)
 
                 xL = X[:, -1, :]
-                xpast = X[:, :self.model.L - 1, :]
 
                 loss_pred = prediction_train_loss(xL, pred, loss_type=cfg.PICAAD.TRAIN_LOSS_TYPE)
 
@@ -108,32 +128,57 @@ class PicaadTrainer:
                 )
                 loss_graph = (
                     graph_stability_loss(pred_weights, self.model.w_ref)
-                    if use_graph_loss
+                    if (use_graph_loss and cfg.PICAAD.ENABLE_GRAPH_LOSS)
                     else torch.tensor(0.0, device=self.device)
                 )
 
-                loss_gate = self.model.gate_sparsity()
-                loss_lagmono = self.model.lag_monotonic_penalty()
-                loss_te_w, loss_te_g = self.model.causal_prior_losses(pred_weights)
-
-                base_abs_err_ref = (xL - pred).abs().detach()
-                loss_perm, batch_cls_sum, batch_cls_cnt = permutation_alignment_and_epoch_cls(
-                    self.model, X, xL, base_abs_err_ref, edge_strength, self.rng,
-                    perm_pairs=cfg.PICAAD.INTERVENTION.PERM_PAIRS_PER_BATCH,
-                    perm_mode=cfg.PICAAD.INTERVENTION.PERM_MODE,
-                    fill_value=cfg.PICAAD.INTERVENTION.FILL_VALUE,
+                loss_gate = (
+                    self.model.gate_sparsity()
+                    if cfg.PICAAD.ENABLE_GATE_LOSS
+                    else torch.tensor(0.0, device=self.device)
                 )
+                loss_lagmono = (
+                    self.model.lag_monotonic_penalty()
+                    if cfg.PICAAD.ENABLE_LAGMONO_LOSS
+                    else torch.tensor(0.0, device=self.device)
+                )
+                if cfg.PICAAD.ENABLE_PRIOR_LOSS:
+                    loss_te_w, loss_te_g = self.model.causal_prior_losses(pred_weights)
+                else:
+                    loss_te_w = torch.tensor(0.0, device=self.device)
+                    loss_te_g = torch.tensor(0.0, device=self.device)
+
+                if cfg.PICAAD.INTERVENTION.LOSS_TYPE == 'gradient':
+                    loss_perm, batch_cls_sum, batch_cls_cnt = gradient_sensitivity_and_epoch_cls(
+                        self.model, X, pred, xL, edge_strength,
+                        margin=cfg.PICAAD.INTERVENTION.MARGIN_HIGH,
+                    )
+                else:
+                    base_abs_err_ref = (xL - pred).abs().detach()
+                    loss_perm, batch_cls_sum, batch_cls_cnt = permutation_alignment_and_epoch_cls(
+                        self.model, X, xL, base_abs_err_ref, edge_strength, self.rng,
+                        perm_pairs=cfg.PICAAD.INTERVENTION.PERM_PAIRS_PER_BATCH,
+                        perm_mode=cfg.PICAAD.INTERVENTION.PERM_MODE,
+                        fill_value=cfg.PICAAD.INTERVENTION.FILL_VALUE,
+                        loss_type=cfg.PICAAD.INTERVENTION.LOSS_TYPE,
+                        margin_high=cfg.PICAAD.INTERVENTION.MARGIN_HIGH,
+                        margin_low=cfg.PICAAD.INTERVENTION.MARGIN_LOW,
+                    )
                 cls_sum += batch_cls_sum
                 cls_cnt += batch_cls_cnt
 
-                loss_inv = invariance_loss_from_tensor(edge_strength, env)
+                loss_inv = (
+                    invariance_loss_from_tensor(edge_strength, env)
+                    if cfg.PICAAD.ENABLE_INV_LOSS
+                    else torch.tensor(0.0, device=self.device)
+                )
 
                 group_task = loss_pred
                 group_causal = loss_te_w + _W_TE_GATE * loss_te_g
                 if use_cstruct_loss:
                     group_causal = group_causal + loss_cstruct
                 group_graphreg = loss_gate + _W_LAGMONO * loss_lagmono
-                if use_graph_loss:
+                if use_graph_loss and cfg.PICAAD.ENABLE_GRAPH_LOSS:
                     group_graphreg = group_graphreg + _W_GRAPH * loss_graph
                 group_robust = loss_perm + _W_INV * loss_inv
 
@@ -162,11 +207,46 @@ class PicaadTrainer:
             self._print_epoch(ep, avg, last_use_cstruct, last_use_graph_loss)
             self._log_train_tb(ep, avg)
 
+            if early_stop:
+                val_loss = self._compute_val_loss()
+                msg = f"    val_loss={val_loss:.6f}  best={best_val_loss:.6f}  patience={patience_counter}/{patience}"
+                print(msg, flush=True)
+                if val_loss < best_val_loss:
+                    best_val_loss = val_loss
+                    patience_counter = 0
+                    best_state = copy.deepcopy(self.model.state_dict())
+                else:
+                    patience_counter += 1
+                    if patience_counter >= patience:
+                        print(f"  Early stop at ep {ep} (patience {patience})", flush=True)
+                        break
+
             self._maybe_run_epoch_eval(ep, epochs)
+
+        if best_state is not None:
+            self.model.load_state_dict(best_state)
+            print(f"  Restored best checkpoint (val_loss={best_val_loss:.6f})", flush=True)
 
     # ----------------------------------------------------------
     # Helpers
     # ----------------------------------------------------------
+    @torch.no_grad()
+    def _compute_val_loss(self):
+        self.model.eval()
+        ds = SlidingWindowDataset(self.val_data, self.model.L)
+        loader = DataLoader(ds, batch_size=self.cfg.TEST.BATCH_SIZE,
+                            shuffle=False, drop_last=False, num_workers=0)
+        total_loss = 0.0
+        count = 0
+        for X in loader:
+            X = X.to(self.device)
+            _, pred, *_ = self.model(X)
+            loss = prediction_train_loss(X[:, -1, :], pred,
+                                         loss_type=self.cfg.PICAAD.TRAIN_LOSS_TYPE)
+            total_loss += float(loss) * X.shape[0]
+            count += X.shape[0]
+        return total_loss / max(count, 1)
+
     @staticmethod
     def _empty_stats():
         return {
