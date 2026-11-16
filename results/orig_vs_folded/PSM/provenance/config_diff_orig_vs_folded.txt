@@ -1,0 +1,12 @@
+76a77
+>     FOLD_INTO_PSI: true
+81a83
+>     PSI_INIT_COEFF: -1.0
+117c119
+< RESULT_DIR: results/ablation_hb/PSM/no_prioralign/PSM_seedX
+---
+> RESULT_DIR: results/orig_vs_folded/PSM/folded/PSM_seedX
+136c138
+<   CKPT_DIR: results/ablation_hb/PSM/no_prioralign/PSM_seedX/ckpt
+---
+>   CKPT_DIR: results/orig_vs_folded/PSM/folded/PSM_seedX/ckpt

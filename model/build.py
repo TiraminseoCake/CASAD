@@ -85,6 +85,8 @@ def build_causal_prior(cfg, train_TN: np.ndarray):
             self_mass=cfg.PICAAD.PRIOR.SELF_MASS,
             seed=cfg.PICAAD.PRIOR.SEED,
         )
+    if prior_type == 'none':
+        return None, None
     raise ValueError(f'Unknown PICAAD.PRIOR.TYPE: {prior_type}')
 
 
@@ -129,6 +131,9 @@ def build_causal_prior_cached(cfg, train_TN: np.ndarray, entity_name: str):
     hyperparameters and the raw training tensor contents.
     """
     p = cfg.PICAAD.PRIOR
+    if p.TYPE == 'none':
+        print('  [prior] type=none, skipping', flush=True)
+        return None, None
     if not p.CACHE_ENABLE:
         return build_causal_prior(cfg, train_TN)
 

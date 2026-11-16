@@ -1,161 +1,114 @@
-# CASAD: Causal Prior-Guided Anomaly Detection
+# PICAAD: Prior-guided Interventional Causal Attention for Anomaly Detection
 
-## Overview
+PICAAD is a multivariate time-series anomaly detector. A PCMCI+ causal prior guides how a lagged
+predictor routes information between variables. During training, small interventions measure how strongly
+each lagged edge actually drives the prediction. These measured strengths accumulate into a
+causal reference strength (CRS). At test time, the anomaly score combines the prediction error with the
+deviation of the current edge strengths from the CRS.
 
-This repository implements causal prior-guided anomaly detection models for multivariate time series (MTSAD). Two main models are provided:
-
-1. **v2\_pcmci** — PCMCI+ prior + MHSA + edge-wise prediction + multi-channel scoring
-2. **Combined (CTSAD+PCMCI)** — CTSAD temporal causal GAT backbone + PCMCI+ prior + edge-wise prediction + multi-channel scoring
-
----
-
-## Models
-
-### v2\_pcmci (`model/oraclead_npz_runner_causal_v2_pcmci.py`)
-
-Per-Variable LSTM encoder with temporal attention pooling. Each lag τ is independently encoded and passed through `nn.MultiheadAttention` (N variable nodes). PCMCI+ prior initializes learnable causal masks and edge gates.
-
-```
-Input → Per-Var LSTM + AttnPool → MHSA (N nodes, per lag) → Edge-wise Prediction → Scoring
-```
-
-**Key features:**
-- PCMCI+ causal prior → edge gate / pred\_logits / attn mask initialization
-- Edge-wise prediction: `pred = Σ(weight × value)` — decomposes causal contributions
-- Multi-channel scoring: `A = P × (C + G)` — prediction error × structural deviation
-- PCMCI+ guided intervention training
-
-### Combined (`model/oraclead_combined_ctsad_pcmci.py`)
-
-Uses CTSAD's temporal causal GAT as backbone. N×T nodes (variable × timestep) with directed causal edge mask. PCMCI+ prior is injected as lag-aware attention bias into the GAT layers.
-
-```
-Input → Per-Var LSTM (full seq) → Temporal Causal GAT (N×T nodes) → Edge-wise Prediction → Scoring
-```
-
-**What comes from CTSAD:**
-- Per-Variable LSTM encoder (full sequence h\_seq output)
-- Temporal Causal GAT with `build_causal_edge_mask` (directed temporal edges)
-- N×T node graph structure
-
-**What comes from v2\_pcmci:**
-- PCMCI+ prior → `build_lag_aware_prior_bias()` → [N×T, N×T] attention bias (novel)
-- Edge-wise prediction: `pred = Σ(weight × value)` (replaces CTSAD's LSTM decoder)
-- Multi-channel scoring: `A = P × (C + G)` (replaces CTSAD's P × D)
-- PCMCI+ guided intervention training
-- Edge gate caching (fixes double-backward in intervention training)
-
-### Other models (archived)
-
-- `model/oraclead_npz_runner_causal_v2_gnn.py` — v2 + CausalGNNLayer (rejected: GNN hurts AD)
-- `model/oraclead_npz_runner_causal_v3.py` — Shared Conv encoder + GNN (rejected: weaker C/G scores)
+This branch holds the **final model used in the paper**, every run script, the per-run result CSVs
+(main comparison and ablations), and the paper's LaTeX sources.
 
 ---
+
+## Final model
+
+| Component | Setting |
+|---|---|
+| Causal prior | PCMCI+ (Tigramite, ParCorr, α = 0.05, τ_max = 5, ≤ 10k contiguous training steps), self-link floor 0.25 |
+| Encoder | per-variable LSTM (2 layers, d = 64) + 4-head attention with a prior-masked bias (5 warm-up epochs) |
+| Routing | Π = softmax(ψ + Δ(X) + β·log W̃ + log G). ψ is initialized as self-loop + 0.25·log W̃; β = 0.35; G = g·(0.05 + 0.95·M) |
+| Loss | L = L_pred (L1) + λ_crs·KL(CRS ‖ E) (from epoch 5, λ_crs = 1) + λ_int·L_int (λ_int = 0.1) |
+| Intervention | 2 source–lag pairs per batch. The CRS is updated once per epoch by EMA (0.9) |
+| Score | A = P + C (raw prediction deviation + strength deviation from the CRS) |
+| Training | AdamW (wd 0.01, clip 1.0), batch 512, 80 epochs, LR 5e-5 (PSM) / 5e-4 (SMD, SWaT) |
+| Checkpoint | `best_smooth`: minimum of the 3-epoch moving average of validation prediction MAE, epoch ≥ 20 |
+
+The prior-alignment loss is **off** in the final model (`PICAAD.ENABLE_PRIOR_LOSS False`). The code default is
+still `True` so older scripts reproduce unchanged. `scripts/run_final.sh` sets the final options explicitly.
+
+## Repository layout
+
+```
+main.py, trainer.py, config.py     entry point, training loop, yacs defaults
+model/                              PICAAD model, priors (PCMCI+), interventions, losses, scoring
+layers/, datasets/, utils/          encoder blocks, npz loaders / splits, evaluation
+metrics/paper_eval/                 shared evaluator (F1, R-F1, Aff-F, AUC-ROC/PR, VUS-ROC/PR)
+scripts/run_final.sh                final model, all datasets, seeds 0-3
+scripts/run_psm_ablation_noalign.sh PSM component ablation (paper Table 3)
+scripts/run_noalign_check.sh        prior-alignment off on SMD + SWaT_ds5
+scripts/run_hb_protocol.sh          prior-alignment on (old base) on all datasets
+scripts/eval_score_components.py    post-hoc P / C / P+C scoring of saved checkpoints
+scripts/collect_paper_results.py    rebuilds results/paper_final from the run CSVs and checks the paper numbers
+scripts/baselines/                  CAROTS data conversion and shared-evaluator rescoring
+scripts/configs/                    yaml configs (ablation_{psm,smd,swat}.yaml are used by the final runs)
+results/paper_final/                every number in the paper's Experiments section (see its README)
+results/{ablation_hb,hb,...}/       per-run CSVs and configs (checkpoints and logs are not tracked)
+docs/paper/full/                    paper LaTeX (main.tex, experiments_revised.tex, refs.bib)
+```
+
+## Setup
+
+```bash
+pip install -r requirements.txt   # tested: python 3.10, torch 2.5.1+cu121, tigramite 5.2.10.1
+```
+
+Datasets are not included. Put them under `data/` as npz files with `train`, `test`, and `label` arrays:
+
+| Dataset | Path | Preparation |
+|---|---|---|
+| PSM | `data/PSM/PSM.npz` | `scripts/prep/prep_psm_to_npz.py` |
+| SMD | `data/SMD/machine-*.npz` (28 files) | `scripts/prep/prep_smd_to_npz.py` |
+| SWaT_ds5 | `data/SWaT_ds5/swat.npz` | SWaT (51 variables) with 5× non-overlapping median aggregation of observations and labels; trailing incomplete block dropped |
+
+PCMCI+ priors are computed on first use and cached in `data/prior_cache/`. You can also precompute them with
+`scripts/precompute_priors.py`.
+
+## Reproduce
+
+```bash
+bash scripts/run_final.sh                 # PSM, SMD, SWaT_ds5 x seeds 0-3 -> results/final/
+bash scripts/run_final.sh PSM             # one dataset
+bash scripts/run_psm_ablation_noalign.sh  # PSM ablation
+python scripts/collect_paper_results.py   # rebuild results/paper_final and verify against the paper
+```
 
 ## Results
 
-### Combined CTSAD+PCMCI (5-seed)
+Seeds 0–3, mean (%). SMD is macro-averaged over 28 machines. All methods are scored with the same evaluator,
+without point adjustment. CAROTS uses its official code. OracleAD uses a re-implementation that is not
+included in this repository.
 
-| Dataset | F1 | R-F1 | Aff-F | A-ROC | A-PR | V-ROC | V-PR |
-|---------|-----|------|-------|-------|------|-------|------|
-| **SWaT** | 78.03 | 23.07 | 81.79 | 89.05 | 78.35 | 91.58 | 79.84 |
-| **PSM** (tuned) | — | — | — | — | 59.25 | — | 55.23 |
-| **SMD** | 48.98 | 40.02 | 85.33 | 83.60 | 44.81 | 85.34 | 41.77 |
+| Dataset | Method | F1 | R-F1 | Aff-F | A-ROC | A-PR | V-ROC | V-PR |
+|---|---|---|---|---|---|---|---|---|
+| PSM | CAROTS | 56.76 | 46.78 | 72.79 | 75.75 | 53.17 | 69.46 | 48.89 |
+| PSM | OracleAD | 53.32 | 47.49 | 77.46 | 73.23 | 55.30 | 67.95 | 47.37 |
+| PSM | **PICAAD** | 53.97 | 42.13 | 77.87 | 75.28 | **58.22** | **71.76** | **54.69** |
+| SMD | CAROTS | 49.45 | 30.71 | 78.50 | 82.16 | 43.54 | 83.85 | 38.87 |
+| SMD | OracleAD | 50.16 | 37.80 | 84.70 | 83.82 | 46.49 | 85.16 | 41.87 |
+| SMD | **PICAAD** | 48.13 | **40.37** | **86.12** | 81.96 | 43.92 | 84.24 | 41.71 |
+| SWaT_ds5 | CAROTS | 79.63 | 34.47 | 80.19 | 85.36 | 75.90 | 79.18 | 65.74 |
+| SWaT_ds5 | OracleAD | 75.83 | 22.83 | 75.25 | 84.53 | 74.65 | 74.06 | 57.13 |
+| SWaT_ds5 | **PICAAD** | 76.03 | 21.35 | 74.20 | 84.01 | 74.02 | 74.50 | 56.74 |
 
-### v2\_pcmci (1-seed)
+### PSM ablation
 
-| Dataset | F1 | R-F1 | Aff-F | A-ROC | A-PR | V-ROC | V-PR |
-|---------|-----|------|-------|-------|------|-------|------|
-| **SWaT** | 77.71 | 31.61 | 76.81 | 88.40 | 79.33 | 88.25 | 73.48 |
-| **PSM** (tuned) | 56.19 | 40.03 | 75.53 | 76.19 | 58.99 | 70.62 | 54.18 |
+Δ is the paired difference from Full in percentage points. Parentheses give the number of seeds (out of 4) that fell below Full.
 
-### vs OracleAD (paper, 5-seed)
+| Variant | A-PR | V-PR | ΔA-PR | ΔV-PR |
+|---|---|---|---|---|
+| PICAAD (Full) | **58.22** | **54.69** | – | – |
+| w/o Prior | 47.43 | 45.53 | −10.79 (4/4) | −9.16 (4/4) |
+| w/o Δ | 46.12 | 44.33 | −12.09 (4/4) | −10.36 (4/4) |
+| w/o CRS loss | 44.11 | 42.79 | −14.11 (4/4) | −11.90 (4/4) |
+| w/o Intervention | 44.13 | 42.69 | −14.08 (4/4) | −12.00 (4/4) |
+| w/o CRS update | 44.32 | 42.98 | −13.90 (4/4) | −11.72 (4/4) |
+| w/o L_int | 54.26 | 50.26 | −3.96 (4/4) | −4.43 (4/4) |
+| + prior-alignment loss | 53.94 | 51.20 | −4.28 (3/4) | −3.49 (3/4) |
 
-| Dataset | OracleAD A-PR | Combined A-PR | Δ |
-|---------|:---:|:---:|:---:|
-| SWaT | 72.39 | **78.35** | +5.96 |
-| PSM | **68.11** | 59.25 | -8.86 |
-| SMD | **44.83** | 44.81 | -0.02 |
+`results/paper_final/` also contains:
+- the prior-alignment on/off comparison on all three datasets,
+- persistent bias vs. folded routing on PSM over 8 seeds (the folded variant's code lives on the `exp/folded-routing` branch),
+- the post-hoc P / C / P+C score composition.
 
----
-
-## Scripts
-
-### Combined model experiments
-| Script | Description |
-|--------|-------------|
-| `scripts/run_combined_swat.sh` | SWaT 5-seed (b128, lr=5e-4) |
-| `scripts/run_combined_psm.sh` | PSM 5-seed (b512, lr=1e-4, tuned) |
-| `scripts/run_combined_smd.sh` | SMD 5-seed (b512, lr=5e-4) |
-
-### v2\_pcmci experiments
-| Script | Description |
-|--------|-------------|
-| `scripts/run_swat_causal_v2.sh` | SWaT 5-seed, 3-GPU parallel |
-| `scripts/run_psm_causal_v2.sh` | PSM 5-seed |
-| `scripts/run_psm_causal_v2_tuned.sh` | PSM tuned (b2048, lr=1e-4) |
-| `scripts/run_smd_causal_v2.sh` | SMD 5-seed |
-| `scripts/run_msl_causal_v2.sh` | MSL 5-seed |
-| `scripts/run_psm_extra_seeds.sh` | PSM extra seeds (5-14) |
-| `scripts/run_psm_smd_parallel.sh` | PSM + SMD parallel execution |
-
-### Hyperparameter sweeps
-| Script | Description |
-|--------|-------------|
-| `scripts/sweep_psm_quick.sh` | PSM sweep (lr, batch, lam\_causal, te\_blend) |
-| `scripts/sweep_smd_quick.sh` | SMD sweep |
-| `scripts/sweep_swat_quick.sh` | SWaT sweep |
-
----
-
-## Result CSVs
-
-```
-results/
-├── combined/
-│   ├── combined_swat_5seed.csv       # SWaT 5-seed final
-│   ├── combined_psm_5seed.csv        # PSM 5-seed (default config)
-│   ├── combined_smd_5seed.csv        # SMD 5-seed final
-│   ├── combined_swat_1seed.csv       # SWaT 1-seed
-│   ├── combined_psm_1seed.csv        # PSM 1-seed
-│   ├── combined_smd_1seed.csv        # SMD 1-seed
-│   ├── combined_psm_b512_lr1e4.csv   # PSM sweep best (A-PR=59.25)
-│   ├── combined_psm_b1024_lr1e4.csv  # PSM sweep
-│   ├── combined_psm_b2048_lr1e4.csv  # PSM sweep
-│   └── combined_psm_b2048_lr5e4.csv  # PSM sweep
-└── v2_pcmci/
-    ├── swat_v2_pcmci.csv
-    ├── swat_final_pcmci_ep.csv
-    ├── swat_full_seed0.csv
-    ├── psm_tuned_seed0.csv
-    ├── smd_tuned.csv
-    └── smd_2nd.csv
-```
-
----
-
-## Quick Start
-
-### Combined model
-```bash
-pip install torch numpy scikit-learn pandas tigramite
-
-python model/oraclead_combined_ctsad_pcmci.py \
-  --input_dir /path/to/SWaT \
-  --entities swat --dataset SWaT \
-  --seeds 0,1,2,3,4 --epochs 20 --batch 128 --lr 5e-4 \
-  --L 10 --d 64 --heads 4 --max_lag 5 \
-  --num_gat_layers 2 --gat_heads 4 --gat_dim 64 \
-  --grad_clip 1.0 --prior pcmci --pcmci_alpha 0.05 \
-  --use_median_vus_window --diagnose_components
-```
-
-### v2\_pcmci
-```bash
-python model/oraclead_npz_runner_causal_v2_pcmci.py \
-  --input_dir /path/to/SWaT \
-  --entities swat --dataset SWaT \
-  --epochs 80 --batch 128 --lr 5e-4 \
-  --grad_clip 1.0 --prior pcmci \
-  --use_median_vus_window --diagnose_components
-```
+Each table comes with its per-run CSVs.

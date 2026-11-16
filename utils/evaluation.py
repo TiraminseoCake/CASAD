@@ -24,7 +24,12 @@ def paper_eval_one(score_series_1d, y01, start_idx, eval_cfg):
         USE_MEDIAN_VUS_WINDOW, SLIDING_WINDOW, VUS_VERSION, VUS_THRE.
     """
     score = score_series_1d[start_idx:].astype(np.float64)
-    labels = y01[start_idx:].astype(np.int32)
+    if getattr(eval_cfg, 'LABEL_MODE', 'point') == 'window':
+        # window ending at t covers [t-start_idx, t]; anomalous if any step in it is
+        labels = np.lib.stride_tricks.sliding_window_view(
+            np.asarray(y01, dtype=np.int32), start_idx + 1).max(axis=1)
+    else:
+        labels = y01[start_idx:].astype(np.int32)
 
     m = (~np.isnan(score)) & np.isfinite(score)
     score = score[m]
@@ -172,3 +177,9 @@ def run_epoch_eval(model, test_TN, y, device, cfg,
 
     if was_training:
         model.train()
+
+    return {
+        "F1": F1, "AUC_PR": A_PR, "AUC_ROC": A_ROC,
+        "R_F1": R_F1, "Aff_F": Aff_F1,
+        "VUS_ROC": VUS_ROC, "VUS_PR": VUS_PR,
+    }

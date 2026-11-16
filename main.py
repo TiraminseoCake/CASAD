@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from datasets.build import list_entities, load_entity
+from datasets.build import list_entities, load_entity, split_train_val
 from model.build import (
     apply_prior_to_model,
     build_causal_prior_cached,
@@ -57,7 +57,8 @@ def _run_seed(cfg, entity, seed, te_weight_np, te_gate_np, device):
     writer = _make_writer(cfg, entity.name, seed)
 
     model = build_model(cfg, N=entity.N).to(device)
-    apply_prior_to_model(cfg, model, te_weight_np, te_gate_np)
+    if te_weight_np is not None:
+        apply_prior_to_model(cfg, model, te_weight_np, te_gate_np)
 
     ckpt_dir = cfg.TRAIN.CKPT_DIR
     csv_path = os.path.join(cfg.RESULT_DIR, f'{entity.name}_seed{seed}_epoch_metrics.csv')
@@ -266,7 +267,10 @@ def main():
         print(f'\n=== {name} (Ttr={entity.T_train}, Tte={entity.T_test}, N={entity.N}) '
               f'| prior={prior_label} ===', flush=True)
 
-        te_weight_np, te_gate_np = build_causal_prior_cached(cfg, entity.train_z, entity.name)
+        prior_input = entity.train_z
+        if getattr(cfg.DATA, 'FIT_ON_TRAIN_SUB', False):
+            prior_input, _ = split_train_val(entity.train_z, cfg.PICAAD.VAL_RATIO)
+        te_weight_np, te_gate_np = build_causal_prior_cached(cfg, prior_input, entity.name)
 
         print(
             f'lr={cfg.SOLVER.BASE_LR} L={cfg.PICAAD.L} tau_max={cfg.PICAAD.TAU_MAX} '

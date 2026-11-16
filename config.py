@@ -20,6 +20,7 @@ _C.DATA.NAME = 'SWaT'               # dataset name (used in path composition)
 _C.DATA.INPUT_DIR = ''              # NPZ dir; empty -> {BASE_DIR}/{NAME}_npz
 _C.DATA.ENTITIES = ''               # comma-separated entities; empty -> glob
 _C.DATA.SCALE = 'standard'          # standard | none
+_C.DATA.FIT_ON_TRAIN_SUB = False    # True: scaler and PCMCI+ prior fit only on the first (1 - VAL_RATIO) of train
 _C.DATA.NUM_ENVS = 4                # pseudo-env count for invariance loss
 
 
@@ -101,7 +102,15 @@ _C.PICAAD.START_WREF_EPOCH = 3
 _C.PICAAD.TRAIN_LOSS_TYPE = 'l1'     # l1 | l2root
 _C.PICAAD.VAL_RATIO = 0.2
 _C.PICAAD.EARLY_STOP = True
+_C.PICAAD.EARLY_STOP_ON = 'val_loss'
+_C.PICAAD.EARLY_STOP_METRIC = 'F1'
 _C.PICAAD.PATIENCE = 10
+# Post-training checkpoint selection on the normal validation split (no early stopping):
+#   best_val    = epoch with minimum validation prediction MAE
+#   best_smooth = minimum of the SELECT_SMOOTH-point centered moving average, epochs >= SELECT_MIN_EPOCH
+_C.PICAAD.SELECT_BEST_VAL = False
+_C.PICAAD.SELECT_MIN_EPOCH = 20
+_C.PICAAD.SELECT_SMOOTH = 3
 
 # per-loss enable flags (ablation toggle)
 _C.PICAAD.ENABLE_PRIOR_LOSS = True
@@ -142,6 +151,12 @@ _C.PICAAD.INTERVENTION.FILL_VALUE = 0.0
 _C.PICAAD.INTERVENTION.LOSS_TYPE = 'mse'       # mse | margin | contrastive | gradient
 _C.PICAAD.INTERVENTION.MARGIN_HIGH = 0.3
 _C.PICAAD.INTERVENTION.MARGIN_LOW = 0.1
+# Separate switches for the two roles of the intervention measurements (both True = original behavior):
+#   APPLY_LOSS       (I): use the direct intervention-alignment loss (perm) in the objective
+#   UPDATE_REFERENCE (U): accumulate the measured responses into the CRS reference (cls_ref) each epoch;
+#                         False keeps cls_ref at its initial value (the PCMCI+ strength prior)
+_C.PICAAD.INTERVENTION.APPLY_LOSS = True
+_C.PICAAD.INTERVENTION.UPDATE_REFERENCE = True
 
 # scoring
 _C.PICAAD.SCORING = CN()
@@ -171,6 +186,7 @@ _C.EVAL.VUS_VERSION = 'opt'
 _C.EVAL.VUS_THRE = 250
 _C.EVAL.USE_MEDIAN_VUS_WINDOW = False
 _C.EVAL.DIAGNOSE_COMPONENTS = False
+_C.EVAL.LABEL_MODE = 'point'         # 'point': label of the window's last step | 'window': 1 if any step in the input window is anomalous (CAROTS)
 
 
 # --- analysis (intervention contribution) ---

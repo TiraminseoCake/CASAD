@@ -1,0 +1,4 @@
+dataset,dAUC_PR_on_minus_off,dVUS_PR_on_minus_off,n_seeds,on_dir,off_dir
+PSM,-4.275588415230324,-3.4924614812448382,4,results/hb/PSM,results/ablation_hb/PSM/no_prioralign
+SMD,0.11666902478928343,0.057704163982750245,4,results/hb/SMD,results/ablation_hb/SMD/no_prioralign
+SWaT_ds5,0.6398044466877337,0.0932715289680619,4,results/hb/SWaT_ds5,results/ablation_hb/SWaT_ds5/no_prioralign

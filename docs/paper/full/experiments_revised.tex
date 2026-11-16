@@ -1,0 +1,353 @@
+%============================================================
+\section{Experiments}
+\label{sec:experiments}
+%============================================================
+
+\subsection{Experimental Setup}
+\label{sec:experimental_setup}
+
+%------------------------------------------------------------
+\subsubsection{Datasets}
+\label{sec:datasets}
+%------------------------------------------------------------
+
+We evaluate PICAAD on three widely used real-world MTSAD benchmarks: SWaT~\cite{goh2017dataset}, SMD~\cite{su2019robust}, and PSM~\cite{abdulaal2021practical}. All three datasets contain only normal observations in their training sets, while their test sets include both normal and anomalous observations. SWaT is an industrial water treatment testbed with 51 sensor and actuator channels, where physical processes and control operations introduce temporal dependencies among variables. We downsample SWaT by a factor of five using non-overlapping median aggregation of both the observations and the labels, and drop the incomplete trailing block. SMD comprises 28 server machines, each with 38 monitoring metrics. We estimate a separate causal prior and train a separate model for each machine to account for entity-specific temporal patterns. PSM contains 25 server metrics collected from eBay application servers and has a relatively high proportion of anomalies in its test set. These datasets allow us to evaluate PICAAD across different monitoring environments, variable dimensions, and anomaly distributions. Dataset statistics are summarized in Table~\ref{tab:dataset_statistics}, with further details provided in Appendix~\ref{app:datasets}.
+
+% TODO(team): tab:dataset_statistics가 다른 곳에 이미 있으면 이 표는 지운다.
+\begin{table}[t]
+\centering
+\caption{Dataset statistics. SMD lengths are summed over its 28 machines.}
+\label{tab:dataset_statistics}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & Entities & Vars & Train & Test & Anomaly (\%) \\
+\midrule
+SWaT (ds5) & 1  & 51 & 99{,}000  & 89{,}983  & 12.14 \\
+SMD        & 28 & 38 & 708{,}405 & 708{,}420 & 4.16 \\
+PSM        & 1  & 25 & 132{,}481 & 87{,}841  & 27.76 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%------------------------------------------------------------
+\subsubsection{Evaluation Metrics}
+\label{sec:evaluation_metrics}
+%------------------------------------------------------------
+
+We evaluate all methods from three perspectives. For point-wise ranking, we report AUC-ROC and AUC-PR. We use AUC-PR as the primary evaluation metric because it is more informative under the class imbalance present in all three benchmarks. For threshold-dependent detection, we report point-wise F1, range-based F1 (R-F1), and affiliation-based F1 (Aff-F)~\cite{huet2022affiliation}. These metrics evaluate detection performance at selected thresholds, with Aff-F additionally accounting for the temporal proximity between predicted and labeled anomaly events. Since the reported thresholds are selected to maximize the corresponding metrics on the test set, we treat these results as oracle diagnostic measures rather than estimates of performance under a validation-based thresholding procedure. For range-aware evaluation, we report VUS-ROC and VUS-PR~\cite{paparrizos2022vus}, which integrate detection performance over varying thresholds and temporal tolerance buffers. The maximum tolerance buffer is set to the median length of the labeled anomaly ranges in each evaluated series. We use VUS-PR as a complementary metric for assessing range-aware detection performance. We do not apply point adjustment, which is known to inflate the apparent performance of time-series anomaly detectors~\cite{kim2022towards}. For SMD, each metric is computed separately for the 28 machines and macro-averaged across entities. All results are averaged over four random seeds.
+
+%------------------------------------------------------------
+\subsubsection{Baselines}
+\label{sec:baselines}
+%------------------------------------------------------------
+
+We compare the proposed method with representative MTSAD approaches spanning
+different model families:
+
+\begin{itemize}
+    \item \textbf{Recurrent and reconstruction-based methods:}
+    LSTM-AE~\cite{malhotra2016lstm} and OmniAnomaly~\cite{su2019robust}.
+
+    \item \textbf{Transformer and general time-series methods:}
+    Anomaly Transformer~\cite{xu2022anomaly},
+    PatchTST~\cite{nie2023patchtst},
+    TimesNet~\cite{wu2023timesnet},
+    DCdetector~\cite{yang2023dcdetector},
+    iTransformer~\cite{liu2024itransformer}, and
+    ModernTCN~\cite{luo2024moderntcn}.
+
+    \item \textbf{Recent detectors:}
+    SARAD~\cite{dai2024sarad} and
+    CATCH~\cite{wu2024catch}.
+
+    \item \textbf{Causality-based methods:}
+    OracleAD~\cite{cho2025oraclead} and
+    CAROTS~\cite{kim2025carots}.
+\end{itemize}
+% TODO(team): 위 목록은 Table~\ref{tab:performance_comparison}의 열과 일치시킴.
+% USAD, MTAD-GAT, GDN, TranAD, GCAD는 표에 열이 없어 제외. 돌리면 다시 추가.
+% CHECK: wu2024catch 항목이 anomaly detection CATCH(ICLR 2025)인지 확인.
+
+All baselines are retrained under identical splits, normalization, and
+window-to-timestamp alignment. We retain each method's native scoring
+mechanism but recompute every metric from its raw anomaly scores using a
+single shared script, and we do not reuse numbers reported in the original
+papers. CAROTS is run from its official code. Because no official
+implementation of OracleAD is available, we use a re-implementation that
+follows the architecture and hyperparameters reported in the original paper
+(window length 10, \(\lambda_{\mathrm{dev}}=3\), \(\lambda_{\mathrm{recon}}=0.1\),
+20 epochs, and product score fusion), with the checkpoint selected by the
+validation prediction error. Hyperparameters follow the original
+recommendations and are adjusted only on the normal validation split; test
+labels are never used for tuning or thresholding, for any method.
+
+%------------------------------------------------------------
+\subsubsection{Implementation Details}
+\label{sec:implementation_details}
+%------------------------------------------------------------
+
+We reserve the last 20\% of each normal training sequence as a chronological
+validation split. Standardization statistics and the causal prior are computed
+only from the remaining 80\%, and the same statistics are applied to the
+validation and test splits. Sequences are converted into sliding windows of
+length \(L=10\) with stride 1, with lag-segment length \(w=5\) and
+\(\tau_{\max}=5\) so that \(L=\tau_{\max}+w\). Each window score is assigned to
+its target time index for point-wise evaluation; the first \(L-1\) time points
+of each test sequence are excluded for all methods. We run PCMCI+ (Tigramite)
+with ParCorr, \(\alpha_{\mathrm{PC}}=0.05\), and \(\tau_{\max}=5\) on a
+contiguous subsample of at most 10{,}000 training steps, once per dataset and
+separately for each SMD entity; this offline step is cached and reused across
+seeds and configurations.
+% TODO(team): PCMCI+ 소요 시간을 Appendix에 넣을 경우 app:efficiency 참조 복원.
+The encoder uses a hidden dimension of \(d=64\), two LSTM layers per variable,
+and four attention heads. We train with AdamW (weight decay 0.01, gradient
+clipping 1.0) and a batch size of 512, using a learning rate of
+\(5\times10^{-5}\) for PSM and \(5\times10^{-4}\) for SMD and SWaT, for 80 epochs
+without early stopping. We report the checkpoint that minimizes the three-epoch
+moving average of the validation prediction MAE over epochs \(\ge 20\).
+We fix the following values across all datasets: \(\eta=0.25\),
+\(\epsilon_m=0.05\), \(\beta=0.35\), \(\beta_{\mathrm{cls}}=0.9\),
+\(e_{\mathrm{warm}}=5\), \(e_0=5\), \(\lambda_{\mathrm{crs}}=1\), and
+\(\lambda_{\mathrm{int}}=0.1\), with two source--lag pairs intervened per
+mini-batch and the CRS updated once per epoch.
+% CHECK: \epsilon_m = G = g(\epsilon_m + (1-\epsilon_m)M)의 mask floor (코드값 0.05).
+% Method 절의 기호와 다르면 맞춰 주세요.
+The anomaly score is the unweighted sum of the prediction and
+strength-deviation scores (Eq.~\eqref{eq:final_score}).
+Full values are listed in Appendix~\ref{app:hyperparams}. No intervention is
+performed at inference: each test window requires a single forward pass, with
+the CRS frozen after training. Test labels are never used for training,
+tuning, checkpoint selection, or thresholding. All experiments run on a single
+NVIDIA RTX A6000 GPU, and we release code and configurations upon publication.
+
+%------------------------------------------------------------
+\subsection{Overall Performance}
+\label{sec:overall_performance}
+%------------------------------------------------------------
+
+\begin{table*}[t]
+\centering
+\caption{Performance comparison (\%). Mean over four seeds; SMD is macro-averaged over 28 machines. Best in bold, second best underlined.}
+\label{tab:performance_comparison}
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll|cccccccccc|ccc}
+\toprule
+\textbf{Dataset} & \textbf{Metric} & \textbf{A.E} & \textbf{Omni} & \textbf{A.T} & \textbf{Patch} & \textbf{TsNet} & \textbf{DC} & \textbf{iTrans} & \textbf{Modern} & \textbf{SARAD} & \textbf{CATCH} & \textbf{OracleAD} & \textbf{CAROTS} & \textbf{PICAAD} \\
+\midrule
+PSM
+& F1     & 47.55 & 45.90 & 43.45 & 43.45 & 43.45 & 43.45 & 43.45 & 43.45 & 45.75 & 44.33 & 53.32 & \textbf{56.76} & \underline{53.97} \\
+& R-F1   & 45.93 & 40.58 & 12.17 & 34.75 & 37.49 & 21.35 & 35.91 & 35.48 & 13.54 & \textbf{54.19} & \underline{47.49} & 46.78 & 42.13 \\
+& Aff-F  & 73.70 & 73.49 & 69.68 & 69.43 & 69.43 & 69.59 & 69.53 & 69.43 & 77.12 & \textbf{79.16} & 77.46 & 72.79 & \underline{77.87} \\
+& A-ROC  & 66.79 & 63.95 & 38.35 & 58.68 & 59.09 & 49.86 & 59.22 & 59.21 & 62.86 & 64.75 & 73.23 & \textbf{75.75} & \underline{75.28} \\
+& A-PR   & 47.27 & 45.00 & 24.28 & 37.91 & 38.95 & 27.78 & 38.27 & 38.59 & 41.67 & 43.40 & \underline{55.30} & 53.17 & \textbf{58.22} \\
+& V-ROC  & 68.20 & 61.23 & 50.96 & 50.62 & 50.67 & 50.11 & 51.23 & 50.68 & 57.63 & 57.00 & 67.95 & \underline{69.46} & \textbf{71.76} \\
+& V-PR   & 49.66 & \underline{52.49} & 49.76 & 50.31 & 49.86 & 27.89 & 44.54 & 50.55 & 38.64 & 45.95 & 47.37 & 48.89 & \textbf{54.69} \\
+\midrule
+SMD
+& F1     & 25.78 & 32.16 & 7.98 & 7.98 & 7.98 & 8.00 & 7.98 & 7.98 & 25.92 & 7.98 & \textbf{50.16} & \underline{49.45} & 48.13 \\
+& R-F1   & 28.09 & 35.81 & 5.84 & 13.81 & 9.43 & 8.23 & 9.02 & 14.43 & 10.35 & 2.90 & \underline{37.80} & 30.71 & \textbf{40.37} \\
+& Aff-F  & 83.34 & 82.57 & 67.43 & 67.43 & 67.43 & 67.49 & 67.43 & 67.43 & 75.87 & 67.43 & \underline{84.70} & 78.50 & \textbf{86.12} \\
+& A-ROC  & 76.80 & 71.25 & 50.40 & 73.85 & 59.09 & 49.97 & 74.57 & 72.13 & 72.84 & 80.96 & \textbf{83.82} & \underline{82.16} & 81.96 \\
+& A-PR   & 19.40 & 27.73 & 4.57 & 14.82 & 13.66 & 4.16 & 14.57 & 13.01 & 25.87 & 17.09 & \textbf{46.49} & 43.54 & \underline{43.92} \\
+& V-ROC  & 74.38 & 73.26 & 50.34 & 51.66 & 51.10 & 49.92 & 51.76 & 51.55 & 65.57 & 50.95 & \textbf{85.16} & 83.85 & \underline{84.24} \\
+& V-PR   & 22.50 & 31.18 & 36.86 & 41.60 & 41.21 & 4.27 & 32.85 & 41.54 & 19.33 & 35.25 & \textbf{41.87} & 38.87 & \underline{41.71} \\
+\midrule
+SWaT
+& F1     & 74.46 & 75.40 & 21.65 & 21.65 & 21.65 & 21.65 & 21.65 & 21.65 & 57.30 & 21.65 & 75.83 & \textbf{79.63} & \underline{76.03} \\
+& R-F1   & \underline{36.63} & \textbf{38.72} & 15.48 & 12.23 & 20.80 & 15.54 & 11.89 & 12.88 & 21.37 & 14.74 & 22.83 & 34.47 & 21.35 \\
+& Aff-F  & \underline{75.30} & 72.09 & 70.06 & 69.51 & 73.47 & 69.25 & 69.25 & 72.08 & 74.88 & 73.68 & 75.25 & \textbf{80.19} & 74.20 \\
+& A-ROC  & 81.97 & 82.15 & 42.58 & 24.36 & 28.97 & 49.89 & 24.57 & 24.50 & \textbf{85.40} & 33.31 & 84.53 & \underline{85.36} & 84.01 \\
+& A-PR   & 67.51 & 72.73 & 11.93 & 8.40 & 10.71 & 12.14 & 8.33 & 9.00 & 64.77 & 13.39 & \underline{74.65} & \textbf{75.90} & 74.02 \\
+& V-ROC  & 81.89 & \underline{81.98} & 50.72 & 49.84 & 20.80 & 50.00 & 49.90 & 50.15 & \textbf{86.30} & 51.89 & 74.06 & 79.18 & 74.50 \\
+& V-PR   & \textbf{65.89} & 64.42 & 17.00 & 11.92 & 51.20 & 11.92 & 12.05 & 13.05 & 62.72 & 18.70 & 57.13 & \underline{65.74} & 56.74 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+% OracleAD / CAROTS / PICAAD 열: 같은 서버, 같은 공통 평가 스크립트, seed 0-3.
+%   OracleAD = faithful re-impl (floor split, 20 ep), PICAAD = best_smooth checkpoint.
+% TODO(team): A.E ~ CATCH 10개 열이 같은 프로토콜(분할, t>=9, 공통 evaluator)인지 확인.
+
+Table~\ref{tab:performance_comparison} reports the comparison on SWaT, SMD, and
+PSM. All results are obtained under the same preprocessing, splits, and
+evaluation script without point adjustment, and are averaged over four seeds.
+For SMD, metrics are macro-averaged over the 28 entities. Best results are in
+bold and second-best underlined.
+
+On PSM, PICAAD achieves the best AUC-PR (58.22), VUS-ROC (71.76), and VUS-PR
+(54.69). It improves AUC-PR by 2.9 points over the strongest causal baseline,
+OracleAD (55.30), and VUS-PR by 5.8 points over CAROTS (48.89). On SMD, PICAAD
+achieves the best R-F1 (40.37) and Aff-F (86.12), indicating more accurate
+range-level and event-level localization, while OracleAD attains the highest
+AUC-PR (46.49 vs.\ 43.92). On SWaT, CAROTS performs best on most metrics, and
+PICAAD is comparable to OracleAD in point-wise ranking (AUC-PR 74.02 vs.\ 74.65).
+
+% TODO(team): 나머지 baseline 열 확인 후 수정.
+Several general-purpose baselines produce a point-wise F1 equal to that of
+flagging every test point as anomalous (43.45 on PSM, 7.98 on SMD, and 21.65 on
+SWaT), indicating that their scores do not rank anomalous points above normal
+ones under this protocol.
+
+%------------------------------------------------------------
+\subsection{Ablation Study}
+\label{sec:ablation}
+%------------------------------------------------------------
+
+We examine the training-time contribution of each component on PSM by removing
+it and retraining with the same four seeds (Table~\ref{tab:ablation});
+differences are paired by seed. In \emph{w/o Prior}, the PCMCI+ priors are
+replaced with the model's uninformative defaults. In \emph{w/o \(\Delta\)}, the
+input-dependent routing correction is removed. In \emph{w/o CRS loss},
+\(\lambda_{\mathrm{crs}}=0\) throughout training. In \emph{w/o Intervention}, no
+intervention is performed, which removes both \(\mathcal{L}_{\mathrm{int}}\) and
+the CRS updates. In \emph{w/o CRS update}, interventions train
+\(\mathcal{L}_{\mathrm{int}}\), but the CRS remains at its prior initialization.
+In \emph{w/o \(\mathcal{L}_{\mathrm{int}}\)}, the CRS is updated, but
+\(\lambda_{\mathrm{int}}=0\). The last row adds an explicit prior-alignment loss,
+consisting of the Jensen--Shannon divergence between the batch-averaged routing
+distribution and the strength prior and a binary cross-entropy between the
+learned gate and the prior mask; we analyze it further in
+Sec.~\ref{sec:prior_usage}.
+
+\begin{table}[t]
+\centering
+\caption{Ablation on PSM (\%). \(\Delta\): paired mean difference from Full (pp); parentheses: seeds (of 4) below Full.}
+\label{tab:ablation}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+Variant & A-PR & V-PR & \(\Delta\)A-PR & \(\Delta\)V-PR \\
+\midrule
+PICAAD (Full)                      & \textbf{58.22} & \textbf{54.69} & --           & --           \\
+w/o Prior                          & 47.43 & 45.53 & \(-\)10.79 (4) & \(-\)9.16 (4)  \\
+w/o \(\Delta\)                     & 46.12 & 44.33 & \(-\)12.09 (4) & \(-\)10.36 (4) \\
+w/o CRS loss                       & 44.11 & 42.79 & \(-\)14.11 (4) & \(-\)11.90 (4) \\
+w/o Intervention                   & 44.13 & 42.69 & \(-\)14.08 (4) & \(-\)12.00 (4) \\
+w/o CRS update                     & 44.32 & 42.98 & \(-\)13.90 (4) & \(-\)11.72 (4) \\
+w/o \(\mathcal{L}_{\mathrm{int}}\) & 54.26 & 50.26 & \(-\)3.96 (4)  & \(-\)4.43 (4)  \\
+\midrule
++ prior-alignment loss             & 53.94 & 51.20 & \(-\)4.28 (3)  & \(-\)3.49 (3)  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Removing any component degrades both AUC-PR and VUS-PR on all four seeds. The
+largest drops, about 14 points in AUC-PR, occur when CRS alignment,
+interventions, or CRS updates are removed. This indicates that the reference
+must be updated from intervention responses during training: a reference kept
+at the PCMCI+ strength prior (w/o CRS update) performs no better than removing
+interventions entirely. Removing the causal prior lowers AUC-PR by 10.8 points,
+and removing the instance-specific correction \(\Delta(\mathbf{X})\) lowers it
+by 12.1 points. The direct intervention loss contributes a smaller but
+consistent gain of 4.0 points.
+
+%------------------------------------------------------------
+\subsection{How to Use the Causal Prior}
+\label{sec:prior_usage}
+%------------------------------------------------------------
+
+The causal prior can enter the model as an alignment target, as an
+initialization, or as a persistent routing bias. We compare these choices in
+Table~\ref{tab:prior_usage}.
+
+\begin{table}[t]
+\centering
+\caption{Prior usage (\%). Top: effect of adding the prior-alignment loss (with \(-\) without, pp; seeds 0--3). Bottom: persistent strength-prior bias vs.\ folding it into the initialization of \(\psi\) (PSM, seeds 0--7, mean\(\pm\)sd).}
+\label{tab:prior_usage}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcc}
+\toprule
+\multicolumn{3}{l}{\emph{(a) + prior-alignment loss}} \\
+Dataset & \(\Delta\)A-PR & \(\Delta\)V-PR \\
+\midrule
+PSM  & \(-\)4.28 & \(-\)3.49 \\
+SWaT & \(+\)0.64 & \(+\)0.09 \\
+SMD  & \(+\)0.12 & \(+\)0.06 \\
+\midrule
+\multicolumn{3}{l}{\emph{(b) Routing prior (PSM, 8 seeds)}} \\
+Routing & A-PR & V-PR \\
+\midrule
+Persistent bias (default) & \textbf{58.07}\(\pm\)2.84 & \textbf{54.15}\(\pm\)2.71 \\
+Folded into \(\psi\)      & 56.05\(\pm\)2.94 & 52.56\(\pm\)2.30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Prior as an alignment target.} Adding the explicit prior-alignment loss
+lowers AUC-PR on PSM by 4.3 points, while changing it by less than 0.7 points
+on SWaT and SMD (Table~\ref{tab:prior_usage}a). At the end of training on PSM,
+this loss improves the strength-deviation score alone (AUC-PR
+\(34.6\rightarrow39.1\)) but degrades the prediction score more
+(\(58.0\rightarrow54.0\)). Constraining the routing to stay close to the
+PCMCI+ estimate therefore does not help, and can hurt when the estimated
+structure is imperfect.
+
+\emph{Prior as initialization vs.\ persistent bias.} We also fold the
+strength-prior term \(\beta\log\tilde{\mathbf{W}}\) into the initialization of
+\(\psi\) and remove it from the routing logits, so that the prior affects only
+the starting point of training. Over eight seeds, the persistent bias attains
+a higher mean AUC-PR (58.07 vs.\ 56.05) and VUS-PR (54.15 vs.\ 52.56), although
+the paired difference is not significant (\(\Delta\)A-PR \(-2.02\), 95\% CI
+\([-5.17, 1.12]\); the folded variant is better on 3 of 8 seeds). We therefore
+keep the persistent bias as the default, while noting that the simpler
+initialization-only variant remains competitive.
+% CHECK: \tilde{\mathbf{W}}, \psi 기호가 Method 절과 같은지 확인.
+
+%------------------------------------------------------------
+\subsection{Anomaly-Score Component Ablation}
+\label{sec:ablation_score}
+%------------------------------------------------------------
+
+PICAAD combines prediction deviation and causal-strength deviation as defined
+in Sec.~\ref{sec:scoring}. For brevity, we denote
+\(S_{\mathrm{pred}}\) and \(S_{\mathrm{str}}\) by \(P\) and \(C\), respectively.
+Thus, the default anomaly score in Eq.~\eqref{eq:final_score} is \(A=P+C\).
+
+To examine the role of each view, we evaluate each component individually and
+their sum. All variants reuse the same trained models, reference buffers, and
+validation-selected checkpoints; only the inference-time score composition is
+changed. This ablation therefore evaluates the post-hoc scoring utility of
+each component rather than the training-time contribution of the associated
+objectives, which Table~\ref{tab:ablation} covers.
+
+\begin{table}[t]
+\centering
+\caption{Post-hoc anomaly-score component ablation (\%) with the same checkpoints. \(P\): prediction deviation; \(C\): deviation from the CRS; \(A=P+C\) (default).}
+\label{tab:score_ablation}
+\small
+\setlength{\tabcolsep}{2.6pt}
+\begin{tabular}{llccccccc}
+\toprule
+Data & Score & F1 & R-F1 & Aff-F & A-ROC & A-PR & V-ROC & V-PR \\
+\midrule
+PSM  & \(P\)     & 53.83 & 41.99 & 78.02 & 75.20 & 58.18 & 71.72 & 54.65 \\
+     & \(C\)     & 45.63 & 37.26 & 71.32 & 58.95 & 34.70 & 53.73 & 33.76 \\
+     & \(P{+}C\) & 53.97 & 42.13 & 77.87 & 75.28 & 58.22 & 71.76 & 54.69 \\
+\midrule
+SMD  & \(P\)     & 48.15 & 40.42 & 86.15 & 81.95 & 43.92 & 84.22 & 41.71 \\
+     & \(C\)     & 15.45 & 17.21 & 74.02 & 61.13 &  9.32 & 62.50 &  8.55 \\
+     & \(P{+}C\) & 48.13 & 40.37 & 86.12 & 81.96 & 43.92 & 84.24 & 41.71 \\
+\midrule
+SWaT & \(P\)     & 76.02 & 22.05 & 74.45 & 83.98 & 73.97 & 74.45 & 56.66 \\
+     & \(C\)     & 70.53 & 26.56 & 74.16 & 83.42 & 57.19 & 83.51 & 56.06 \\
+     & \(P{+}C\) & 76.03 & 21.35 & 74.20 & 84.01 & 74.02 & 74.50 & 56.74 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:score_ablation} reports the results on all three datasets. The
+strength-deviation score carries anomaly information on its own. On PSM,
+\(C\) alone reaches an AUC-PR of 34.70, above the anomaly ratio of 27.76\%. On
+SWaT, it exceeds \(P\) in VUS-ROC (83.51 vs.\ 74.45) and R-F1 (26.56 vs.\ 22.05),
+suggesting that deviations from the CRS localize anomalous ranges that the
+prediction error ranks less well. In the raw sum, however, \(A\) is dominated by
+the prediction score: on every dataset and seed, \(A\) and \(P\) differ by at
+most 0.32 points in AUC-PR and VUS-PR. The benefit of the CRS in
+Table~\ref{tab:ablation} therefore arises mainly through training, by shaping
+the predictor's routing, rather than through the additive strength term at
+inference.

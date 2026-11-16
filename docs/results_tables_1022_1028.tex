@@ -1,0 +1,159 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,skip=4pt}
+\newcommand{\B}[1]{\textbf{#1}}
+\newcommand{\m}{$-$}
+\setlength{\tabcolsep}{5pt}
+
+\begin{document}
+
+\section*{PICAAD Results (Oct 22 -- Oct 28)}
+
+\noindent
+All values are means over seeds 0--3 (\%). Checkpoint: best\_smooth (epoch $\ge$ 20, minimum 3-point moving average of validation MAE).
+Score: $A = P + C$ (raw). A-PR = sklearn average precision; VUS window = median anomaly length.
+\emph{New base} = prior-alignment loss (tew+teg) off; \emph{old base} = on.
+
+%--------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{Main comparison: PICAAD vs.\ CAROTS vs.\ OracleAD. Best per dataset in bold.}
+\label{tab:main}
+\begin{tabular}{llccccccc}
+\toprule
+Dataset & Model & F1 & R-F1 & Aff-F & A-ROC & A-PR & V-ROC & V-PR \\
+\midrule
+\multirow{4}{*}{PSM}
+ & PICAAD (new base) & 53.97 & 42.13 & \B{77.87} & 75.28 & \B{58.22} & \B{71.76} & \B{54.69} \\
+ & PICAAD (old base) & 54.94 & 44.34 & 77.61 & 74.45 & 53.94 & 70.93 & 51.20 \\
+ & CAROTS            & \B{56.76} & \B{46.78} & 72.79 & \B{75.75} & 53.17 & 69.46 & 48.89 \\
+ & OracleAD          & 46.68 & 38.89 & 73.14 & 66.22 & 45.19 & 60.22 & 41.60 \\
+\midrule
+\multirow{4}{*}{SWaT\_ds5}
+ & PICAAD (new base) & 76.03 & 21.35 & 74.20 & 84.01 & 74.02 & 74.50 & 56.74 \\
+ & PICAAD (old base) & 76.04 & 21.81 & 74.41 & 84.41 & 74.66 & 74.68 & 56.83 \\
+ & CAROTS            & \B{79.63} & \B{34.47} & \B{80.19} & \B{85.36} & \B{75.90} & \B{79.18} & \B{65.74} \\
+ & OracleAD          & 75.99 & 23.92 & 70.18 & 83.07 & 74.29 & 68.44 & 49.27 \\
+\midrule
+\multirow{4}{*}{SMD (28)}
+ & PICAAD (new base) & 48.13 & 40.37 & 86.12 & 81.96 & 43.92 & \B{84.24} & 41.71 \\
+ & PICAAD (old base) & 48.30 & \B{40.57} & \B{86.26} & 81.86 & \B{44.04} & 84.04 & \B{41.77} \\
+ & CAROTS            & \B{49.45} & 30.71 & 78.50 & \B{82.16} & 43.54 & 83.85 & 38.87 \\
+ & OracleAD          & 47.86 & 33.01 & 79.03 & 80.50 & 43.42 & 81.02 & 34.40 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%--------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{Prior-alignment loss off vs.\ on (OFF $-$ ON, pp). Acceptance: drop $\le$ 1pp on SWaT\_ds5 and SMD28.}
+\label{tab:align}
+\begin{tabular}{lcc}
+\toprule
+Dataset & $\Delta$A-PR & $\Delta$V-PR \\
+\midrule
+PSM      & \B{+4.28} & \B{+3.49} \\
+SWaT\_ds5 & \m0.64 & \m0.09 \\
+SMD28    & \m0.12 & \m0.06 \\
+\bottomrule
+\end{tabular}
+\hspace{1.5em}
+\begin{tabular}{lccc}
+\toprule
+Score (PSM, ep.\ 80) & ON & OFF & ON $-$ OFF \\
+\midrule
+$A = P + C$ & 53.93 & 58.03 & \m4.10 \\
+$P_\text{raw}$ & 53.95 & 57.99 & \m4.04 \\
+$C_\text{raw}$ & 39.12 & 34.59 & \B{+4.53} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%--------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{PSM ablation on the new base. $\Delta$ = paired mean vs.\ Full (pp); parentheses: seeds below Full out of 4.}
+\label{tab:abl_new}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+Variant & F1 & R-F1 & Aff-F & A-ROC & A-PR & V-ROC & V-PR & $\Delta$A-PR & $\Delta$V-PR \\
+\midrule
+\B{Full}                  & 53.97 & 42.13 & 77.87 & 75.28 & \B{58.22} & 71.76 & \B{54.69} & -- & -- \\
+w/o $\delta$              & 44.80 & 44.03 & 78.95 & 63.60 & 46.12 & 62.08 & 44.33 & \m12.09 (4/4) & \m10.36 (4/4) \\
+w/o CRS loss              & 43.91 & 47.34 & 78.99 & 61.98 & 44.11 & 60.73 & 42.79 & \m14.11 (4/4) & \m11.90 (4/4) \\
+w/o Intervention (I0U0)   & 44.51 & 43.45 & 79.29 & 62.28 & 44.13 & 60.93 & 42.69 & \m14.08 (4/4) & \m12.00 (4/4) \\
+w/o ref.\ update (I1U0)   & 43.93 & 44.19 & 79.49 & 62.08 & 44.32 & 60.83 & 42.98 & \m13.90 (4/4) & \m11.72 (4/4) \\
+w/o int.\ loss (I0U1)     & 49.46 & 42.29 & 78.96 & 69.88 & 54.26 & 66.90 & 50.26 & \m3.96 (4/4) & \m4.43 (4/4) \\
+w/o Prior                 & 46.08 & 41.67 & 78.87 & 65.35 & 47.43 & 63.62 & 45.53 & \m10.79 (4/4) & \m9.16 (4/4) \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+%--------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{PSM ablation on the old base (reference).}
+\label{tab:abl_old}
+\begin{tabular}{lcccc}
+\toprule
+Variant & A-PR & V-PR & $\Delta$A-PR & $\Delta$V-PR \\
+\midrule
+\B{Full (old base)}       & 53.94 & 51.20 & -- & -- \\
+w/o $\delta$              & 46.53 & 44.67 & \m7.41 (4/4) & \m6.53 (4/4) \\
+w/o CRS loss              & 44.40 & 43.04 & \m9.54 (4/4) & \m8.16 (4/4) \\
+I0U0                      & 44.75 & 43.21 & \m9.19 (4/4) & \m7.99 (4/4) \\
+I1U0                      & 45.43 & 43.92 & \m8.51 (4/4) & \m7.28 (4/4) \\
+I0U1                      & 54.33 & 50.00 & +0.39 (2/4) & \m1.20 (4/4) \\
+w/o prior align           & 58.22 & 54.69 & +4.28 (1/4) & +3.49 (1/4) \\
+w/o Prior                 & 47.43 & 45.53 & \m6.51 (4/4) & \m5.67 (4/4) \\
+w/o Causal Attn mask      & 54.68 & 50.87 & +0.74 (2/4) & \m0.33 (2/4) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%--------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{Folded routing: implementation checks (PSM, new base).}
+\label{tab:fold_check}
+\begin{tabular}{lp{10cm}}
+\toprule
+Check & Result \\
+\midrule
+Option off vs.\ original code & bitwise identical \\
+Initial routing weights & max diff $\le 1.2\times10^{-7}$ \\
+Losses & pred, teg identical; cstruct, tew $\le 2\times10^{-9}$; perm rel.\ $2.5\times10^{-4}$ (ReLU boundary) \\
+RNG, gate/$\Delta$ updates & identical \\
+Checkpoint restore & folded and original both correct \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%--------------------------------------------------------------------
+\begin{table}[h]
+\centering
+\caption{PSM: ORIGINAL vs.\ FOLDED routing (best\_smooth, $A = P + C$). Mean $\pm$ sample s.d.; 95\% CI of the paired difference with $t_{3}$.}
+\label{tab:fold}
+\begin{tabular}{ccccc}
+\toprule
+Seed & ORIGINAL A-PR / V-PR & FOLDED A-PR / V-PR & $\Delta$A-PR & $\Delta$V-PR \\
+\midrule
+0 & 60.34 / 56.28 & 50.13 / 48.12 & \m10.21 & \m8.16 \\
+1 & 54.52 / 51.47 & 53.12 / 50.44 & \m1.41 & \m1.03 \\
+2 & 60.54 / 57.12 & 58.36 / 54.78 & \m2.18 & \m2.34 \\
+3 & 57.46 / 53.91 & 57.58 / 54.46 & +0.12 & +0.56 \\
+\midrule
+Mean & \B{58.22$\pm$2.84 / 54.69$\pm$2.54} & 54.80$\pm$3.88 / 51.95$\pm$3.23 & \m3.42 & \m2.74 \\
+95\% CI & & & [\m10.78, +3.94] & [\m8.79, +3.30] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

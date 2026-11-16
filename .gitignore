@@ -18,3 +18,14 @@ nohup.out
 # scripts/setup_prior_cache.sh.
 !pretrained_priors/
 !pretrained_priors/*.npz
+
+# Model checkpoints (results/ CSVs are force-added; weights stay local)
+ckpt/
+*.pt
+
+# Internal / not for public release: patent disclosure material, server handoff bundles, provenance audits
+cauts_prep.py
+docs/invention_disclosure*.pdf
+handoff/
+provenance_bundle*/
+provenance_report*.md

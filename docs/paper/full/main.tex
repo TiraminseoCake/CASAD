@@ -1,0 +1,622 @@
+% ====================================================================
+% PICAAD -- full AAAI submission draft (2026-11-04)
+% Built from the PDF draft "PICAAD_AAAI (2).pdf" and revised to match the final model:
+%   * no prior-alignment loss; priors enter via initialization, the persistent routing
+%     bias, the structural gate factor, the attention bias, intervention sampling, CRS^(0);
+%   * routing keeps the persistent strength-prior bias (Appendix A.4 rewritten);
+%   * anomaly score A = S_pred + S_str (raw; no calibration, no routing-deviation score).
+% Compile in the Overleaf AAAI template: replace the preamble below with the template's
+% preamble if it differs (aaai2026.sty, times, helvet, courier, natbib via the style).
+% Open items are marked "% TODO(team)".
+% ====================================================================
+\documentclass[letterpaper]{article}
+\usepackage[submission]{aaai2026}   % TODO(team): match the style file name in the Overleaf template
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\urlstyle{rm}
+\def\UrlFont{\rm}
+\usepackage{natbib}
+\usepackage{caption}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{bm}
+
+\newcommand{\Wt}{\widetilde{\mathbf{W}}}
+\newcommand{\Wts}{\widetilde{W}}
+\newcommand{\CRS}{\mathrm{CRS}}
+
+\title{PICAAD: Prior-Informed Causality-Aware Anomaly Detection\\for Multivariate Time Series}
+\author{Anonymous submission}
+\affiliations{}
+
+\begin{document}
+
+\maketitle
+
+% ====================================================================
+\begin{abstract}
+Multivariate time-series anomaly detection (MTSAD) often relies on reconstruction or prediction errors, while inter-variable dependencies are modeled through correlation, attention, or learned graphs. Such statistical dependencies may mix direct influence with indirect or spurious associations, and anomalies that primarily disrupt normal dependency patterns can be overlooked when individual values remain plausible. We introduce PICAAD (Prior-Informed Causality-Aware Anomaly Detection), a causal-prior-guided framework that incorporates conditional-independence-based causal discovery as an explicit inductive bias within the predictor. PICAAD applies PCMCI+ to normal training data to extract time-lagged structural and strength priors, which are treated as soft guidance: they initialize prior-guided attention, edge gating, and source-lag routing, and remain in the routing computation as a persistent bias while the learnable components adapt. To characterize the normal dependency behavior of the predictor, PICAAD intervenes on source-lag segments and aggregates the resulting increases in target prediction error into a causal reference structure (CRS). At inference time, anomalies are scored by combining prediction error with the deviation of model-based causal strengths from the CRS. Experiments on SWaT, SMD, and PSM under point-wise and range-aware metrics, together with ablations and score-component analyses, support the contributions of causal-prior guidance and the interventional CRS.
+\end{abstract}
+
+% ====================================================================
+\section{Introduction}
+
+Multivariate time-series anomaly detection (MTSAD) aims to identify abnormal time points or segments from multiple interdependent variables. Industrial systems such as water treatment plants, power grids, and large-scale server clusters~\cite{goh2017swat,su2019omni} continuously generate multivariate time series. Failure to detect anomalies in such systems can lead to serious physical damage, service disruption, and economic loss. As the scale and complexity of these systems increase, modeling inter-variable dependencies has become a central challenge in MTSAD.
+
+Most existing MTSAD methods detect anomalies through reconstruction or forecasting errors and model inter-variable relationships via attention, learned graphs, or correlation~\cite{audibert2020usad,wu2023timesnet,deng2021gdn}. Such dependencies reflect statistical association rather than causal influence, so variables driven by a common cause can appear directly dependent. Moreover, the anomaly decision still rests on value-level error, leaving the role of the learned structure in the temporal evolution of the series unclear.
+
+A causal perspective offers a complementary view: under normal operation, variables follow relatively stable time-lagged dependencies, so anomalies may appear not only in individual values but also as changes in these dependencies. For instance, in a server, a memory leak can drive CPU utilization up regardless of request volume, breaking the normal request--utilization dependency even when each reading alone remains plausible. Such dependency-level deviations provide anomaly evidence complementary to prediction error.
+
+Motivated by this view, recent studies incorporate causality into MTSAD: GCAD~\cite{liu2025gcad} detects anomalies as deviations from Granger-causal patterns derived from a deep predictor, and CAROTS~\cite{kim2025carots} integrates causality into contrastive learning. These methods show that causal information benefits MTSAD, but several questions remain underexplored.
+
+First, causal patterns in existing causal MTSAD methods are often derived from prediction-oriented criteria, under which predictive relevance may also arise from indirect or confounded associations. Without explicit multivariate conditional-independence testing, direct time-lagged dependencies can remain entangled with associations explainable by other variables. Second, causal information is often used as an auxiliary signal, for example to guide data augmentation or to support post-hoc scoring, rather than as an inductive bias within the predictor itself. Although this avoids directly imposing a potentially imperfect causal structure, it limits how strongly that structure can shape the model's internal prediction mechanism. Third, existing normal causal references are often constructed by aggregating observational or predictor-derived dependency patterns, without measuring how strongly the learned predictor depends on each source-lag segment under intervention.
+
+To address these limitations, we propose \textbf{PICAAD} (Prior-Informed Causality-Aware Anomaly Detection), a causal-prior-guided framework for MTSAD. PICAAD first applies PCMCI+~\cite{runge2020pcmciplus} to normal training data to estimate time-lagged causal priors through conditional-independence testing. This helps distinguish direct lagged dependencies from confounded associations and remains reliable under the strong autocorrelation typical of sensor data. The resulting structure is not treated as a ground-truth causal graph. Instead, it serves as a soft prior that guides causal attention, edge gating, and instance-specific routing. The learnable components adapt to the training data, while a persistent prior bias in the routing logits keeps the strength prior in the forward computation throughout training rather than only at initialization. Unlike prior causal MTSAD methods that use causal structure only to guide augmentation or scoring, PICAAD lets the causal prior actively shape how the predictor routes information across variables.
+
+To characterize how strongly the predictor depends on individual source-lag segments, PICAAD constructs a causal reference structure (CRS) through model-based interventions during training. For each sampled source-lag pair, we permute the corresponding segment within the mini-batch and measure the resulting increase in each target's prediction error, which quantifies the predictor's reliance on that segment. Aggregating these responses over normal windows yields a reference that reflects the predictor's normal dependency behavior rather than a summary of observed patterns.
+
+% TODO(team): the score-component results (Table 5) show that P dominates the raw sum; keep the claim below modest.
+At inference time, PICAAD combines two anomaly scores. The prediction deviation captures value-level anomalies, and the deviation of the model-based causal strengths from the CRS targets relation-level anomalies. Our contributions are summarized as follows:
+\begin{itemize}
+\item We propose PICAAD, a causal-prior-guided MTSAD framework that incorporates conditional-independence-based, time-lagged causal priors as an explicit inductive bias within the predictor. Rather than treating the discovered structure as a fixed graph, PICAAD uses it as a soft prior for attention, edge gating, and source-lag routing, retained in the routing logits as a persistent bias.
+\item We introduce an interventional causal reference structure (CRS) that measures how strongly the predictor relies on each source-lag segment, rather than summarizing observed patterns. We use it both as a training-time alignment target and as a normal reference for anomaly scoring.
+\item We evaluate PICAAD on SWaT, SMD, and PSM under point-wise and range-aware metrics against a broad set of baselines, including two causality-aware detectors. Ablations and score-component analyses examine the contributions of the causal prior and the interventional CRS.
+\end{itemize}
+
+% ====================================================================
+\section{Related Work}
+
+\paragraph{Multivariate time-series anomaly detection.}
+Deep MTSAD methods largely follow reconstruction- or forecasting-based paradigms, detecting anomalies from the errors of models trained on normal data. Reconstruction-based methods such as USAD~\cite{audibert2020usad} and Anomaly Transformer~\cite{xu2022anomaly} learn to recover normal observations, whereas forecasting-based methods identify anomalies through deviations between predicted and observed values. Although these approaches are effective for value-level deviations, they do not necessarily provide an explicit directed representation of source--target dependencies.
+
+To model inter-variable relationships, graph-based methods learn adaptive or latent dependency structures from data. GDN~\cite{deng2021gdn}, for example, constructs a directed graph using learned node representations, while GRELEN~\cite{zhang2022grelen} learns latent graph relations for anomaly detection. These learned structures improve relational modeling, but they are primarily identified from statistical or predictive associations and may therefore retain indirect or common-driver dependencies. Moreover, their final anomaly scores remain largely based on reconstruction or prediction behavior.
+
+\paragraph{Causality-aware time-series anomaly detection.}
+Causal discovery provides a complementary approach to dependency modeling. Granger causality~\cite{granger1969} determines whether the past of one variable provides additional information for predicting another. Classical formulations are typically linear, while neural extensions such as NGC~\cite{tank2021ngc} and CUTS+~\cite{cheng2024cutsplus} support nonlinear temporal relationships. However, predictive relevance does not in general distinguish direct causal dependencies from indirect or common-driver associations. PCMCI+~\cite{runge2020pcmciplus}, in contrast, uses multivariate conditional-independence tests with optimized conditioning sets to improve the identification of direct lagged dependencies and to control false positives in autocorrelated time series.
+
+Recent MTSAD methods exploit causal information in different ways. GCAD~\cite{liu2025gcad} extracts dynamic Granger-causal patterns from a deep forecaster and detects anomalies through deviations from their normal patterns. It is closely related to PICAAD in treating dependency changes as anomaly evidence, but derives its patterns from predictive gradients rather than from an explicit conditional-independence-based causal prior. OracleAD~\cite{cho2025oraclead} learns a stable latent structure among variable embeddings and scores deviations from it jointly with prediction error. CAROTS~\cite{kim2025carots} incorporates causal information through causality-preserving and causality-disturbing augmentations for contrastive learning, while CaPulse~\cite{xia2025capulse} uses structural causal modeling to disentangle causal factors before density-based detection. These methods use causality to shape representations, training signals, or scores rather than to guide the predictor's internal routing.
+
+PICAAD differs in two respects. First, it uses PCMCI+-derived time-lagged structural and strength priors as soft internal guidance for variable attention, edge gating, and instance-specific routing. Second, it constructs an interventional causal reference structure by perturbing source-lag segments and measuring their effects on the predictor's errors. Prediction deviation and deviation from this reference are then combined as anomaly signals.
+
+% ====================================================================
+\section{Preliminaries}
+
+\paragraph{Causal anomaly formulation.}
+Let $\{x^i\}_{i=1}^{N}$ denote a multivariate time series, and let $\mathbf{x}_t=(x^1_t,\ldots,x^N_t)^\top\in\mathbb{R}^N$ be the observation at time $t$. Following a Granger-style temporal view~\cite{granger1969}, the past of $x^i$ is considered relevant to $x^j$ if it provides additional information for predicting $x^j$. We model such dependencies using a time-lagged structural equation~\cite{peters2017elements,runge2019science}. For target variable $x^j$, let
+\[
+\mathcal{P}_j=\mathrm{Pa}(x^j)\subseteq\{1,\ldots,N\}\times\{1,\ldots,\tau_{\max}\}
+\]
+denote its lagged parent set, where $\tau_{\max}$ is the maximum lag considered. An element $(i,\tau)\in\mathcal{P}_j$ indicates that $x^i_{t-\tau}$ is a lagged parent of $x^j_t$. Let $\mathbf{u}^j_t=[x^i_{t-\tau}]_{(i,\tau)\in\mathcal{P}_j}$ collect the corresponding parent values. The structural equation is then written as
+\begin{equation}
+x^j_t=f^j(\mathbf{u}^j_t)+\varepsilon^j_t,
+\label{eq:sem}
+\end{equation}
+where $f^j$ denotes the dependency mechanism and $\varepsilon^j_t$ is an exogenous noise term. We assume that $\mathcal{P}_j$ and $f^j$ remain approximately stable within a normal operating regime~\cite{absar2021invariant,han2025rootcause}. Under this assumption, anomalies may appear either as values inconsistent with those expected from the lagged parents or as changes in the normal dependency pattern. This perspective motivates modeling normal temporal dependencies for anomaly detection.
+
+\paragraph{PCMCI+.}
+To estimate a time-lagged causal prior from normal data, we use PCMCI+~\cite{runge2020pcmciplus}, a conditional-independence-based causal discovery method for multivariate time series. It identifies candidate lagged parents through a PC-style selection step and evaluates them with momentary conditional independence (MCI) tests that condition on the estimated parent sets of both variables. PCMCI+ requires a conditional-independence (CI) test; we use partial correlation (ParCorr), which evaluates linear conditional dependence by correlating the residuals obtained after regressing both variables on the conditioning set.
+
+PCMCI+ can discover both lagged and contemporaneous relationships. For a discovered lagged link with $\tau\in\{1,\ldots,\tau_{\max}\}$, temporal order determines the direction from $x^i_{t-\tau}$ to $x^j_t$. Let $\widehat{\mathcal{P}}_j$ denote the estimated parent set of $x^j_t$, and let $v^\tau_{ij}$ denote the test statistic associated with a retained source-lag pair $(i,\tau)\in\widehat{\mathcal{P}}_j$. The magnitude $|v^\tau_{ij}|$ provides a relative measure of conditional-dependence strength. The estimated graph and its test statistics are used to construct the structural and strength priors described below. These estimates are not interpreted as a ground-truth causal graph.
+
+% ====================================================================
+\section{Method}
+
+\subsection{Problem Formulation}
+Let $\mathbf{X}=[\mathbf{x}_1,\ldots,\mathbf{x}_L]\in\mathbb{R}^{N\times L}$ denote a multivariate time-series window of length $L$, where $\mathbf{x}_\ell=(x^1_\ell,\ldots,x^N_\ell)^\top$ is the observation at local time index $\ell$. We follow the semi-supervised MTSAD setting, in which the model is trained on normal data. Given the past observations $\mathbf{x}_1,\ldots,\mathbf{x}_{L-1}$, the model produces a prediction $\hat{\mathbf{x}}_L$ of the target observation $\mathbf{x}_L$. The target observation is withheld from the predictor and used to compute the prediction error, and an anomaly score is assigned to the target time $L$.
+
+To predict $\mathbf{x}_L$, we use a length-$w$ lag segment for each variable $i\in\{1,\ldots,N\}$ and each lag $\tau\in\{1,\ldots,\tau_{\max}\}$:
+\begin{equation}
+\mathbf{s}^\tau_i=[x^i_{L-\tau-w+1},\ldots,x^i_{L-\tau}]\in\mathbb{R}^w .
+\label{eq:segment}
+\end{equation}
+This segment represents the temporal context of variable $i$ ending $\tau$ steps before the target time $L$. To ensure that all lag segments lie within the input window, we require $L\ge\tau_{\max}+w$. Each pair $(\tau,i)$ defines a source-lag candidate, and for each target variable, PICAAD assigns prediction weights to these candidates through a process we refer to as source-lag routing.
+
+Figure~\ref{fig:overview} illustrates the prior-guided prediction architecture. The model encodes historical segments and uses PCMCI+-derived priors to guide variable attention and source-lag routing. During training, we perturb selected segments and measure the resulting increases in prediction error. These measurements are accumulated into a causal reference structure (CRS), which serves as a reference for learning model-based dependency strengths.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/overview.pdf}   % TODO(team): figure file name
+\caption{Overview of PICAAD. Offline, PCMCI+ produces a structural prior $\mathbf{M}$ and a strength prior $\Wt$ from normal training data. Lag segments are encoded per variable and contextualized by prior-guided multi-head self-attention. Routing combines global logits $\psi$ (initialized from $\Wt$), a persistent strength-prior bias, a learned gate $\mathbf{G}$ under the structural factor, and an input-dependent correction $\Delta(\mathbf{X})$. During training, interventions on source-lag segments update the causal reference structure (CRS).}
+\label{fig:overview}
+\end{figure*}
+
+\subsection{Causal Prior Construction}
+We apply PCMCI+ to normal training observations, excluding validation and test data, to estimate temporal dependencies and their test statistics. We convert these estimates into two complementary priors: a structural gate prior $\mathbf{M}$ and a normalized strength prior $\Wt$, both in $[0,1]^{\tau_{\max}\times N\times N}$. The former encodes candidate connectivity, whereas the latter specifies the relative prior weights of source-lag candidates for each target.
+
+For each positive lag, we assign a coefficient $c^\tau_{ij}\in\{0,0.5,1\}$ based on the estimated edge type: $1$ for directed relationships, $0.5$ for ambiguous relationships, and $0$ otherwise. We initialize the structural gate prior from the estimated lagged relationships:
+\begin{equation}
+M_{\tau,i,j}=c^\tau_{ij},\qquad \tau=1,\ldots,\tau_{\max}.
+\label{eq:Mprior}
+\end{equation}
+Since PICAAD predicts the target observation using only past values, its routing structure does not include contemporaneous connections ($\tau=0$). To retain the source--target information of directed contemporaneous relationships identified by PCMCI+, we map these connections to the closest available lag by setting $M_{1,i,j}=1$. This mapping is a prior-construction convention and does not imply the identification of a lag-one causal relationship. We additionally set $M_{1,j,j}=1$ for each target $j$ to retain a lag-one autoregressive candidate.
+
+We initialize the unnormalized strength of each lagged candidate using the magnitude of its PCMCI+ test statistic:
+\begin{equation}
+a_{\tau,i,j}=c^\tau_{ij}\,|v^\tau_{ij}|,\qquad \tau=1,\ldots,\tau_{\max}.
+\label{eq:strength}
+\end{equation}
+As with the structural prior, we incorporate directed contemporaneous relationships into the lag-one strengths by retaining the larger of the existing strength and the corresponding test-statistic magnitude. We also enforce a positive minimum strength for each lag-one self-link to ensure well-defined normalization. The strength prior is obtained by normalizing the strengths over source-lag pairs for each target:
+\begin{equation}
+\Wts_{\tau,i,j}=\frac{a_{\tau,i,j}}{\sum_{\tau'=1}^{\tau_{\max}}\sum_{i'=1}^{N}a_{\tau',i',j}} .
+\label{eq:Wprior}
+\end{equation}
+Consequently, $\sum_{\tau,i}\Wts_{\tau,i,j}=1$ for each target $j$, whereas $\mathbf{M}$ is not normalized.
+
+The resulting priors provide structural guidance rather than a ground-truth causal graph, and the test statistics serve as proxies for conditional-dependence strength rather than physical causal effects. The structural prior $\mathbf{M}$ initializes the attention bias and the learnable gate, provides the fixed structural factor of the gate, and determines the sampling of source-lag candidates for training-time interventions. The strength prior $\Wt$ initializes the global routing logits, provides a persistent routing bias, and initializes the CRS. Both prior tensors remain fixed during training, while the attention, gating, and routing parameters are learned and the CRS is separately updated using intervention responses.
+
+\subsection{Causal-Prior-Guided Prediction}
+
+\paragraph{Lag encoding and prior-guided attention.}
+We encode each lag segment $\mathbf{s}^\tau_i$ using a variable-specific LSTM~\cite{hochreiter1997lstm} followed by temporal attention pooling, yielding an embedding $\mathbf{z}^\tau_i\in\mathbb{R}^d$. The encoder for each variable is shared across lags. At lag $\tau$, we stack the variable embeddings as $\mathbf{Z}^\tau=[\mathbf{z}^\tau_1,\ldots,\mathbf{z}^\tau_N]^\top\in\mathbb{R}^{N\times d}$. We then apply multi-head self-attention~\cite{vaswani2017attention} across variables at each lag. The attention parameters are shared across lags, while a learnable lag-specific bias is added to the pre-softmax attention logits to incorporate $\mathbf{M}$. The bias is initialized from $\mathbf{M}$ to favor prior-supported connections, and its contribution increases during a warmup period while its parameters are optimized jointly with the predictor. We denote the resulting representations by $\mathbf{Z}^{*\tau}\in\mathbb{R}^{N\times d}$. Details are given in Appendices~A.2 and~A.3.
+
+\paragraph{Routing and prediction.}
+Whereas the attention layer combines variable information within each lag, routing assigns prediction weights jointly across source-lag candidates for each target. Using the contextualized embeddings, we compute an instance-specific correction for each source--target pair at lag $\tau$:
+\begin{equation}
+\Delta_{\tau,i,j}(\mathbf{X})=\frac{\langle q(\mathbf{z}^{*\tau}_i),\,k(\mathbf{z}^{*\tau}_j)\rangle}{\sqrt{d_h}},
+\label{eq:delta}
+\end{equation}
+where $q$ and $k$ are learned routing projections with output dimension $d_h$, distinct from those of the self-attention layer and shared across lags.
+
+Let $\psi$ denote learnable routing logits shared across input windows and initialized using $\Wt$. To incorporate structural guidance, we combine a learnable gate $\mathbf{M}_{\mathrm{learn}}$, initialized using $\mathbf{M}$, with the fixed structural prior:
+\begin{equation}
+\mathbf{G}=\mathbf{M}_{\mathrm{learn}}\odot\bigl[\gamma+(1-\gamma)\mathbf{M}\bigr],
+\label{eq:gate}
+\end{equation}
+where each entry of $\mathbf{M}_{\mathrm{learn}}$ lies in $(0,1)$ and $0<\gamma<1$ is a fixed attenuation factor. The structural factor is one when $M_{\tau,i,j}=1$ and $\gamma$ when $M_{\tau,i,j}=0$. Thus, the learnable gate adjusts individual candidates under fixed structural guidance without imposing a hard binary mask. The routing distribution is
+\begin{equation}
+\bm{\Pi}=\mathrm{softmax}_{\tau,i}\Bigl(\psi+\Delta(\mathbf{X})+\beta\log\max(\Wt,\epsilon)+\log\mathbf{G}\Bigr),
+\label{eq:routing}
+\end{equation}
+where $\beta>0$ controls the persistent strength-prior bias and $\epsilon>0$ is a numerical floor. The term $\beta\log\max(\Wt,\epsilon)$ is a fixed buffer; unlike the prior contribution absorbed into $\psi$, it is not reduced by weight decay, so the strength prior remains in the routing computation throughout training. For each target $j$, the softmax normalizes jointly over all source-lag candidates, giving $\sum_{\tau,i}\Pi_{\tau,i,j}=1$.
+
+A shared affine projection maps each contextualized source-lag embedding to target-specific candidate values $V_{\tau,i,j}$. The prediction and the model-based edge strength are
+\begin{equation}
+\hat{x}^j_L=\sum_{\tau,i}\Pi_{\tau,i,j}V_{\tau,i,j}+b_j,\qquad E_{\tau,i,j}=\Pi_{\tau,i,j}\,|V_{\tau,i,j}|,
+\label{eq:pred}
+\end{equation}
+where $b_j$ is a learnable target-specific bias. The prediction combines the candidate values according to their routing weights, whereas $E_{\tau,i,j}$ measures the magnitude of each weighted candidate value and is used for CRS alignment and scoring. Because the contextualized embeddings incorporate information from other variables, these quantities represent model-internal contributions rather than identified causal effects.
+
+\subsection{Interventional Causal Reference Structure}
+We construct a causal reference structure (CRS) from the predictor's responses to perturbations of normal historical segments. The CRS is a non-differentiable buffer with the same dimensions as $\Wt$ and is initialized as $\CRS^{(0)}=\Wt$.
+
+During training, we sample source-lag pairs $(\tau,i)$ with probability proportional to $\sum_j M_{\tau,i,j}$. For each sampled pair, we replace its segment in each window with the corresponding segment from another window in the mini-batch, preserving the internal temporal order while leaving other input entries and target observations unchanged. We denote the perturbed input by $\mathbf{X}^{\mathrm{int}}$ and its prediction by $\hat{\mathbf{x}}^{\mathrm{int}}_L$. For each window, the response of target $j$ is the positive increase in prediction error:
+\begin{equation}
+\delta_{\tau,i,j}=\Bigl[\,|x^j_L-\hat{x}^{j,\mathrm{int}}_L|-\mathrm{sg}\bigl(|x^j_L-\hat{x}^j_L|\bigr)\Bigr]_+ ,
+\label{eq:response}
+\end{equation}
+where $[a]_+=\max(a,0)$ and $\mathrm{sg}(\cdot)$ is the stop-gradient operation. Each sampled pair produces a response for every target variable. These responses quantify the learned predictor's sensitivity to the selected segment rather than physical causal effects. Because lag segments can overlap, the response is attributed to the perturbed segment and need not isolate the effect of a single lag.
+
+We aggregate the measured responses over each training epoch, normalize them for each target, and incorporate them into the CRS through an exponential moving average. Unmeasured entries use their previous CRS values rather than zeros, and the updated reference is renormalized over source-lag pairs for each target (Appendix~A.5). The CRS is updated only from normal training data and remains fixed during inference.
+
+\subsection{Training Objective}
+We train the predictor using a forecasting loss and two alignment terms based on the accumulated CRS and on the intervention responses measured in the current mini-batch:
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{\mathrm{pred}}+\lambda_{\mathrm{crs}}(e)\,\mathcal{L}_{\mathrm{crs}}+\lambda_{\mathrm{int}}\,\mathcal{L}_{\mathrm{int}},
+\label{eq:loss}
+\end{equation}
+where $e$ denotes the training epoch. The coefficient $\lambda_{\mathrm{crs}}(e)$ is zero during an initial phase and takes its prescribed value afterwards.
+
+The prediction loss $\mathcal{L}_{\mathrm{pred}}$ is the mean absolute forecasting error $\frac{1}{N}\sum_{j}|x^j_L-\hat{x}^j_L|$, averaged over the mini-batch. The CRS-alignment loss $\mathcal{L}_{\mathrm{crs}}$ compares the target-wise normalized, mini-batch-averaged edge strengths with the accumulated CRS using the Kullback--Leibler divergence. The CRS is treated as a constant during each gradient update. Reference updates begin from the first epoch, independently of the delayed activation of this loss. The intervention-alignment loss $\mathcal{L}_{\mathrm{int}}$ compares, for each sampled source-lag pair, the mini-batch-averaged edge strengths with the averaged intervention responses after normalizing both across target variables, using the mean squared error. Unlike CRS alignment, it directly incorporates the responses measured in the current mini-batch.
+
+We do not add an explicit loss that pulls the routing distribution or the learned gate toward the priors. The priors already enter the model through initialization, the persistent routing bias in Eq.~\eqref{eq:routing}, and the structural factor in Eq.~\eqref{eq:gate}. An additional prior-alignment loss did not improve SWaT or SMD and reduced AUC-PR on PSM (Section~\ref{sec:ablation}). The exact formulations are given in Appendix~A.6.
+
+\subsection{Anomaly Scoring}
+For each test window, a single forward pass produces the prediction $\hat{\mathbf{x}}_L$ and the edge strengths $\mathbf{E}(\mathbf{X})$. The predictor parameters and the CRS remain fixed, and no test-time interventions are performed. We normalize $\mathbf{E}$ over all source-lag pairs for each target, denote the result by $\bar{\mathbf{E}}$, and compute a prediction-deviation score and a strength-deviation score:
+\begin{align}
+S_{\mathrm{pred}}&=\frac{1}{N}\sum_{j=1}^{N}|x^j_L-\hat{x}^j_L|, \\
+S_{\mathrm{str}}&=\frac{1}{\tau_{\max}}\sum_{\tau=1}^{\tau_{\max}}\sqrt{\frac{1}{N^2}\sum_{i=1}^{N}\sum_{j=1}^{N}\bigl(\bar{E}_{\tau,i,j}-\CRS_{\tau,i,j}\bigr)^2}.
+\label{eq:scores}
+\end{align}
+The prediction score measures the discrepancy between predicted and observed values. The strength score measures the deviation of the current normalized edge strengths from the normal CRS, computed as a root-mean-square difference over source--target pairs at each lag and averaged across lags. The final anomaly score is
+\begin{equation}
+A=S_{\mathrm{pred}}+S_{\mathrm{str}},
+\label{eq:final}
+\end{equation}
+without score calibration or weighting. The score is assigned to the target time $L$ of the window.
+
+% ====================================================================
+\section{Experiments}
+
+\subsection{Experimental Setup}
+
+\paragraph{Datasets.}
+We evaluate PICAAD on three real-world MTSAD benchmarks: SWaT~\cite{goh2017swat}, SMD~\cite{su2019omni}, and PSM~\cite{abdulaal2021psm}. The training sets of all three contain only normal observations, whereas the test sets contain both normal and anomalous observations. SWaT is a water treatment testbed with 51 sensor and actuator channels. We downsample SWaT by a factor of five using non-overlapping median aggregation of both the observations and the labels, and drop the incomplete trailing block.\footnote{The 37 test rows labeled ``A ttack'' in the original release are treated as anomalous.} SMD comprises 28 server machines with 38 metrics each; for every machine, we estimate a separate causal prior and train a separate model. PSM contains 25 server metrics from eBay application servers and has a relatively high anomaly ratio. Table~\ref{tab:datasets} summarizes the statistics.
+
+\begin{table}[t]
+\centering
+\caption{Dataset statistics. SMD lengths are summed over its 28 machines.}
+\label{tab:datasets}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & Entities & Vars & Train & Test & Anomaly (\%) \\
+\midrule
+SWaT (ds5) & 1  & 51 & 99{,}000  & 89{,}983  & 12.14 \\
+SMD        & 28 & 38 & 708{,}405 & 708{,}420 & 4.16 \\
+PSM        & 1  & 25 & 132{,}481 & 87{,}841  & 27.76 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Evaluation metrics.}
+We evaluate all methods from three perspectives. For point-wise ranking, we report AUC-ROC and AUC-PR (average precision), using AUC-PR as the primary metric because it is more informative under class imbalance. For threshold-dependent detection, we report point-wise F1, range-based F1 (R-F1), and affiliation-based F1 (Aff-F1)~\cite{huet2022affiliation}. Because these thresholds are selected to maximize each metric on the test set, we treat these results as oracle diagnostic measures rather than estimates of deployable performance. For range-aware evaluation, we report VUS-ROC and VUS-PR~\cite{paparrizos2022vus}, with the maximum tolerance buffer set to the median length of the labeled anomaly ranges in each evaluated series. We do not apply point adjustment~\cite{kim2022rigorous}. For SMD, every metric is computed per machine and macro-averaged over the 28 machines. All results are averaged over four random seeds.
+
+\paragraph{Baselines.}
+% TODO(team): keep this list identical to the columns of Table 2, and confirm that every column was rerun under this protocol.
+We compare PICAAD with reconstruction-based methods (LSTM-AE~\cite{malhotra2016lstm} and OmniAnomaly~\cite{su2019omni}), Transformer-based and general time-series models (Anomaly Transformer~\cite{xu2022anomaly}, PatchTST~\cite{nie2023patchtst}, TimesNet~\cite{wu2023timesnet}, DCdetector~\cite{yang2023dcdetector}, iTransformer~\cite{liu2024itransformer}, and ModernTCN~\cite{luo2024moderntcn}), recent detectors (SARAD~\cite{dai2024sarad} and CATCH~\cite{wu2025catch}), and causality-aware methods (OracleAD~\cite{cho2025oraclead} and CAROTS~\cite{kim2025carots}). No official implementation of OracleAD is available. We therefore use a re-implementation that follows the architecture and hyperparameters reported in the original paper (window length 10, $\lambda_{\mathrm{dev}}=3$, $\lambda_{\mathrm{recon}}=0.1$, 20 epochs, and product score fusion), with the checkpoint selected by the validation prediction error. CAROTS is run from its official code without modification. All baselines are retrained under identical splits and normalization. We keep each method's native anomaly score and recompute every metric from its raw scores with a single shared evaluation script; we do not reuse numbers reported in the original papers.
+
+\paragraph{Implementation details.}
+The last 20\% of each training sequence is held out as a chronological validation split, and standardization statistics and the causal prior are computed only from the remaining 80\%. We use windows of length $L=10$ with stride 1, segment length $w=5$, and $\tau_{\max}=5$, so that $L=\tau_{\max}+w$. Each window score is assigned to its target time index, and the first $L-1$ test time points are excluded for all methods. PCMCI+ (Tigramite) is run once per dataset and once per SMD machine, with ParCorr, $\alpha_{\mathrm{PC}}=0.05$, $\tau_{\max}=5$, and a contiguous subsample of at most 10{,}000 training steps; the result is cached and reused across seeds and configurations, and the self-link floor is $m_{\mathrm{self}}=0.25$. The encoder uses $d=64$, two LSTM layers per variable, and four attention heads, and the prior attention bias is warmed up over the first five epochs. For routing, we set $\gamma=0.05$ and $\beta=0.35$, and initialize $\psi$ with a self-link offset of 1 plus $0.25\log\Wt$. Two source-lag pairs are intervened per mini-batch, and the CRS is updated once per epoch with EMA coefficient $0.9$. We set $\lambda_{\mathrm{crs}}=1$ from epoch 5 onward and $\lambda_{\mathrm{int}}=0.1$. We train with AdamW (weight decay $0.01$, gradient clipping $1.0$) and batch size 512, using a learning rate of $5\times10^{-5}$ for PSM and $5\times10^{-4}$ for SMD and SWaT, for 80 epochs without early stopping. We report the checkpoint that minimizes the three-epoch moving average of the validation prediction MAE over epochs $\ge 20$. Test labels are never used for training, tuning, checkpoint selection, or thresholding. All experiments run on a single NVIDIA RTX A6000 GPU.
+
+\subsection{Overall Performance}
+
+Table~\ref{tab:main} reports the comparison. All methods share the same preprocessing, splits, and evaluation script, without point adjustment.
+
+On PSM, PICAAD achieves the best AUC-PR (58.22), VUS-ROC (71.76), and VUS-PR (54.69). It improves AUC-PR by 2.9 points over the strongest causal baseline, OracleAD (55.30), and VUS-PR by 5.8 points over CAROTS (48.89). On SMD, PICAAD achieves the best R-F1 (40.37) and Aff-F1 (86.12), indicating more accurate range-level and event-level localization, while OracleAD attains the highest AUC-PR (46.49 vs.\ 43.92). On SWaT, CAROTS performs best on most metrics, and PICAAD is comparable to OracleAD in point-wise ranking (AUC-PR 74.02 vs.\ 74.65).
+
+% TODO(team): revise once the remaining baseline columns are verified.
+Several general-purpose baselines produce a point-wise F1 equal to that of flagging every test point as anomalous (43.45 on PSM, 7.98 on SMD, and 21.65 on SWaT), indicating that their scores do not rank anomalous points above normal ones under this protocol.
+
+\begin{table*}[t]
+\centering
+\caption{Performance comparison (\%). Mean over four seeds; SMD is macro-averaged over 28 machines. Best in bold, second best underlined.}
+\label{tab:main}
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll|cccccccccc|ccc}
+\toprule
+Dataset & Metric & A.E & Omni & A.T & Patch & TsNet & DC & iTrans & Modern & SARAD & CATCH & OracleAD & CAROTS & PICAAD \\
+\midrule
+\multirow{7}{*}{PSM} & F1 & 47.55 & 45.90 & 43.45 & 43.45 & 43.45 & 43.45 & 43.45 & 43.45 & 45.75 & 44.33 & 53.32 & \textbf{56.76} & \underline{53.97} \\
+ & R-F1 & 45.93 & 40.58 & 12.17 & 34.75 & 37.49 & 21.35 & 35.91 & 35.48 & 13.54 & \textbf{54.19} & \underline{47.49} & 46.78 & 42.13 \\
+ & Aff-F1 & 73.70 & 73.49 & 69.68 & 69.43 & 69.43 & 69.59 & 69.53 & 69.43 & 77.12 & \textbf{79.16} & 77.46 & 72.79 & \underline{77.87} \\
+ & A-ROC & 66.79 & 63.95 & 38.35 & 58.68 & 59.09 & 49.86 & 59.22 & 59.21 & 62.86 & 64.75 & 73.23 & \textbf{75.75} & \underline{75.28} \\
+ & A-PR & 47.27 & 45.00 & 24.28 & 37.91 & 38.95 & 27.78 & 38.27 & 38.59 & 41.67 & 43.40 & \underline{55.30} & 53.17 & \textbf{58.22} \\
+ & V-ROC & 68.20 & 61.23 & 50.96 & 50.62 & 50.67 & 50.11 & 51.23 & 50.68 & 57.63 & 57.00 & 67.95 & \underline{69.46} & \textbf{71.76} \\
+ & V-PR & 49.66 & \underline{52.49} & 49.76 & 50.31 & 49.86 & 27.89 & 44.54 & 50.55 & 38.64 & 45.95 & 47.37 & 48.89 & \textbf{54.69} \\
+\midrule
+\multirow{7}{*}{SMD} & F1 & 25.78 & 32.16 & 7.98 & 7.98 & 7.98 & 8.00 & 7.98 & 7.98 & 25.92 & 7.98 & \textbf{50.16} & \underline{49.45} & 48.13 \\
+ & R-F1 & 28.09 & 35.81 & 5.84 & 13.81 & 9.43 & 8.23 & 9.02 & 14.43 & 10.35 & 2.90 & \underline{37.80} & 30.71 & \textbf{40.37} \\
+ & Aff-F1 & 83.34 & 82.57 & 67.43 & 67.43 & 67.43 & 67.49 & 67.43 & 67.43 & 75.87 & 67.43 & \underline{84.70} & 78.50 & \textbf{86.12} \\
+ & A-ROC & 76.80 & 71.25 & 50.40 & 73.85 & 59.09 & 49.97 & 74.57 & 72.13 & 72.84 & 80.96 & \textbf{83.82} & \underline{82.16} & 81.96 \\
+ & A-PR & 19.40 & 27.73 & 4.57 & 14.82 & 13.66 & 4.16 & 14.57 & 13.01 & 25.87 & 17.09 & \textbf{46.49} & 43.54 & \underline{43.92} \\
+ & V-ROC & 74.38 & 73.26 & 50.34 & 51.66 & 51.10 & 49.92 & 51.76 & 51.55 & 65.57 & 50.95 & \textbf{85.16} & 83.85 & \underline{84.24} \\
+ & V-PR & 22.50 & 31.18 & 36.86 & 41.60 & 41.21 & 4.27 & 32.85 & 41.54 & 19.33 & 35.25 & \textbf{41.87} & 38.87 & \underline{41.71} \\
+\midrule
+\multirow{7}{*}{SWaT} & F1 & 74.46 & 75.40 & 21.65 & 21.65 & 21.65 & 21.65 & 21.65 & 21.65 & 57.30 & 21.65 & 75.83 & \textbf{79.63} & \underline{76.03} \\
+ & R-F1 & \underline{36.63} & \textbf{38.72} & 15.48 & 12.23 & 20.80 & 15.54 & 11.89 & 12.88 & 21.37 & 14.74 & 22.83 & 34.47 & 21.35 \\
+ & Aff-F1 & \underline{75.30} & 72.09 & 70.06 & 69.51 & 73.47 & 69.25 & 69.25 & 72.08 & 74.88 & 73.68 & 75.25 & \textbf{80.19} & 74.20 \\
+ & A-ROC & 81.97 & 82.15 & 42.58 & 24.36 & 28.97 & 49.89 & 24.57 & 24.50 & \textbf{85.40} & 33.31 & 84.53 & \underline{85.36} & 84.01 \\
+ & A-PR & 67.51 & 72.73 & 11.93 & 8.40 & 10.71 & 12.14 & 8.33 & 9.00 & 64.77 & 13.39 & \underline{74.65} & \textbf{75.90} & 74.02 \\
+ & V-ROC & 81.89 & \underline{81.98} & 50.72 & 49.84 & 20.80 & 50.00 & 49.90 & 50.15 & \textbf{86.30} & 51.89 & 74.06 & 79.18 & 74.50 \\
+ & V-PR & \textbf{65.89} & 64.42 & 17.00 & 11.92 & 51.20 & 11.92 & 12.05 & 13.05 & 62.72 & 18.70 & 57.13 & \underline{65.74} & 56.74 \\
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+\subsection{Ablation Study}
+\label{sec:ablation}
+
+We examine the training-time contribution of each component on PSM by removing it and retraining with the same four seeds (Table~\ref{tab:ablation}); differences are paired by seed. In \emph{w/o Prior}, the PCMCI+ priors are replaced with the model's uninformative defaults. In \emph{w/o $\Delta$}, the input-dependent routing correction is removed. In \emph{w/o CRS loss}, $\lambda_{\mathrm{crs}}=0$ throughout training. In \emph{w/o Intervention}, no intervention is performed, which removes both $\mathcal{L}_{\mathrm{int}}$ and the CRS updates. In \emph{w/o CRS update}, interventions train $\mathcal{L}_{\mathrm{int}}$, but the CRS remains at $\Wt$. In \emph{w/o $\mathcal{L}_{\mathrm{int}}$}, the CRS is updated, but $\lambda_{\mathrm{int}}=0$. The last row adds an explicit prior-alignment loss, consisting of the Jensen--Shannon divergence between the batch-averaged routing distribution and $\Wt$ and a binary cross-entropy between the learned gate and $\mathbf{M}$.
+
+\begin{table}[t]
+\centering
+\caption{Ablation on PSM (\%). $\Delta$: paired mean difference from Full (pp); parentheses: seeds (of 4) below Full.}
+\label{tab:ablation}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+Variant & A-PR & V-PR & $\Delta$A-PR & $\Delta$V-PR \\
+\midrule
+PICAAD (Full)                    & \textbf{58.22} & \textbf{54.69} & --           & --           \\
+w/o Prior                        & 47.43 & 45.53 & $-$10.79 (4) & $-$9.16 (4)  \\
+w/o $\Delta$                     & 46.12 & 44.33 & $-$12.09 (4) & $-$10.36 (4) \\
+w/o CRS loss                     & 44.11 & 42.79 & $-$14.11 (4) & $-$11.90 (4) \\
+w/o Intervention                 & 44.13 & 42.69 & $-$14.08 (4) & $-$12.00 (4) \\
+w/o CRS update                   & 44.32 & 42.98 & $-$13.90 (4) & $-$11.72 (4) \\
+w/o $\mathcal{L}_{\mathrm{int}}$ & 54.26 & 50.26 & $-$3.96 (4)  & $-$4.43 (4)  \\
+\midrule
++ prior-alignment loss           & 53.94 & 51.20 & $-$4.28 (3)  & $-$3.49 (3)  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Removing any component degrades both AUC-PR and VUS-PR on all four seeds. The largest drops, about 14 points in AUC-PR, occur when CRS alignment, interventions, or CRS updates are removed. This indicates that the reference must be updated from intervention responses during training: a reference kept at the PCMCI+ strength prior (w/o CRS update) performs no better than removing interventions entirely. Removing the causal prior lowers AUC-PR by 10.8 points, and removing the instance-specific correction $\Delta(\mathbf{X})$ lowers it by 12.1 points. The direct intervention loss contributes a smaller but consistent gain of 4.0 points.
+
+Adding the explicit prior-alignment loss lowers AUC-PR on PSM by 4.3 points, while changing it by less than 0.7 points on SWaT and SMD (Appendix~B). At the end of training, this loss improves the strength-deviation score alone (AUC-PR $34.6\rightarrow39.1$) but degrades the prediction score more ($58.0\rightarrow54.0$), which supports using the priors without an additional alignment objective.
+
+\subsection{Anomaly-Score Components}
+\label{sec:components}
+
+To assess the two scores post hoc, we evaluate the prediction score $P=S_{\mathrm{pred}}$, the strength-deviation score $C=S_{\mathrm{str}}$, and their sum $A=P+C$ (Table~\ref{tab:components}). All variants reuse the same trained models and selected checkpoints, and only the inference-time score composition changes. This analysis therefore measures the post-hoc scoring utility of each score rather than the training-time contribution of the associated objectives, which Table~\ref{tab:ablation} covers.
+
+\begin{table}[t]
+\centering
+\caption{Post-hoc score composition (\%) with the same checkpoints. $P$: prediction deviation; $C$: deviation from the CRS; $A=P+C$ (default).}
+\label{tab:components}
+\small
+\setlength{\tabcolsep}{2.6pt}
+\begin{tabular}{llccccccc}
+\toprule
+Data & Score & F1 & R-F1 & Aff & A-ROC & A-PR & V-ROC & V-PR \\
+\midrule
+\multirow{3}{*}{PSM}  & $P$   & 53.83 & 41.99 & 78.02 & 75.20 & 58.18 & 71.72 & 54.65 \\
+                      & $C$   & 45.63 & 37.26 & 71.32 & 58.95 & 34.70 & 53.73 & 33.76 \\
+                      & $P{+}C$ & 53.97 & 42.13 & 77.87 & 75.28 & 58.22 & 71.76 & 54.69 \\
+\midrule
+\multirow{3}{*}{SMD}  & $P$   & 48.15 & 40.42 & 86.15 & 81.95 & 43.92 & 84.22 & 41.71 \\
+                      & $C$   & 15.45 & 17.21 & 74.02 & 61.13 &  9.32 & 62.50 &  8.55 \\
+                      & $P{+}C$ & 48.13 & 40.37 & 86.12 & 81.96 & 43.92 & 84.24 & 41.71 \\
+\midrule
+\multirow{3}{*}{SWaT} & $P$   & 76.02 & 22.05 & 74.45 & 83.98 & 73.97 & 74.45 & 56.66 \\
+                      & $C$   & 70.53 & 26.56 & 74.16 & 83.42 & 57.19 & 83.51 & 56.06 \\
+                      & $P{+}C$ & 76.03 & 21.35 & 74.20 & 84.01 & 74.02 & 74.50 & 56.74 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The strength-deviation score carries anomaly information on its own. On PSM, $C$ alone reaches an AUC-PR of 34.70, above the anomaly ratio of 27.76\%. On SWaT, it exceeds $P$ in VUS-ROC (83.51 vs.\ 74.45) and R-F1 (26.56 vs.\ 22.05), suggesting that deviations from the CRS localize anomalous ranges that the prediction error ranks less well. In the raw sum, however, $A$ is dominated by the prediction score: on every dataset and seed, $A$ and $P$ differ by at most 0.32 points in AUC-PR and VUS-PR. The benefit of the CRS in Table~\ref{tab:ablation} therefore arises mainly through training, by shaping the predictor's routing, rather than through the additive strength term at inference.
+
+% ====================================================================
+\section{Conclusion}
+
+We presented PICAAD, a causal-prior-guided framework for multivariate time-series anomaly detection. PICAAD turns PCMCI+ estimates into structural and strength priors that initialize prior-guided attention, gating, and source-lag routing and remain in the routing logits as a persistent bias. It further measures the predictor's reliance on individual source-lag segments through training-time interventions and accumulates these responses into an interventional causal reference structure. Across SWaT, SMD, and PSM, PICAAD achieves the best AUC-PR and VUS-PR on PSM and the best range- and event-level F1 on SMD. On PSM, removing the causal prior, the interventions, or the CRS updates reduces the mean AUC-PR by 10.8 to 14.1 points, and every seed falls below the full model.
+
+Our analysis also identifies limitations. On SWaT, CAROTS remains stronger, particularly on range-aware metrics. Although the strength-deviation score is informative on its own, it contributes little to the raw additive score, so the CRS currently helps mainly by shaping training rather than through scoring. Combining the two scores in a scale-aware way using only normal validation data, and extending the ablations beyond PSM, are directions for future work.
+
+% ====================================================================
+\bibliography{refs}
+
+% ====================================================================
+\clearpage
+\appendix
+
+\section{A\quad Additional Method Details}
+This appendix describes prior construction, lag encoding, prior-guided variable attention, routing, the intervention measurements used to maintain the CRS, and the training losses. We use $N$ variables, $\tau_{\max}$ candidate lags, and segments of length $w$. Unless stated otherwise, three-dimensional dependency tensors are indexed by $(\tau,i,j)$, corresponding to lag, source variable, and target variable.
+
+\subsection{A.1\quad Prior Construction and Normalization}
+
+\paragraph{Structural coefficients and initial strengths.}
+PCMCI+ is fitted to normal training data. Let $v^\tau_{ij}$ denote its conditional-independence test statistic for a source--target pair at lag $\tau$. For positive lags, the retained graph entries are converted into coefficients
+\begin{equation}
+c^\tau_{ij}=
+\begin{cases}
+1, & \text{retained directed link } i\to j,\\
+\tfrac{1}{2}, & \text{retained \texttt{o-o} or \texttt{x-x} entry},\\
+0, & \text{otherwise}.
+\end{cases}
+\tag{A.1}
+\end{equation}
+We initialize the structural prior and the unnormalized strength tensor as
+\begin{equation}
+M_{\tau,i,j}=c^\tau_{ij},\qquad a_{\tau,i,j}=c^\tau_{ij}|v^\tau_{ij}|.
+\tag{A.2}
+\end{equation}
+The fractional coefficient retains information from these graph entries without assigning them the same structural weight as a directed link. Neither this coefficient nor the test-statistic magnitude is interpreted as a physical causal effect.
+
+\paragraph{Contemporaneous links and self-links.}
+Let $\mathcal{E}_0$ contain the directed contemporaneous links. For each $(i,j)\in\mathcal{E}_0$, we update the lag-one slot:
+\begin{equation}
+M_{1,i,j}\leftarrow\max\{M_{1,i,j},1\},\qquad a_{1,i,j}\leftarrow\max\{a_{1,i,j},|v^0_{ij}|\}.
+\tag{A.3}
+\end{equation}
+This transfer is a modeling approximation that makes the contemporaneous information available to a predictor with past-only inputs; it does not identify a lag-one causal effect. We then reinforce the self-link of each target:
+\begin{equation}
+M_{1,j,j}\leftarrow1,\qquad a_{1,j,j}\leftarrow\max\{a_{1,j,j},m_{\mathrm{self}}\},\quad m_{\mathrm{self}}>0.
+\tag{A.4}
+\end{equation}
+The contemporaneous merge and self-link reinforcement are applied before strength normalization.
+
+\paragraph{Target-wise normalization.}
+For each target $j$, define $Z_j=\sum_{\tau=1}^{\tau_{\max}}\sum_{i=1}^{N}a_{\tau,i,j}$. The strength prior is
+\begin{equation}
+\Wts_{\tau,i,j}=
+\begin{cases}
+a_{\tau,i,j}/Z_j, & Z_j>\epsilon_{\mathrm{prior}},\\
+\mathbb{I}\{\tau=1,\,i=j\}, & \text{otherwise},
+\end{cases}
+\tag{A.5}
+\end{equation}
+where $\mathbb{I}\{\cdot\}$ is the indicator function. The positive self-strength floor prevents a zero denominator in exact arithmetic, and the second branch provides a self-only fallback for a numerically empty column. Thus, $\sum_{\tau,i}\Wts_{\tau,i,j}=1$ for every target, while $\mathbf{M}$ is not normalized.
+
+\subsection{A.2\quad Lag Encoder and Temporal Pooling}
+
+\paragraph{Lag segments.}
+Within a window with prediction target $\mathbf{x}_L$, the segment associated with source $i$ and lag $\tau$ is
+\begin{equation}
+\mathbf{s}^\tau_i=(x^i_{L-\tau-w+1},\ldots,x^i_{L-\tau}),\qquad \tau\in\{1,\ldots,\tau_{\max}\}.
+\tag{A.6}
+\end{equation}
+With one-based indexing, $L\ge\tau_{\max}+w$ ensures that every segment is contained in the window. Adjacent segments can overlap, and no segment contains the target observation $\mathbf{x}_L$.
+
+\paragraph{Variable-specific recurrent encoding.}
+The recurrent encoder for variable $i$ produces
+\begin{equation}
+\mathbf{H}^\tau_i=\mathrm{LSTM}_i(\mathbf{s}^\tau_i)=(\mathbf{h}^\tau_{i,1},\ldots,\mathbf{h}^\tau_{i,w}),\qquad \mathbf{h}^\tau_{i,r}\in\mathbb{R}^d.
+\tag{A.7}
+\end{equation}
+Different variables have separate recurrent parameters, and for a given variable the same encoder is reused across all lags.
+
+\paragraph{Temporal attention pooling.}
+Let $s^\tau_{\mathrm{pool},i}(\cdot)$ denote the scalar pooling score for the hidden states of this segment. The temporal weights and segment embedding are
+\begin{align}
+\alpha^\tau_{i,r}&=\frac{\exp\bigl(s^\tau_{\mathrm{pool},i}(\mathbf{h}^\tau_{i,r})\bigr)}{\sum_{u=1}^{w}\exp\bigl(s^\tau_{\mathrm{pool},i}(\mathbf{h}^\tau_{i,u})\bigr)}, \tag{A.8}\\
+\mathbf{z}^\tau_i&=\sum_{r=1}^{w}\alpha^\tau_{i,r}\mathbf{h}^\tau_{i,r}. \tag{A.9}
+\end{align}
+The softmax in Eq.~(A.8) is over positions within one segment and does not mix variables or lags.
+
+\subsection{A.3\quad Prior-Guided Variable Attention}
+
+\paragraph{Attention at a fixed lag.}
+For each lag, multi-head self-attention operates on the $N$ variable embeddings. For head $h$, write
+\begin{equation}
+\mathbf{q}^\tau_{h,j}=Q_h(\mathbf{z}^\tau_j),\quad \mathbf{k}^\tau_{h,i}=K_h(\mathbf{z}^\tau_i),\quad \mathbf{u}^\tau_{h,i}=U_h(\mathbf{z}^\tau_i),
+\tag{A.10}
+\end{equation}
+where the projection maps are shared across lags. The attention logit for query variable $j$ and source variable $i$ is
+\begin{equation}
+\ell^\tau_{h,j,i}(e)=\frac{(\mathbf{q}^\tau_{h,j})^\top\mathbf{k}^\tau_{h,i}}{\sqrt{d_h}}+\rho(e)\,\Phi_{\tau,i,j},
+\tag{A.11}
+\end{equation}
+where $\Phi$ is a learnable lag-specific bias initialized from the structural prior and $\rho(e)$ controls its contribution during warmup. The source weights and head output are
+\begin{equation}
+A^\tau_{h,j,i}=\frac{\exp(\ell^\tau_{h,j,i})}{\sum_{k=1}^{N}\exp(\ell^\tau_{h,j,k})},\qquad \mathbf{o}^\tau_{h,j}=\sum_{i=1}^{N}A^\tau_{h,j,i}\mathbf{u}^\tau_{h,i}.
+\tag{A.12}
+\end{equation}
+The head outputs are combined to produce the contextualized embedding $\mathbf{z}^{*\tau}_j$.
+
+\paragraph{Axis correspondence and warmup.}
+The prior convention is $(\tau,\text{source},\text{target})$, whereas an attention matrix is indexed by $(\text{query},\text{key})=(\text{target},\text{source})$. Consequently, the bias added at attention location $(j,i)$ is $\Phi_{\tau,i,j}$. Warmup scales the contribution of the bias to the attention logits; it does not by itself specify a parameter-freezing schedule.
+
+\subsection{A.4\quad Routing, Gating, and Prediction Head}
+
+\paragraph{Routing-logit initialization.}
+The global routing logits are initialized from the strength prior:
+\begin{equation}
+\psi^{(0)}_{\tau,i,j}=b_{\mathrm{self}}\,\mathbb{I}\{\tau=1,\,i=j\}+\kappa\log\Wts_{\epsilon,\tau,i,j},
+\tag{A.13}
+\end{equation}
+where $\Wts_\epsilon$ is the positive, numerically stabilized strength prior, $b_{\mathrm{self}}=1$ favors the lag-one autoregressive candidate, and $\kappa=0.25$. After initialization, $\psi$ is optimized as a model parameter with weight decay.
+
+\paragraph{Persistent strength-prior bias.}
+In addition to the initialization, the routing logits contain the fixed term $\beta\log\Wts_\epsilon$ with $\beta=0.35$ (Eq.~\eqref{eq:routing}). This term is a constant buffer and does not receive gradients. Unlike the prior contribution absorbed into $\psi$, it is not reduced by weight decay, so the strength prior remains in the routing computation throughout training. In a controlled comparison on PSM with eight seeds, folding this term into the initialization of $\psi$ (initializing $\psi$ with $(\kappa+\beta)\log\Wts_\epsilon$ and removing the persistent bias) reduced the mean AUC-PR from 58.07 to 56.05 (Appendix~B).
+
+\paragraph{Effective gate and routing distribution.}
+The effective gate combines the learned soft gate with a fixed structural factor:
+\begin{equation}
+G_{\theta,\tau,i,j}=M_{\mathrm{learn},\theta,\tau,i,j}\bigl[\gamma+(1-\gamma)M_{\tau,i,j}\bigr],\qquad 0<\gamma\le1,
+\tag{A.14}
+\end{equation}
+with $\gamma=0.05$. The fixed factor assigns a nonzero structural weight to pairs outside the prior support and therefore guides the structure without imposing a hard support mask. We collect the input-independent routing terms as
+\begin{equation}
+B_{\theta,\tau,i,j}=\psi_{\theta,\tau,i,j}+\beta\log\Wts_{\epsilon,\tau,i,j}+\log\bigl(G_{\theta,\tau,i,j}+\epsilon_G\bigr),\qquad \epsilon_G>0.
+\tag{A.15}
+\end{equation}
+For an input window $\mathbf{X}$, the routing distribution is
+\begin{equation}
+\Pi_{\tau,i,j}(\mathbf{X})=\frac{\exp\bigl(B_{\theta,\tau,i,j}+\Delta_{\theta,\tau,i,j}(\mathbf{X})\bigr)}{\sum_{\tau'=1}^{\tau_{\max}}\sum_{i'=1}^{N}\exp\bigl(B_{\theta,\tau',i',j}+\Delta_{\theta,\tau',i',j}(\mathbf{X})\bigr)}.
+\tag{A.16}
+\end{equation}
+Thus, $\sum_{\tau,i}\Pi_{\tau,i,j}(\mathbf{X})=1$ for each target $j$. Unlike variable attention, this normalization jointly spans the source and lag axes.
+
+\paragraph{Candidate values and prediction.}
+A shared affine value head maps each contextualized embedding to a vector of target-specific candidate values:
+\begin{equation}
+\mathbf{V}_{\tau,i,:}(\mathbf{X})=W_V\mathbf{z}^{*\tau}_i+\mathbf{b}_V,\qquad W_V\in\mathbb{R}^{N\times d},\ \mathbf{b}_V\in\mathbb{R}^N.
+\tag{A.17}
+\end{equation}
+This map is shared across source variables and lags. The prediction and effective strength are
+\begin{align}
+\hat{x}^j_L&=b_j+\sum_{\tau=1}^{\tau_{\max}}\sum_{i=1}^{N}\Pi_{\tau,i,j}(\mathbf{X})V_{\tau,i,j}(\mathbf{X}), \tag{A.18}\\
+E_{\tau,i,j}(\mathbf{X})&=\Pi_{\tau,i,j}(\mathbf{X})\,|V_{\tau,i,j}(\mathbf{X})|. \tag{A.19}
+\end{align}
+The value-head bias $\mathbf{b}_V$ is included in the candidate values and hence in $\mathbf{E}$, whereas the final prediction bias $\mathbf{b}$ is added after aggregation. The effective strength is a model-dependent quantity used for reference alignment and scoring, not an identified causal effect.
+
+\subsection{A.5\quad Intervention Measurements and Masked CRS Updates}
+
+\paragraph{Sampling source--lag pairs.}
+Each intervention selects a source--lag pair $(\tau,i)$ with probability determined by the structural prior:
+\begin{equation}
+q_{\tau,i}=\sum_{j=1}^{N}M_{\tau,i,j},\qquad p_{\tau,i}=\frac{q_{\tau,i}}{\sum_{\tau'=1}^{\tau_{\max}}\sum_{i'=1}^{N}q_{\tau',i'}}.
+\tag{A.20}
+\end{equation}
+The self-links ensure a positive denominator. A selected pair identifies an input block to perturb, and the resulting prediction response is measured for every target variable.
+
+\paragraph{Segment permutation.}
+For measurement $r$, let $(\tau_r,i_r)$ be the selected pair and let $\pi_r$ be a permutation of the indices of its mini-batch of size $B_r$. Define $\mathcal{I}_\tau=\{L-\tau-w+1,\ldots,L-\tau\}$. Starting from the original mini-batch, construct
+\begin{equation}
+x^{\mathrm{int},k}_{b,u}=
+\begin{cases}
+x^k_{\pi_r(b),u}, & k=i_r\ \text{and}\ u\in\mathcal{I}_{\tau_r},\\
+x^k_{b,u}, & \text{otherwise}.
+\end{cases}
+\tag{A.21}
+\end{equation}
+The selected segment is transferred as a complete block, preserving its internal temporal order, and the target $\mathbf{x}_{b,L}$ remains unchanged. Because lag segments can overlap, this replacement can also change the encodings of other segments that contain the modified observations.
+
+\paragraph{Positive prediction-error responses.}
+Let $\hat{x}^j_{b,L}$ and $\hat{x}^{j,\mathrm{int}}_{r,b,L}$ be the original and intervened predictions. The response of target $j$ and its mini-batch average are
+\begin{align}
+\delta_{r,b,j}&=\Bigl[\,|x^j_{b,L}-\hat{x}^{j,\mathrm{int}}_{r,b,L}|-\mathrm{sg}\bigl(|x^j_{b,L}-\hat{x}^j_{b,L}|\bigr)\Bigr]_+, \tag{A.22}\\
+\bar{\delta}_{r,j}&=\frac{1}{B_r}\sum_{b=1}^{B_r}\delta_{r,b,j}. \tag{A.23}
+\end{align}
+The positive part is applied to each example before averaging, so improvements on some examples do not cancel error increases on others.
+
+\paragraph{Accumulation and measurement masks.}
+Let $\mathcal{R}_e$ be the measurements collected during epoch $e$. The accumulated sums and counts are
+\begin{align}
+S^{(e)}_{\tau,i,j}&=\sum_{r\in\mathcal{R}_e}\mathbb{I}\{(\tau_r,i_r)=(\tau,i)\}\,\mathrm{sg}(\bar{\delta}_{r,j}), \tag{A.24}\\
+n^{(e)}_{\tau,i}&=\sum_{r\in\mathcal{R}_e}\mathbb{I}\{(\tau_r,i_r)=(\tau,i)\}. \tag{A.25}
+\end{align}
+Define $U^{(e)}_{\tau,i}=\mathbb{I}\{n^{(e)}_{\tau,i}>0\}$ and $F^{(e)}_{\tau,i,j}=S^{(e)}_{\tau,i,j}/n^{(e)}_{\tau,i}$ when $U^{(e)}_{\tau,i}=1$. The values of $F^{(e)}$ at unmeasured rows are not estimates of zero response; such rows are identified by $U^{(e)}$ and handled using the previous reference. A measured response with $M_{\tau,i,j}=0$ is still an observed response.
+
+\paragraph{Reference initialization and masked updates.}
+Let $\mathcal{N}(\cdot)$ denote normalization over source--lag pairs for each target. The reference is initialized as $\CRS^{(0)}=\Wt$, and at the end of epoch $e$ it is updated as
+\begin{align}
+\widehat{F}^{(e)}_{\tau,i,j}&=\begin{cases}F^{(e)}_{\tau,i,j}, & U^{(e)}_{\tau,i}=1,\\ \CRS^{(e-1)}_{\tau,i,j}, & \text{otherwise},\end{cases} \tag{A.26}\\
+\CRS^{(e)}&=\mathcal{N}\Bigl(\eta\,\CRS^{(e-1)}+(1-\eta)\,\mathcal{N}\bigl(\widehat{F}^{(e)}\bigr)\Bigr), \tag{A.27}
+\end{align}
+with $\eta=0.9$, so that $\sum_{\tau,i}\CRS^{(e)}_{\tau,i,j}=1$ for every target. Using previous-reference values for unmeasured rows before normalization does not imply that those entries remain numerically identical after normalization.
+
+\paragraph{Gradient handling and inference.}
+The responses stored in the accumulator are detached from the computation graph, and the CRS is a non-trainable buffer; gradients do not propagate through its accumulation or update. At inference, the predictor and its reference are fixed, and neither interventions nor reference updates are performed on test windows.
+
+\subsection{A.6\quad Training Losses}
+
+Let $\bar{\mathbf{E}}^{\mathrm{B}}=\mathcal{N}\bigl(\frac{1}{B}\sum_{b}\mathbf{E}_b\bigr)$ denote the mini-batch-averaged edge strengths normalized over source--lag pairs for each target. The CRS-alignment loss is
+\begin{equation}
+\mathcal{L}_{\mathrm{crs}}=\frac{1}{\tau_{\max}N}\sum_{j=1}^{N}\mathrm{KL}\Bigl(\CRS_{\cdot,\cdot,j}\,\big\|\,\bar{E}^{\mathrm{B}}_{\cdot,\cdot,j}\Bigr),
+\tag{A.28}
+\end{equation}
+where both distributions are clipped below at $10^{-8}$. For the measurements $r$ of the current mini-batch with a positive total response, let $\mathcal{N}_j$ denote normalization over targets. The intervention loss is
+\begin{equation}
+\mathcal{L}_{\mathrm{int}}=\frac{1}{|\mathcal{R}_B|}\sum_{r\in\mathcal{R}_B}\frac{1}{N}\sum_{j=1}^{N}\Bigl(\mathcal{N}_j\bigl(\textstyle\frac{1}{B}\sum_b E_{b,\tau_r,i_r,\cdot}\bigr)_j-\mathcal{N}_j(\bar{\delta}_{r,\cdot})_j\Bigr)^2 .
+\tag{A.29}
+\end{equation}
+We use $\lambda_{\mathrm{crs}}=1$ from epoch 5 onward and $\lambda_{\mathrm{int}}=0.1$. In $\mathcal{L}_{\mathrm{crs}}$, gradients flow only through $\mathbf{E}$. In $\mathcal{L}_{\mathrm{int}}$, the stop-gradient in Eq.~(A.22) applies only to the original prediction error, so gradients flow through both the edge strengths and the intervened prediction. Pairs with zero total response are skipped. Only the copies of the responses accumulated into the CRS (Eq.~(A.24)) are detached.
+
+\section{B\quad Additional Results}
+
+\begin{table}[h]
+\centering
+\caption{Effect of adding the prior-alignment loss (with $-$ without, pp), mean over seeds 0--3.}
+\small
+\begin{tabular}{lcc}
+\toprule
+Dataset & $\Delta$A-PR & $\Delta$V-PR \\
+\midrule
+PSM  & $-$4.28 & $-$3.49 \\
+SWaT & $+$0.64 & $+$0.09 \\
+SMD  & $+$0.12 & $+$0.06 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Persistent strength-prior bias vs.\ folding it into the initialization of $\psi$ (PSM, seeds 0--7).}
+\small
+\begin{tabular}{lcc}
+\toprule
+Routing & A-PR & V-PR \\
+\midrule
+Persistent bias (Eq.~\ref{eq:routing}) & \textbf{58.07}$\pm$2.84 & \textbf{54.15}$\pm$2.71 \\
+Folded into $\psi$      & 56.05$\pm$2.94 & 52.56$\pm$2.30 \\
+\midrule
+\multicolumn{3}{l}{Paired $\Delta$A-PR $-$2.02, 95\% CI [$-$5.17, $+$1.12]; folded better on 3/8 seeds.} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

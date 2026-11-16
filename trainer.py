@@ -2,6 +2,7 @@
 tensor (w_ref/cls_ref) maintenance for a single (entity, seed) run.
 """
 import copy
+import os
 
 import numpy as np
 import torch
@@ -73,11 +74,20 @@ class PicaadTrainer:
         N = self.model.N
         epochs = cfg.SOLVER.MAX_EPOCH
 
-        early_stop = getattr(cfg.PICAAD, 'EARLY_STOP', False) and self.val_data is not None
+        early_stop = getattr(cfg.PICAAD, 'EARLY_STOP', False)
+        es_on = getattr(cfg.PICAAD, 'EARLY_STOP_ON', 'val_loss')
+        es_metric = getattr(cfg.PICAAD, 'EARLY_STOP_METRIC', 'F1')
         patience = getattr(cfg.PICAAD, 'PATIENCE', 10)
-        best_val_loss = float('inf')
+
+        if early_stop and es_on == 'val_loss' and self.val_data is None:
+            early_stop = False
+
+        best_es_score = float('inf') if es_on == 'val_loss' else float('-inf')
         patience_counter = 0
         best_state = None
+        select_val = bool(getattr(cfg.PICAAD, 'SELECT_BEST_VAL', False)) and self.val_data is not None
+        if select_val:
+            self._sel_init()
 
         for ep in range(1, epochs + 1):
             self.model.train()
@@ -180,7 +190,10 @@ class PicaadTrainer:
                 group_graphreg = loss_gate + _W_LAGMONO * loss_lagmono
                 if use_graph_loss and cfg.PICAAD.ENABLE_GRAPH_LOSS:
                     group_graphreg = group_graphreg + _W_GRAPH * loss_graph
-                group_robust = loss_perm + _W_INV * loss_inv
+                if getattr(cfg.PICAAD.INTERVENTION, 'APPLY_LOSS', True):
+                    group_robust = loss_perm + _W_INV * loss_inv
+                else:
+                    group_robust = _W_INV * loss_inv
 
                 loss = (
                     cfg.PICAAD.LAM_TASK * group_task
@@ -207,12 +220,12 @@ class PicaadTrainer:
             self._print_epoch(ep, avg, last_use_cstruct, last_use_graph_loss)
             self._log_train_tb(ep, avg)
 
-            if early_stop:
+            if early_stop and es_on == 'val_loss':
                 val_loss = self._compute_val_loss()
-                msg = f"    val_loss={val_loss:.6f}  best={best_val_loss:.6f}  patience={patience_counter}/{patience}"
+                msg = f"    val_loss={val_loss:.6f}  best={best_es_score:.6f}  patience={patience_counter}/{patience}"
                 print(msg, flush=True)
-                if val_loss < best_val_loss:
-                    best_val_loss = val_loss
+                if val_loss < best_es_score:
+                    best_es_score = val_loss
                     patience_counter = 0
                     best_state = copy.deepcopy(self.model.state_dict())
                 else:
@@ -221,11 +234,30 @@ class PicaadTrainer:
                         print(f"  Early stop at ep {ep} (patience {patience})", flush=True)
                         break
 
-            self._maybe_run_epoch_eval(ep, epochs)
+            if select_val:
+                self._sel_track(ep, self._compute_val_loss())
+
+            eval_metrics = self._maybe_run_epoch_eval(ep, epochs)
+
+            if early_stop and es_on == 'test_metric' and eval_metrics is not None:
+                score = eval_metrics.get(es_metric, eval_metrics.get('F1', 0.0))
+                print(f"    es_metric({es_metric})={score:.6f}  best={best_es_score:.6f}  patience={patience_counter}/{patience}", flush=True)
+                if score > best_es_score:
+                    best_es_score = score
+                    patience_counter = 0
+                    best_state = copy.deepcopy(self.model.state_dict())
+                else:
+                    patience_counter += 1
+                    if patience_counter >= patience:
+                        print(f"  Early stop at ep {ep} (patience {patience}, {es_metric}={score:.6f})", flush=True)
+                        break
 
         if best_state is not None:
             self.model.load_state_dict(best_state)
-            print(f"  Restored best checkpoint (val_loss={best_val_loss:.6f})", flush=True)
+            print(f"  Restored best checkpoint ({es_on}={best_es_score:.6f})", flush=True)
+
+        if select_val:
+            self._sel_finalize_and_eval(epochs)
 
     # ----------------------------------------------------------
     # Helpers
@@ -288,6 +320,9 @@ class PicaadTrainer:
             else:
                 beta = float(cfg.PICAAD.WREF_EMA)
                 self.model.w_ref.mul_(beta).add_(epoch_w * (1.0 - beta))
+
+            if not getattr(cfg.PICAAD.INTERVENTION, 'UPDATE_REFERENCE', True) and self.model.has_cls_ref:
+                return  # U=0: keep cls_ref fixed at its initial value
 
             if self.model.has_cls_ref:
                 fallback_cls = self.model.cls_ref
@@ -370,13 +405,87 @@ class PicaadTrainer:
             w.add_histogram(f"{p}/train/w_ref_hist",   self.model.w_ref.detach().cpu().numpy(),   ep)
             w.add_histogram(f"{p}/train/cls_ref_hist", self.model.cls_ref.detach().cpu().numpy(), ep)
 
+    # ----------------------------------------------------------
+    # Validation-based checkpoint selection (no early stopping)
+    # ----------------------------------------------------------
+    def _sel_init(self):
+        self._sel_hist = {}            # epoch -> val MAE
+        self._sel_recent = []          # [(epoch, state)] of the last `half + 1` epochs
+        self._sel_best_val = None      # (val, epoch, state)
+        self._sel_best_smooth = None   # (smoothed val, epoch, state)
+
+    def _sel_smoothed(self, e):
+        half = int(getattr(self.cfg.PICAAD, 'SELECT_SMOOTH', 3)) // 2
+        vals = [self._sel_hist[k] for k in range(e - half, e + half + 1) if k in self._sel_hist]
+        return float(np.mean(vals))
+
+    def _sel_consider_smooth(self, e, state):
+        if e < int(getattr(self.cfg.PICAAD, 'SELECT_MIN_EPOCH', 20)):
+            return
+        sv = self._sel_smoothed(e)
+        if self._sel_best_smooth is None or sv < self._sel_best_smooth[0]:
+            self._sel_best_smooth = (sv, e, state)
+
+    def _sel_track(self, ep, val_loss):
+        half = int(getattr(self.cfg.PICAAD, 'SELECT_SMOOTH', 3)) // 2
+        state = copy.deepcopy(self.model.state_dict())
+        self._sel_hist[ep] = float(val_loss)
+        if self._sel_best_val is None or val_loss < self._sel_best_val[0]:
+            self._sel_best_val = (float(val_loss), ep, state)
+        self._sel_recent.append((ep, state))
+        self._sel_recent = self._sel_recent[-(half + 1):]
+        # the centered average of epoch ep - half is complete once epoch ep is known
+        e_done = ep - half
+        for e, st in self._sel_recent:
+            if e == e_done:
+                self._sel_consider_smooth(e, st)
+        print(f"    val_mae={val_loss:.6f}  best_val={self._sel_best_val[0]:.6f}@ep{self._sel_best_val[1]}", flush=True)
+
+    def _sel_finalize_and_eval(self, epochs):
+        import pandas as pd
+        half = int(getattr(self.cfg.PICAAD, 'SELECT_SMOOTH', 3)) // 2
+        last_ep = max(self._sel_hist)
+        for e, st in self._sel_recent:          # tail epochs use truncated windows
+            if e > last_ep - half:
+                self._sel_consider_smooth(e, st)
+        name, seed = self.entity.name, self.seed
+        out_dir = os.path.dirname(self.csv_path)
+        pd.DataFrame({'epoch': list(self._sel_hist), 'val_mae': list(self._sel_hist.values())}).to_csv(
+            os.path.join(out_dir, f'{name}_seed{seed}_val_curve.csv'), index=False)
+
+        last_state = copy.deepcopy(self.model.state_dict())
+        for tag, sel in (('best_val', self._sel_best_val), ('best_smooth', self._sel_best_smooth)):
+            if sel is None:
+                continue
+            _, ep, state = sel
+            self.model.load_state_dict(state)
+            self.model._current_epoch = ep          # causal-mask warmup ramp of that epoch
+            if self.ckpt_dir is not None:
+                os.makedirs(self.ckpt_dir, exist_ok=True)
+                torch.save({'epoch': ep, 'seed': seed, 'entity': name, 'selection': tag,
+                            'val_mae': self._sel_hist[ep], 'state_dict': state, 'cfg': self.cfg.dump(),
+                            'mu': np.asarray(self.entity.mu, dtype=np.float32),
+                            'sd': np.asarray(self.entity.sd, dtype=np.float32)},
+                           os.path.join(self.ckpt_dir, f'{name}_seed{seed}_{tag}.pt'))
+            print(f"  [{tag}] epoch {ep} (val_mae={self._sel_hist[ep]:.6f}) -> test eval", flush=True)
+            run_epoch_eval(
+                self.model, self.entity.test_z, self.entity.y, self.device, self.cfg,
+                ep=ep, seed=seed, name=name, epochs_total=epochs,
+                train_TN=self.entity.train_z, writer=None, writer_prefix="",
+                ckpt_dir=None, csv_path=os.path.join(out_dir, f'{name}_seed{seed}_select_{tag}.csv'),
+                mu=self.entity.mu, sd=self.entity.sd,
+            )
+        self.model.load_state_dict(last_state)
+        self.model._current_epoch = last_ep
+
+    @torch.no_grad()
     def _maybe_run_epoch_eval(self, ep, epochs_total):
         every = self.cfg.TRAIN.EVAL_EVERY
         if every is None or every <= 0:
-            return
+            return None
         if (ep % every != 0) and (ep != epochs_total):
-            return
-        run_epoch_eval(
+            return None
+        return run_epoch_eval(
             self.model, self.entity.test_z, self.entity.y, self.device, self.cfg,
             ep=ep, seed=self.seed, name=self.entity.name,
             epochs_total=epochs_total,

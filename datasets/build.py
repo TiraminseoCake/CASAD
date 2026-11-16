@@ -64,7 +64,12 @@ def load_entity(cfg, entity_name: str) -> EntityArrays:
 
     y = reduce_label(data['label'], test.shape[0])
 
-    if cfg.DATA.SCALE == 'standard':
+    if cfg.DATA.SCALE == 'standard' and getattr(cfg.DATA, 'FIT_ON_TRAIN_SUB', False):
+        # statistics (incl. NaN fill) from the training part only; validation tail and test transformed with them
+        n_fit = int(train.shape[0] * (1.0 - cfg.PICAAD.VAL_RATIO))
+        _, rest_z, mu, sd = standardize_train_test(train[:n_fit], np.concatenate([train, test], axis=0))
+        train_z, test_z = rest_z[:train.shape[0]], rest_z[train.shape[0]:]
+    elif cfg.DATA.SCALE == 'standard':
         train_z, test_z, mu, sd = standardize_train_test(train, test)
     elif cfg.DATA.SCALE == 'none':
         train_z = train.astype(np.float32)

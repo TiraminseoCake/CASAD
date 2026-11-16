@@ -225,6 +225,8 @@ def score_windows(model, series_TN, device, batch, scoring_cfg,
             gamma=gamma,
         )
     else:
+        alpha = getattr(scoring_cfg, 'SCORE_ALPHA', 1.0)
+        beta = getattr(scoring_cfg, 'SCORE_BETA', 1.0)
         cal = {
             "P": raw["P_raw"].astype(np.float32),
             "C": raw["C_raw"].astype(np.float32),
@@ -235,10 +237,9 @@ def score_windows(model, series_TN, device, batch, scoring_cfg,
         else:
             cal["CF"] = np.zeros_like(cal["P"])
         cal["S"] = cal["C"].copy()
+        cal["A"] = (float(alpha) * cal["P"] + float(beta) * cal["C"]).astype(np.float32)
         if use_cf and float(gamma) > 0:
-            cal["A"] = (cal["P"] + cal["C"] + float(gamma) * cal["CF"]).astype(np.float32)
-        else:
-            cal["A"] = (cal["P"] + cal["C"]).astype(np.float32)
+            cal["A"] = (cal["A"] + float(gamma) * cal["CF"]).astype(np.float32)
 
     out = {}
     out.update(raw)
